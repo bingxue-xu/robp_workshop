@@ -9,6 +9,7 @@ from tf2_geometry_msgs import do_transform_point
 from std_msgs.msg import ColorRGBA
 from visualization_msgs.msg import Marker, UVCoordinate
 from sensor_msgs.msg import Image
+from robp_interfaces.msg import PointPixel
 
 from PIL import Image as RawImage, ImageTransform
 import io
@@ -60,8 +61,9 @@ class Workspace(Node):
 
         self._map_pub = self.create_publisher(Marker, '/map', 10)
         self._img_pub = self.create_publisher(Image, '/seen_image', 10)
+        self._robot_pub = self.create_publisher(PointPixel, '/robot_pos_pixel', 10)
 
-        self.map_timer = self.create_timer(2, self.map_timer_callback)
+        self.map_timer = self.create_timer(0.1, self.map_timer_callback)
         self.sensor_timer = self.create_timer(0.1, self.sensor_timer_callback)
 
         pkg_dir = os.path.dirname(os.path.abspath(__file__))
@@ -140,7 +142,11 @@ class Workspace(Node):
         image_corners = self.map_to_image_pixels(odom_corners, pixels_per_meter=1000,
                                                       img_width=self.image.size[0], img_height=self.image.size[1])
 
-        transform= [coord for point in image_corners for coord in point] # [31,146,88,226,252,112,195,31]
+        coords = [coord for point in image_corners for coord in point] # [31,146,88,226,252,112,195,31]
+        
+        transform = coords[:8]
+        robot_pos = coords[8:10]
+
         sensor_image = self.image.transform((320, 180), ImageTransform.QuadTransform(transform), fillcolor=(135, 116, 101), resample=RawImage.Resampling.BICUBIC)        
         seen_image_msg = Image()
         seen_image_msg.header.stamp = Time.to_msg(self.get_clock().now())
@@ -148,7 +154,12 @@ class Workspace(Node):
         sensor_image_cv2 = cv2.cvtColor(np.array(sensor_image), cv2.COLOR_RGB2BGR)
         seen_image_msg = self.bridge.cv2_to_imgmsg(sensor_image_cv2, 'bgr8')
         self._img_pub.publish(seen_image_msg)
-        
+
+        robot_pos_msg = PointPixel()
+        robot_pos_msg.width = robot_pos[0]
+        robot_pos_msg.height = robot_pos[1]
+        self._robot_pub.publish(robot_pos_msg)
+        self.get_logger().info(f'Publishing robot position on image msg {robot_pos_msg.width, robot_pos_msg.height}')
 
     def map_to_image_pixels(self, corners, pixels_per_meter, img_width, img_height):
         uvs = []
@@ -170,6 +181,7 @@ class Workspace(Node):
             (camera_x, width / 2, 0.0),
             (camera_x, -width / 2, 0.0),
             (camera_x + height, -width / 2, 0.0),
+            (0.0, 0.0, 0.0)
         ]
 
         cur_time = self.get_clock().now()

@@ -17,6 +17,7 @@ class Perception(Node):
         self.create_subscription(Image, '/camera/camera/color/image_raw', self.image_callback, 10)
 
         self.point_pub = self.create_publisher(PointPixel,'/found_point', 10)
+        
 
         plt.ion()
         self.figure, ((self.ax_image, self.ax_mask, self.ax_line_point), (self.ax_hue, self.ax_saturation, self.ax_value)) = plt.subplots(2, 3)
