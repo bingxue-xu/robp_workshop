@@ -115,19 +115,6 @@ class Workspace(Node):
         uv6 = UVCoordinate(u=0.0, v=0.0)
         marker.uv_coordinates = [uv1, uv2, uv3, uv4, uv5, uv6]
 
-        # transform = [510, 1280, 5930, 670, 5880, 5580, 530, 4770]
-        # transform = [, 5907, 687, 5871, 5563, ]
-        # transform = [530, 1277, 5907, 687, 5871, 5563, 524, 4774]
-
-        # width = 300
-        # height = 450
-        # coeffs = find_coeffs(
-        # [(width, 0), (0, 0), (0, height), (width, height)],
-        # [(5871, 5563), (5919, 717), (530, 1277), (530, 4707)])
-        # full_image_low_res = self.image.transform((width, height), RawImage.PERSPECTIVE, coeffs, resample=RawImage.Resampling.BICUBIC)
-        # full_image_low_res = self.image.transform((300, 450), ImageTransform.QuadTransform(transform), resample=RawImage.Resampling.BICUBIC)
-        # full_image_low_res = full_image_low_res.transpose(RawImage.ROTATE_90)
-
         full_image_low_res = self.image.resize((200, 300), RawImage.Resampling.LANCZOS)
 
         # # Gamma correct
