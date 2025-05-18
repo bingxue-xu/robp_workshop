@@ -35,14 +35,14 @@ class Controller(Node):
         linear_velocity = 0.5
         angular_velocity = 0.0
 
-        width =320 
+        width = 320 
         height = 180 
 
         error = 0
         error = (column - width / 2)
 
         gain = 1
-        gain = 2/width
+        gain = 0.01
         angular_velocity = -gain * error
 
         return linear_velocity, angular_velocity
