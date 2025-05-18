@@ -17,7 +17,7 @@ The goal is to enable the robot to drive based on what it sees.
 
 - **Kobuki** for simulation
 
-    sudo apt install ros-humble-kobuki-ros-interfaces
+        sudo apt install ros-humble-kobuki-ros-interfaces
 
 - ROS 2 **packages**, 
 
