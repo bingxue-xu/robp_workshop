@@ -60,6 +60,7 @@ class Workspace(Node):
         self.tf_listener = TransformListener(self.tf_buffer, self)
 
         self._map_pub = self.create_publisher(Marker, '/map', 10)
+        self._map_img_pub = self.create_publisher(Image, '/map/image', 10)
         self._img_pub = self.create_publisher(Image, '/seen_image', 10)
         self._robot_pub = self.create_publisher(PointPixel, '/robot_pos_pixel', 10)
 
@@ -78,6 +79,12 @@ class Workspace(Node):
         self.image = self.image.transform((width, height), RawImage.PERSPECTIVE, coeffs, resample=RawImage.Resampling.BICUBIC)
 
     def map_timer_callback(self):
+
+        map_img = Image()
+        map_img = self.image
+        map_img_cv2 = np.array(map_img)
+        map_img_msg = self.bridge.cv2_to_imgmsg(map_img_cv2, 'rgb8')
+        self._map_img_pub.publish(map_img_msg)
 
         # publish map marker
         marker = Marker()
