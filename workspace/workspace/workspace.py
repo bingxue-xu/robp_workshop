@@ -170,7 +170,7 @@ class Workspace(Node):
     def corners_in_robot_view(self):
 
         camera_x = 0.17
-        height = 0.17
+        height = 0.145
         width = height *(320 / 180) 
 
         raw_pts = [
