@@ -3,6 +3,7 @@
 import rclpy
 from rclpy.node import Node
 from rclpy.time import Time
+from rclpy.qos import QoSProfile, QoSDurabilityPolicy
 
 from geometry_msgs.msg import Point, Vector3, PointStamped, Quaternion
 from tf2_geometry_msgs import do_transform_point
@@ -58,22 +59,29 @@ class Workspace(Node):
         self.tf_buffer = Buffer()
         self.tf_listener = TransformListener(self.tf_buffer, self)
 
-        self._map_pub = self.create_publisher(Marker, '/map', 10)
+        latching_qos = QoSProfile(depth=1, durability=QoSDurabilityPolicy.TRANSIENT_LOCAL)
+
+        self._map_pub = self.create_publisher(Marker, '/map', qos_profile=latching_qos)
         self._img_pub = self.create_publisher(Image, '/seen_image', 10)
 
-        self.map_timer = self.create_timer(2, self.map_timer_callback)
-        self.sensor_timer = self.create_timer(0.1, self.sensor_timer_callback)
+        # self.map_timer = self.create_timer(2, self.map_timer_callback)
+        self.sensor_timer = self.create_timer(1 / 30, self.sensor_timer_callback)
 
         pkg_dir = os.path.dirname(os.path.abspath(__file__))
-        image_path = os.path.join(pkg_dir,'workspace.jpg')
+        image_path = os.path.join(pkg_dir,'workspace2.jpg')
         self.image = RawImage.open(image_path)
 
         width = 2000
         height = 3000
+        # coeffs = find_coeffs(
+        # [(width, 0), (0, 0), (0, height), (width, height)],
+        # [(5871, 5563), (5919, 717), (530, 1277), (530, 4707)])
         coeffs = find_coeffs(
-        [(width, 0), (0, 0), (0, height), (width, height)],
-        [(5871, 5563), (5919, 717), (530, 1277), (530, 4707)])
+        [(0, 0), (0, height), (width, height), (width, 0)],
+        [(412, 538), (181, 2704), (2085, 2681), (1793, 504)])
         self.image = self.image.transform((width, height), RawImage.PERSPECTIVE, coeffs, resample=RawImage.Resampling.BICUBIC)
+
+        self.map_timer_callback()
 
     def map_timer_callback(self):
 
@@ -162,7 +170,7 @@ class Workspace(Node):
     def corners_in_robot_view(self):
 
         camera_x = 0.17
-        height = 0.5
+        height = 0.17
         width = height *(320 / 180) 
 
         raw_pts = [
