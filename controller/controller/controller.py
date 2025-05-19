@@ -42,13 +42,13 @@ class Controller(Node):
         error = (column - width / 2)
 
         gain = 1
-        gain = 0.01
+        gain = 2/width
         angular_velocity = -gain * error
 
         return linear_velocity, angular_velocity
 
     def point_on_line_callback(self, msg: PointPixel):
-        linear_velocity, angular_velocity = self.point_on_line_control(msg.width, msg.height)
+        linear_velocity, angular_velocity = self.point_on_line_control(msg.column, msg.row)
 
         twist_msg = Twist()
         twist_msg.linear.x = linear_velocity

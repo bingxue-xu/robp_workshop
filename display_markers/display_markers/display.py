@@ -7,7 +7,7 @@ from visualization_msgs.msg import Marker
 from geometry_msgs.msg import Point, PointStamped
 from tf2_ros import Buffer, TransformListener
 from sensor_msgs.msg import Image
-from robp_interfaces.msg import DutyCycles, PointPixel
+from robp_interfaces.msg import DutyCycles, PointPixel, HSVFilter
 import cv2
 from cv_bridge import CvBridge
 from geometry_msgs.msg import Vector3
@@ -27,9 +27,11 @@ class Display(Node) :
         self.create_subscription(Image, '/seen_image', self.image_callback, 10)
         self.create_subscription(Image, '/camera/camera/color/image_raw', self.image_callback, 10)
         self.point_subs = self.create_subscription(PointPixel, '/found_point', self.point_callback, 10)
+        self.point_subs = self.create_subscription(HSVFilter, '/hsv_filter', self.hsv_filter_callback, 10)
         self.dutycycle_sub = self.create_subscription(DutyCycles, '/motor/duty_cycles', self.dutycycle_callback, 10)
  
         self.img_pub = self.create_publisher(Image, '/annotated_image', 10)
+        self.img_masked_pub = self.create_publisher(Image, '/masked_image', 10)
         self.left_dutycycle_pub = self.create_publisher(Marker, '/left_duty_cycle', 10)
         self.right_dutycycle_pub = self.create_publisher(Marker, '/right_duty_cycle', 10)
 
@@ -47,8 +49,8 @@ class Display(Node) :
             self.get_logger().warn('Waiting for image')
             return
         
-        u = msg.width
-        v = msg.height
+        u = msg.column
+        v = msg.row
         annotated_img = self.cv_rgb.copy()
         cv2.circle(annotated_img, (u, v), 6, (0, 255, 0), 4)
         cv2.putText(annotated_img, 'Point', (u, v), cv2.FONT_HERSHEY_SIMPLEX, 2, (0, 255, 0), 4)
@@ -58,6 +60,26 @@ class Display(Node) :
         out_msg.header.frame_id = msg.header.frame_id
         self.img_pub.publish(out_msg)
         self.get_logger().info(f'Publishing point on image msg {u, v}')
+
+    def hsv_filter_callback(self, msg: HSVFilter) :
+
+        """Mask the image with the HSV filter."""
+
+        if self.cv_rgb is None:
+            self.get_logger().warn('Waiting for image')
+            return
+        
+        hsv_image = cv2.cvtColor(self.cv_rgb, cv2.COLOR_RGB2HSV)
+
+        tape_mask = cv2.inRange(hsv_image, (msg.hue_min / 2, msg.saturation_min, msg.value_min), (msg.hue_max / 2, msg.saturation_max, msg.value_max))
+
+        image = cv2.bitwise_and(self.cv_rgb,self.cv_rgb,mask = tape_mask)
+
+        out_msg = self.bridge.cv2_to_imgmsg(image, 'rgb8')
+        out_msg.header.stamp = msg.header.stamp
+        out_msg.header.frame_id = msg.header.frame_id
+        self.img_masked_pub.publish(out_msg)
+        self.get_logger().debug(f'Publishing masked image msg')
 
 
     def dutycycle_callback(self, msg: DutyCycles):
@@ -80,7 +102,7 @@ class Display(Node) :
         left_arrow.scale = arrow_scale
         left_arrow.color = arrow_color
         left_start = Point(x=0.0, y=0.17, z=0.0)
-        left_end = Point(x=50*left*arrow_scale.z, y=0.17, z=0.0)
+        left_end = Point(x=25*left*arrow_scale.z, y=0.17, z=0.0)
         left_arrow.points = [left_start, left_end]
 
         # the right duty cycle
@@ -94,7 +116,7 @@ class Display(Node) :
         right_arrow.scale = arrow_scale
         right_arrow.color = arrow_color
         right_start = Point(x=0.0, y=-0.17, z=0.0)
-        right_end = Point(x=50*right*arrow_scale.z, y=-0.17, z=0.0)
+        right_end = Point(x=25*right*arrow_scale.z, y=-0.17, z=0.0)
         right_arrow.points = [right_start, right_end]
 
         # Publish the markers
