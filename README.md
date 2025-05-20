@@ -40,6 +40,10 @@ The goal is to enable the robot to drive based on what it sees.
 
     ros2 run perception plotting
 
+**Debugging (both simulation and robot)**
+
+    ros2 topic echo /motor_controller/twist
+
 
 ## Implement to your own solution
 

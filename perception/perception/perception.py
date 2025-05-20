@@ -34,32 +34,48 @@ class Perception(Node):
         # Convert the image to the HSV (hue, saturation, value) color space
         hsv_image = cv2.cvtColor(image, cv2.COLOR_RGB2HSV)
 
-        height, width, _ = hsv_image.shape
-
-        line_column = -1
-        line_row = -1
-
         hsv_filter = HSVFilter()
+        
         ############## START Modify the values inbetween here ################
-        hsv_filter.hue_min = 0   # Range: [0, 360]
-        hsv_filter.hue_max = 360  # Range: [0, 360]
-        hsv_filter.saturation_min = 0  # Range: [0, 255]
+
+        # A hint is that most of the background can be filtered using only saturation.
+        # Therefore, it is a good idea to start filtering on saturation and then
+        # move on to hue and/or value.
+
+        hsv_filter.hue_min = 0           # Range: [0, 360]
+        hsv_filter.hue_max = 360         # Range: [0, 360]
+        hsv_filter.saturation_min = 0    # Range: [0, 255]
         hsv_filter.saturation_max = 255  # Range: [0, 255]
-        hsv_filter.value_min = 0  # Range: [0, 255]
-        hsv_filter.value_max = 255  # Range: [0, 255]
+        hsv_filter.value_min = 0         # Range: [0, 255]
+        hsv_filter.value_max = 255       # Range: [0, 255]
+
         ############## END Modify the values inbetween here ################
+
         self.hsv_filter_pub.publish(hsv_filter)
 
         # Remove pixles outside the values above from the image
         tape_mask = cv2.inRange(hsv_image, (hsv_filter.hue_min / 2, hsv_filter.saturation_min,
                                 hsv_filter.value_min), (hsv_filter.hue_max / 2, hsv_filter.saturation_max, hsv_filter.value_max))
 
+        line_column = -1
+        line_row = -1
+
+        # Image size
+        height = hsv_image.shape[0]
+        width = hsv_image.shape[1]
+
         ############## START Improve/change below ###########################
+
+        # With the given solution it will always pick a point on the line on the last row,
+        # which is towards the bottom of the image. Is this a good solution? What would
+        # the controller want?
+
         for row in range(height):
             for column in range(width):
                 if tape_mask[row, column]:
                     line_column = column
                     line_row = row
+
         ############## END Improve/change below ###########################
 
         return line_column, line_row
