@@ -3,13 +3,18 @@
 This repository demonstrates how to run a camera-based differential robot on ROS2.
 The goal is to enable the robot to drive based on what it sees.
 
-![Line Follower Demo](assets/line_follower_demo.gif)
+
+
+https://github.com/user-attachments/assets/4e851c0b-155f-403f-a164-380398083e3c
+
+
+
 
 ## Installation 
 
 - **Ubuntu**, tutorial here https://ubuntu.com/tutorials/install-ubuntu-desktop#1-overview
 
-- **ROS 2**, Jazzy page https://docs.ros.org/en/jazzy/Installation/Ubuntu-Install-Debians.htmlLinks 
+- **ROS 2**, Jazzy page https://docs.ros.org/en/jazzy/Installation/Ubuntu-Install-Debians.html  
 
 - **Kobuki** for simulation
 
@@ -49,6 +54,11 @@ The goal is to enable the robot to drive based on what it sees.
 
 You can customize the system to your own needs by modifying perception and control, for example, following an object instead of a line
 
-- **perception**:  *src/perception/perception/perception.py*
+- **Perception**:  *src/perception/perception/perception.py*
 
 - **Controller**: *src/controller/controller/controller.py*
+
+## Documentation 
+Here are some useful links:
+- ROS (Robot Operating System) wiki: https://wiki.ros.org/ 
+- The HSV Color Model: [the HSV Color Model](https://medium.com/@dijdomv01/a-beginners-guide-to-understand-the-color-models-rgb-and-hsv-244226e4b3e3)
