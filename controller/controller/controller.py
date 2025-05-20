@@ -20,30 +20,33 @@ class Controller(Node):
 
     def point_on_line_control(self,  column : int, row : int):
         """
-        Calulate the linear and angular velocity based on the the point on line
+        Calculate the linear and angular velocity based on a point on the line
 
-        :param column: The width coordinate of the point on line
-        :param row: The height coordinate of the point on line
-        :return: The linear and angular velocity
+        :param column: The width coordinate of the point on the line
+        :param row: The height coordinate of the point on the line
+        :return: The linear [0,1] and angular [-1, 1] velocities
         """
-        
+
+        # Make the robot rotate if we do not find the line
         if column < 0 or row < 0:
             linear_velocity = 0.0
             angular_velocity = 1.0
             return linear_velocity, angular_velocity
 
+        
         linear_velocity = 0.5
         angular_velocity = 0.0
 
+        # Image size
         width = 320 
         height = 180 
 
-        error = 0
-        error = (column - width / 2)
+        error_side = 0
+        error_side = (column - width / 2)
 
-        gain = 1
-        gain = 2/width
-        angular_velocity = -gain * error
+        # Controller 
+        gain = 0.005
+        angular_velocity = -gain * error_side
 
         return linear_velocity, angular_velocity
 
