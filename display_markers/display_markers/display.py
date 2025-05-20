@@ -51,9 +51,17 @@ class Display(Node) :
         
         u = msg.column
         v = msg.row
+
         annotated_img = self.cv_rgb.copy()
-        cv2.circle(annotated_img, (u, v), 6, (0, 255, 0), 4)
-        cv2.putText(annotated_img, 'Point', (u, v), cv2.FONT_HERSHEY_SIMPLEX, 2, (0, 255, 0), 4)
+        if msg.column >= 0 or msg.row >= 0:
+            cv2.circle(annotated_img, (msg.column, msg.row), 3, (0, 255, 0), 4)
+            msg.row = max(20, min(annotated_img.shape[0] - 20, msg.row))
+            if msg.column <= annotated_img.shape[1] / 2:
+                cv2.putText(annotated_img, 'Point', (msg.column + 20, msg.row + 10),
+                        cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
+            else:
+                cv2.putText(annotated_img, 'Point', (msg.column - 100, msg.row + 10),
+                        cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
 
         out_msg = self.bridge.cv2_to_imgmsg(annotated_img, 'rgb8')
         out_msg.header.stamp = msg.header.stamp
