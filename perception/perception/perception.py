@@ -20,12 +20,15 @@ class Perception(Node):
 
     def find_point_on_line(self, msg: Image):
         """
-        Find the line and target point on line  
-        :param msg: The image message
-        :return: Point pixel values (column, row) and the line
+        Find the line and a target point on the line  
+        :param msg: The image
+        :return: Point pixel values (column, row) on the line
         """
 
+        # Convert the image to a format that allows us to use the package OpenCV
         image = self.bridge.imgmsg_to_cv2(msg, 'rgb8')
+
+        # Convert the image to the HSV (hue, saturation, value) color space
         hsv_image = cv2.cvtColor(image, cv2.COLOR_RGB2HSV)
 
         height, width, _ = hsv_image.shape
@@ -33,28 +36,30 @@ class Perception(Node):
         line_column = -1
         line_row = -1
 
-        # Change these
         hsv_filter = HSVFilter()
+        ############## START Modify the values inbetween here ################
         hsv_filter.hue_min = 40
         hsv_filter.hue_max = 60 # Max is 360
         hsv_filter.saturation_min = 100
         hsv_filter.saturation_max = 255
         hsv_filter.value_min = 0
         hsv_filter.value_max = 255
+        ############## END Modify the values inbetween here ################
         self.hsv_filter_pub.publish(hsv_filter) 
 
+        # Remove pixles outside the values above from the image
         tape_mask = cv2.inRange(hsv_image, (hsv_filter.hue_min / 2, hsv_filter.saturation_min, hsv_filter.value_min), (hsv_filter.hue_max / 2, hsv_filter.saturation_max, hsv_filter.value_max))
 
-        # Improve/change below
+        ############## START Improve/change below ###########################
         for row in range(height):
             for column in range(width):
                 if tape_mask[row, column]:
                     line_column = column
                     line_row = row
                     return line_column, line_row
-                    
-        return line_column, line_row
+        ############## END Improve/change below ###########################
 
+        return line_column, line_row
 
     def image_callback(self, msg: Image):
 
