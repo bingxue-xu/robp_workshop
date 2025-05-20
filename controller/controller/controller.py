@@ -14,11 +14,12 @@ class Controller(Node):
     def __init__(self):
         super().__init__('controller')
 
-        self.subscription = self.create_subscription(PointPixel, '/found_point', self.point_on_line_callback, 10)
-        self.publisher_ = self.create_publisher(Twist, '/motor_controller/twist', 10)
+        self.subscription = self.create_subscription(
+            PointPixel, '/found_point', self.point_on_line_callback, 10)
+        self.publisher_ = self.create_publisher(
+            Twist, '/motor_controller/twist', 10)
 
-
-    def point_on_line_control(self,  column : int, row : int):
+    def point_on_line_control(self,  column: int, row: int):
         """
         Calculate the linear and angular velocity based on a point on the line
 
@@ -33,13 +34,12 @@ class Controller(Node):
             angular_velocity = 1.0
             return linear_velocity, angular_velocity
 
-        
         linear_velocity = 0.5
         angular_velocity = 0.0
 
         # Image size
-        width = 320 
-        height = 180 
+        width = 320
+        height = 180
 
         error_side = 0
         error_side = (column - width / 2)
@@ -51,14 +51,14 @@ class Controller(Node):
         return linear_velocity, angular_velocity
 
     def point_on_line_callback(self, msg: PointPixel):
-        linear_velocity, angular_velocity = self.point_on_line_control(msg.column, msg.row)
+        linear_velocity, angular_velocity = self.point_on_line_control(
+            msg.column, msg.row)
 
         twist_msg = Twist()
         twist_msg.linear.x = linear_velocity
         twist_msg.angular.z = angular_velocity
 
         self.publisher_.publish(twist_msg)
-        self.get_logger().info(f'Publishing twist msg {twist_msg.linear}, {twist_msg.angular}')
 
 
 def main():
