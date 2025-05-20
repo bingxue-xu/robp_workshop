@@ -1,0 +1,7 @@
+[Desktop Entry]
+Version=1.0
+Name=Robot Simulator
+Exec=/home/dduberg/workshop_ws/src/simulator.sh
+Icon=utilities-terminal
+Terminal=false
+Type=Application

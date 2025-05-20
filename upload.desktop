@@ -1,0 +1,7 @@
+[Desktop Entry]
+Version=1.0
+Name=Upload Solution
+Exec=gnome-terminal -e "bash -c '/home/dduberg/Desktop/upload.sh'"
+Icon=utilities-terminal
+Terminal=true
+Type=Application
