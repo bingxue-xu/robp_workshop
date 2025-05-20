@@ -27,7 +27,7 @@ The goal is to enable the robot to drive based on what it sees.
         rosdep install --from-paths src -y --ignore-src --as-root pip:false
         colcon build --symlink-install
 
-        source /opt/ros/humble/setup.bash
+        source /opt/ros/jazzy/setup.bash
         source ~/workshop_ws/install/local_setup.bash
 
 
@@ -39,10 +39,13 @@ The goal is to enable the robot to drive based on what it sees.
 
     ros2 launch robp_boot_camp_launch workshop_sim_launch.xml
 
-**Life**
+**Robot**
 
     ros2 launch robp_boot_camp_launch workshop_launch.xml
 
+**Plotting (both simulation and robot)**
+
+    ros2 run perception plotting
 
 
 ## Implement to your own solution
