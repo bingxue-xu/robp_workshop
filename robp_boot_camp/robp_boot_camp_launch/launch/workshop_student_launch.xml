@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<launch>
+	<node pkg="perception" exec="perception" name="perception" emulate_tty="true" output="screen" />
+	<node pkg="controller" exec="controller" name="controller" emulate_tty="true" output="screen" />
+</launch>
+

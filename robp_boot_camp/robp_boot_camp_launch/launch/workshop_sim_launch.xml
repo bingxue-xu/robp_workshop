@@ -23,8 +23,8 @@
 		<param name="wheel_radius" value="0.0352" />
 		<param name="ticks_per_revolution" value="360" />
 	</node>
-	<node pkg="perception" exec="perception" name="perception" />	
-	<node pkg="controller" exec="controller" name="controller" />
+	<!-- <node pkg="perception" exec="perception" name="perception" />	 -->
+	<!-- <node pkg="controller" exec="controller" name="controller" /> -->
 	<node pkg="display_markers" exec="display" name="display" />
 	<!-- run rviz -->
 	<node pkg="rviz2" exec="rviz2" name="rviz" args="-d $(find-pkg-share robp_boot_camp_launch)/rviz/boot_camp_part1.rviz -s $(find-pkg-share robp_boot_camp_launch)/rviz/rpl_logo.png -t 'KTH - RPL - Robot Simulator'" on_exit="shutdown" />
