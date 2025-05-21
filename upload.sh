@@ -16,7 +16,7 @@ done
 
 echo -e "${GREEN}Uploading group '${group_name}' solution to robot${NC}"
 
-sshpass -p "ros2" ssh rosuser@192.168.128.108 "mkdir -p ~/${group_name}"
+sshpass -p "ros2" ssh -o StrictHostKeyChecking=no rosuser@192.168.128.108 "mkdir -p ~/${group_name}"
 sshpass -p "ros2" scp /home/robot/workshop_ws/src/perception/perception/perception.py rosuser@192.168.128.108:~/${group_name}/perception.py
 
 if [ "$?" != "0" ]
