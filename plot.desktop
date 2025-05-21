@@ -1,7 +1,7 @@
 [Desktop Entry]
 Version=1.0
 Name=Plot
-Exec=/home/dduberg/workshop_ws/src/plot.sh
-Icon=utilities-terminal
+Exec=/home/robot/workshop_ws/src/plot.sh
+Icon=/home/robot/workshop_ws/src/plot.svg
 Terminal=false
 Type=Application
