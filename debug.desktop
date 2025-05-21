@@ -2,6 +2,6 @@
 Version=1.0
 Name=Debug Controller
 Exec=gnome-terminal -e "bash -c '/home/robot/workshop_ws/src/debug.sh'"
-Icon=utilities-terminal
+Icon=/home/robot/workshop_ws/src/debug.svg
 Terminal=true
 Type=Application
