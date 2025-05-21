@@ -20,6 +20,10 @@ https://github.com/user-attachments/assets/4e851c0b-155f-403f-a164-380398083e3c
 
         sudo apt install ros-jazzy-kobuki-ros-interfaces
 
+- **SSHPass** for SSH
+
+        sudo apt install sshpass
+
 - ROS 2 **packages**, 
 
         cd ~/workshop_ws
@@ -36,6 +40,10 @@ https://github.com/user-attachments/assets/4e851c0b-155f-403f-a164-380398083e3c
 **Simulation** 
 
     ros2 launch robp_boot_camp_launch workshop_sim_launch.xml
+    
+**Student code** 
+
+    ros2 launch robp_boot_camp_launch workshop_student_launch.xml
 
 **Robot**
 
