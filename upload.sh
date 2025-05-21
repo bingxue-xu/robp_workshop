@@ -14,26 +14,27 @@ do
 	read -p "Enter group name: " group_name
 done
 
-echo -e "${GREEN}Uploading solution to robot${NC}"
+echo -e "${GREEN}Uploading group '${group_name}' solution to robot${NC}"
 
-scp /home/robot/workshop_ws/src/perception/perception/perception.py robot@192.168.128.108:~/${group_name}/perception.py
-
-if [ "$?" != "0" ]
-then
-	echo -e "${RED}Could not connect to the robot${NC}"
-	# sleep 10
-	# exit $?
-fi
-
-scp /home/robot/workshop_ws/src/controller/controller/controller.py robot@192.168.128.108:~/${group_name}/controller.py
+sshpass -p "ros2" ssh rosuser@192.168.128.108 "mkdir -p ~/${group_name}"
+sshpass -p "ros2" scp /home/robot/workshop_ws/src/perception/perception/perception.py rosuser@192.168.128.108:~/${group_name}/perception.py
 
 if [ "$?" != "0" ]
 then
 	echo -e "${RED}Could not connect to the robot${NC}"
-	# sleep 10
-	# exit $?
+	sleep 10
+	exit $?
 fi
 
-echo -e "${GREEN}Solution has been uploaded to robot as group ${group_name}${NC}"
+sshpass -p "ros2" scp /home/robot/workshop_ws/src/controller/controller/controller.py rosuser@192.168.128.108:~/${group_name}/controller.py
 
-sleep 10
+if [ "$?" != "0" ]
+then
+	echo -e "${RED}Could not connect to the robot${NC}"
+	sleep 10
+	exit $?
+fi
+
+echo -e "${GREEN}Solution has been uploaded to robot as group '${group_name}'${NC}"
+
+sleep 3
