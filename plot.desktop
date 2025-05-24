@@ -1,0 +1,7 @@
+[Desktop Entry]
+Version=1.0
+Name=Plot
+Exec=/home/robot/workshop_ws/src/plot.sh
+Icon=/home/robot/workshop_ws/src/plot.svg
+Terminal=false
+Type=Application

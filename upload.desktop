@@ -1,0 +1,7 @@
+[Desktop Entry]
+Version=1.0
+Name=Upload Solution
+Exec=gnome-terminal -e "bash -c '/home/robot/workshop_ws/src/upload.sh'"
+Icon=/home/robot/workshop_ws/src/upload.svg
+Terminal=true
+Type=Application

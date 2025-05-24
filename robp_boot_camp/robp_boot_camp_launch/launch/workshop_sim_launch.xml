@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<launch>
+	<!-- Static transform: map -> odom -->
+	<node pkg="tf2_ros" exec="static_transform_publisher" name="static_map_to_odom" output="screen"
+			args="-0.17 0.56 0 0 0 0 map odom"/>
+
+	<!-- launch the kobuki simulation -->
+	<include file="$(find-pkg-share kobuki_softnode)/launch/full_launch.xml" />
+
+	<!-- run the motors -->
+	<node pkg="robp_boot_camp_motors" exec="motors" name="motors">
+		<remap from="/kobuki_motors/pwm" to="/kobuki/pwm" />
+		<remap from="/kobuki_motors/encoders" to="/kobuki/encoders" />
+	</node>
+
+	<!-- load the world node -->
+	<node pkg="robp_boot_camp_world" exec="world" name="world" />
+	<!-- load the workspace -->
+	<node pkg="workspace" exec="workspace" name="workspace" />
+	<node pkg="controller" exec="cartesian_controller" name="cartesian_controller">
+		<param name="frequency" value="10" />
+		<param name="wheel_base" value="0.23" />
+		<param name="wheel_radius" value="0.0352" />
+		<param name="ticks_per_revolution" value="360" />
+	</node>
+	<!-- <node pkg="perception" exec="perception" name="perception" />	 -->
+	<!-- <node pkg="controller" exec="controller" name="controller" /> -->
+	<node pkg="display_markers" exec="display" name="display" />
+	<!-- run rviz -->
+	<node pkg="rviz2" exec="rviz2" name="rviz" args="-d $(find-pkg-share robp_boot_camp_launch)/rviz/boot_camp_part1.rviz -s $(find-pkg-share robp_boot_camp_launch)/rviz/rpl_logo.png -t 'KTH - RPL - Robot Simulator'" on_exit="shutdown" />
+</launch>
+

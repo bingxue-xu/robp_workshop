@@ -1,0 +1,7 @@
+[Desktop Entry]
+Version=1.0
+Name=Robot Simulator
+Exec=/home/robot/workshop_ws/src/simulator.sh
+Icon=/home/robot/workshop_ws/src/simulator.svg
+Terminal=true
+Type=Application
