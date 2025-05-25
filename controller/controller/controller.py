@@ -44,17 +44,17 @@ class Controller(Node):
         # Keep in mind, moving faster makes it more difficult to follow the line.
         # Keep this constant to begin with. Later on, you might want to adjust it based
         # on where the 'point on the line' is.
-        linear_velocity = 0.0
+        linear_velocity = 0.5
 
         angular_velocity = 0.0
 
         # Controller for angular velocity. Here you should calculate how far away the 'point on the line' is
         # to where you want it to be. To start with, consider the error to be how far away from the center 
         # of the image the point is.
-        error_side = 0.0
+        error_side = column - width / 2
 
         # Adjust this such that the angular velocity calculated with the equation below gives resonable values.
-        gain = 0.0
+        gain = 2/width
 
         angular_velocity = -gain * error_side
 

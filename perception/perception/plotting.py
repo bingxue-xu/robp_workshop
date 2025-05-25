@@ -33,7 +33,7 @@ class Plotting(Node):
         self.figure, ((self.ax_image, self.ax_mask, self.ax_line_point),
                       (self.ax_hue, self.ax_saturation, self.ax_value)) = plt.subplots(2, 3)
         plt.show(block=False)
-
+        self.figure.canvas.draw()
         self.image = None
         self.hsv_filter = None
 
