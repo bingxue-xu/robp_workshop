@@ -117,10 +117,10 @@ class Perception(Node):
 
         # Check for points on green mask first, then red, then yellow (priority order)
         masks_with_filters = [
-            (green_tape_mask, green_hsv_filter),
             (red_tape_mask_2, red_hsv_filter_2),  
             (red_tape_mask_1, red_hsv_filter_1),
             (yellow_tape_mask, yellow_hsv_filter),
+            (green_tape_mask, green_hsv_filter),
         ]
         
         for i, (tape_mask, hsv_filter) in enumerate(masks_with_filters):

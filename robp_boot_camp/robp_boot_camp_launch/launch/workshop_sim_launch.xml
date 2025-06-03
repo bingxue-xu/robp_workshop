@@ -1,9 +1,13 @@
 <?xml version="1.0"?>
 <launch>
-	<!-- Static transform: map -> odom -->
+	<!-- Static transform: map -> odom  # workspace2 -->
 	<node pkg="tf2_ros" exec="static_transform_publisher" name="static_map_to_odom" output="screen"
 			args="-0.17 0.56 0 0 0 0 map odom"/>
 
+	<!-- Static transform: map -> odom  # workspace3 -->
+	<!-- <node pkg="tf2_ros" exec="static_transform_publisher" name="static_map_to_odom" output="screen"
+			args="0.82 0.65 0 0.2363 0 0 map odom"/>  -->
+			
 	<!-- launch the kobuki simulation -->
 	<include file="$(find-pkg-share kobuki_softnode)/launch/full_launch.xml" />
 

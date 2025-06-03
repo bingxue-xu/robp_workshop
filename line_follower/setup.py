@@ -20,7 +20,8 @@ setup(
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
-            'line_follower_action = line_follower.line_follower_action:main'
+            'line_follower_action_server = line_follower.line_follower_action_server:main',
+            'line_follower_action_client = line_follower.line_follower_action_client:main',
         ],
     },
 )
