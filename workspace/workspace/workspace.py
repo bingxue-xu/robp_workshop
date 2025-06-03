@@ -70,8 +70,10 @@ class Workspace(Node):
 
         self._map_pub = self.create_publisher(
             PointCloud2, '/map', qos_profile=latching_qos)
+        self._line_pub = self.create_publisher(
+            PointCloud2, '/line', qos_profile=latching_qos
+        )
         self._img_pub = self.create_publisher(Image, '/seen_image', 10)
-        self._robot_pub = self.create_publisher(PointPixel, '/robot_pos_pixel', 10)
 
         # self.map_timer = self.create_timer(2, self.map_timer_callback)
         self.sensor_timer = self.create_timer(
@@ -82,17 +84,28 @@ class Workspace(Node):
         self.image = RawImage.open(image_path)
 
         width = 2000
-        height = 3000
+        height = 3000 # 3600
         # coeffs = find_coeffs(
         # [(width, 0), (0, 0), (0, height), (width, height)],
-        # [(5871, 5563), (5919, 717), (530, 1277), (530, 4707)])
+        # [(5871, 5563), (5919, 717), (530, 1277), (530, 4707)]) # workspace1
+        # [(412, 538), (181, 2704), (2085, 2681), (1793, 504)]) # workspace2
+        # [(1418, 150), (24, 3800), (2300, 4000), (2620, 576)]) # workspace3
+
         coeffs = find_coeffs(
             [(0, 0), (0, height), (width, height), (width, 0)],
-            [(412, 538), (181, 2704), (2085, 2681), (1793, 504)])
+        [(412, 538), (181, 2704), (2085, 2681), (1793, 504)]) # workspace2
         self.image = self.image.transform(
             (width, height), RawImage.PERSPECTIVE, coeffs, resample=RawImage.Resampling.BICUBIC)
-
+    
+        # import matplotlib.pyplot as plt
+        # img_np = np.array(self.image)
+        # plt.imshow(img_np)
+        # plt.title('Perspective Image')
+        # plt.axis('off')
+        # plt.show()
+        
         self.map_timer_callback()
+        self.line_timer_callback()
 
     def map_timer_callback(self):
         width_meter = 2
@@ -139,88 +152,57 @@ class Workspace(Node):
 
         self._map_pub.publish(pc2)
 
-        # # publish map marker
-        # marker = Marker()
 
-        # marker.header.stamp = Time.to_msg(self.get_clock().now())
-        # marker.header.frame_id = "map"
+    def line_timer_callback(self):
+        img_np = np.array(self.image)
+        hsv_img = cv2.cvtColor(img_np, cv2.COLOR_RGB2HSV)
 
-        # marker.ns = "map"
-        # marker.id = 0
-        # # marker.action = marker.ADD
-        # # marker.lifetime =
-        # marker.frame_locked = True
+        red_mask1 = cv2.inRange(hsv_img, (0, 100, 100), (10, 255, 255))
+        red_mask2 = cv2.inRange(hsv_img, (170, 100, 100), (179, 255, 255))
+        red_mask = cv2.bitwise_or(red_mask1, red_mask2)
+        yellow_mask = cv2.inRange(hsv_img, (20, 100, 100), (40, 255, 255))
+        green_mask = cv2.inRange(hsv_img, (60, 100, 100), (80, 255, 255))
+        mask = cv2.bitwise_or(cv2.bitwise_or(red_mask, yellow_mask), green_mask)
 
-        # marker.type = Marker.TRIANGLE_LIST
+        ys, xs = np.nonzero(mask)
 
-        # marker.points = []
-        # marker.colors = []
-        # for v in range(0, height, 2):
-        #     for u in range(0, width, 2):
-        #         p1 = Point(x=height_meter - pixel_size * v,
-        #                    y=width_meter - pixel_size * u, z=0.0)
-        #         p2 = Point(x=p1.x + pixel_size, y=p1.y, z=0.0)
-        #         p3 = Point(x=p1.x, y=p1.y + pixel_size, z=0.0)
-        #         p4 = Point(x=p1.x + pixel_size, y=p1.y + pixel_size, z=0.0)
+        width_meter = 2
+        height_meter = 3
 
-        #         pixel = img.getpixel((u, v))
-        #         c1 = ColorRGBA(r=pixel[0]/255.0, g=pixel[1] /
-        #                        255.0, b=pixel[2]/255.0, a=1.0)
-        #         pixel = img.getpixel((u, v + 1))
-        #         c2 = ColorRGBA(r=pixel[0]/255.0, g=pixel[1] /
-        #                        255.0, b=pixel[2]/255.0, a=1.0)
-        #         pixel = img.getpixel((u + 1, v))
-        #         c3 = ColorRGBA(r=pixel[0]/255.0, g=pixel[1] /
-        #                        255.0, b=pixel[2]/255.0, a=1.0)
-        #         pixel = img.getpixel((u + 1, v + 1))
-        #         c4 = ColorRGBA(r=pixel[0]/255.0, g=pixel[1] /
-        #                        255.0, b=pixel[2]/255.0, a=1.0)
+        img_width, img_height = self.image.size
+        pixel_size_x = width_meter / img_width
+        pixel_size_y = height_meter / img_height
 
-        #         marker.points.extend([p1, p3, p2, p2, p3, p4])
-        #         marker.colors.extend([c1, c3, c2, c2, c3, c4])
+        line_points = []
+        for u, v in zip(xs, ys):
+            x = height_meter - pixel_size_y * v
+            y = width_meter - pixel_size_x * u
+            z = 0.0
 
-        # self._map_pub.publish(marker)
+            color = self.image.getpixel((u, v))
+            r = color[0]
+            g = color[1]
+            b = color[2]
+            a = 255
+            rgb = struct.unpack(
+                'I', struct.pack('BBBB', b, g, r, a))[0]
+            pt = [x, y, z, rgb]
+            line_points.append(pt)
 
-        # marker.type = Marker.TRIANGLE_LIST
+        fields = [PointField(name='x', offset=0, datatype=PointField.FLOAT32, count=1),
+                  PointField(name='y', offset=4, datatype=PointField.FLOAT32, count=1),
+                  PointField(name='z', offset=8, datatype=PointField.FLOAT32, count=1),
+                  PointField(name='rgba', offset=12, datatype=PointField.UINT32, count=1),
+                  ]
 
-        # marker.scale = Vector3(x=1.0, y=1.0, z=1.0)
+        header = Header()
+        header.stamp = Time.to_msg(self.get_clock().now())
+        header.frame_id = "map"
+        pc2 = point_cloud2.create_cloud(header, fields, line_points)
 
-        # # marker.pose.position = Point(x=0.17, y=-0.56, z=0.0)
-        # marker.pose.position = Point(x=0.0, y=0.0, z=0.0)
-        # # marker.pose.orientation = quaternion_from_euler(0.0, 0.0, math.radians(90.0))
+        self._line_pub.publish(pc2)
+        self.get_logger().info(f"First line point: {line_points[0] if line_points else 'None'}")
 
-        # p1 = Point(x=0.0, y=0.0, z=0.0)
-        # p2 = Point(x=0.0, y=2.0, z=0.0)
-        # p3 = Point(x=3.0, y=0.0, z=0.0)
-        # p4 = Point(x=3.0, y=0.0, z=0.0)
-        # p5 = Point(x=0.0, y=2.0, z=0.0)
-        # p6 = Point(x=3.0, y=2.0, z=0.0)
-        # marker.points = [p1, p2, p3, p4, p5, p6]
-
-        # marker.color = ColorRGBA(r=1.0, g=0.0, b=0.0, a=1.0)
-
-        # uv1 = UVCoordinate(u=1.0, v=1.0)
-        # uv2 = UVCoordinate(u=0.0, v=1.0)
-        # uv3 = UVCoordinate(u=1.0, v=0.0)
-        # uv4 = UVCoordinate(u=1.0, v=0.0)
-        # uv5 = UVCoordinate(u=0.0, v=1.0)
-        # uv6 = UVCoordinate(u=0.0, v=0.0)
-        # marker.uv_coordinates = [uv1, uv2, uv3, uv4, uv5, uv6]
-
-        # full_image_low_res = self.image.resize((200, 300), RawImage.Resampling.LANCZOS)
-
-        # # # Gamma correct
-        # gamma = 0.4
-        # full_image_low_res = full_image_low_res.point(lambda x: ((x/255)**gamma)*255)
-
-        # buf = io.BytesIO()
-        # full_image_low_res.save(buf, format='png')
-
-        # marker.texture.data = buf.getvalue()
-        # marker.texture_resource = "embedded://workspace.png"
-        # marker.texture.format = "png"
-
-        # self._map_pub.publish(marker)
 
     def sensor_timer_callback(self):
         # corners = ul_x, ul_y, ur_x, ur_y, lr_x, lr_y, ll_x, ll_y
@@ -238,10 +220,9 @@ class Workspace(Node):
             transform), fillcolor=(135, 116, 101), resample=RawImage.Resampling.BICUBIC)
         seen_image_msg = Image()
         seen_image_msg.header.stamp = Time.to_msg(self.get_clock().now())
-        seen_image_msg.header.frame_id = 'base_link'
-        sensor_image_cv2 = cv2.cvtColor(
-            np.array(sensor_image), cv2.COLOR_RGB2BGR)
-        seen_image_msg = self.bridge.cv2_to_imgmsg(sensor_image_cv2, 'bgr8')
+        seen_image_msg.header.frame_id = 'camera_link'
+        sensor_image_cv2 = np.array(sensor_image)
+        seen_image_msg = self.bridge.cv2_to_imgmsg(sensor_image_cv2, 'rgb8')
         self._img_pub.publish(seen_image_msg)
 
     def map_to_image_pixels(self, corners, pixels_per_meter, img_width, img_height):
@@ -264,7 +245,6 @@ class Workspace(Node):
             (camera_x, width / 2, 0.0),
             (camera_x, -width / 2, 0.0),
             (camera_x + height, -width / 2, 0.0),
-            (0.0, 0.0, 0.0)
         ]
 
         cur_time = self.get_clock().now()
@@ -290,7 +270,7 @@ class Workspace(Node):
         odom_corners = []
         for x, y, z in raw_pts:
             point = PointStamped()
-            point.header.frame_id = 'base_link'
+            point.header.frame_id = 'map'
             point.header.stamp = rclpy.time.Time().to_msg()
             point.point.x = x
             point.point.y = y
