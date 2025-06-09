@@ -52,27 +52,27 @@ def generate_launch_description():
     #     )
     # )
 
-    # RPLidar
-    rplidar_launch = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource(
-            os.path.join(
-                get_package_share_directory('rplidar_ros'),
-                'launch',
-                'rplidar.launch.py'  
-            )
-        )
-    )
-
-    # # USB Camera
-    # usb_cam_launch = IncludeLaunchDescription(
+    # # RPLidar
+    # rplidar_launch = IncludeLaunchDescription(
     #     PythonLaunchDescriptionSource(
     #         os.path.join(
-    #             get_package_share_directory('usb_cam'),
+    #             get_package_share_directory('rplidar_ros'),
     #             'launch',
-    #             'camera.launch.py'
+    #             'rplidar.launch.py'  
     #         )
     #     )
     # )
+
+    # USB Camera
+    usb_cam_launch = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource(
+            os.path.join(
+                get_package_share_directory('usb_cam'),
+                'launch',
+                'camera.launch.py'
+            )
+        )
+    )
 
     # # phidgets_container 
     # phidgets_launch = IncludeLaunchDescription(
@@ -101,37 +101,37 @@ def generate_launch_description():
     #     ]
     # )
 
-    rplidar_check = Node(
-        package='hardware_test',
-        executable='rplidar_check',
-        name='rplidar_check',
-        output='screen',
-        emulate_tty=True,
-        parameters=[
-            {'robot_name':          robot_name},
-            {'domain_id':           domain_id},
-            {'json_folder':         json_folder},
-            {'topic_name':          '/scan'},
-            {'timeout_s':           100.0},
-            {'point_count_threshold':100},
-            {'range_threshold':     1.0},
-        ]
-    )
-
-    # usb_cam_check = Node(
+    # rplidar_check = Node(
     #     package='hardware_test',
-    #     executable='usb_camera_check',
-    #     name='usb_camera_check',
+    #     executable='rplidar_check',
+    #     name='rplidar_check',
     #     output='screen',
     #     emulate_tty=True,
     #     parameters=[
-    #         {'robot_name':  robot_name},
-    #         {'domain_id':   domain_id},
-    #         {'json_folder': json_folder},
-    #         {'topic_name':  '/image_raw'},
-    #         {'timeout_s':   5.0},
+    #         {'robot_name':          robot_name},
+    #         {'domain_id':           domain_id},
+    #         {'json_folder':         json_folder},
+    #         {'topic_name':          '/scan'},
+    #         {'timeout_s':           100.0},
+    #         {'point_count_threshold':100},
+    #         {'range_threshold':     1.0},
     #     ]
     # )
+
+    usb_cam_check = Node(
+        package='hardware_test',
+        executable='usb_cam_check',
+        name='usb_cam_check',
+        output='screen',
+        emulate_tty=True,
+        parameters=[
+            {'robot_name':  robot_name},
+            {'domain_id':   domain_id},
+            {'json_folder': json_folder},
+            {'topic_name':  '/camera1/image_raw'},
+            {'timeout_s':   50.0},
+        ]
+    )
 
     # --- 4. RViz ---
     rviz_cfg = os.path.join(
@@ -157,14 +157,14 @@ def generate_launch_description():
 
         # # driver launch
         # realsense_launch,
-        rplidar_launch,
-        # usb_cam_launch,
+        # rplidar_launch,
+        usb_cam_launch,
         # phidgets_launch,
 
-        # check nodes
+        # # check nodes
         # realsense_check,
-        rplidar_check,
-        # usb_cam_check,
+        # rplidar_check,
+        usb_cam_check,
 
         # RViz
         rviz_node,
