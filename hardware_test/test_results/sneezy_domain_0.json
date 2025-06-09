@@ -1,0 +1,11 @@
+{
+  "robot_name": "sneezy",
+  "domain_id": 0,
+  "results": {
+    "RPLidar": {
+      "status": "PASS",
+      "detail": "Total rplidar points: 360, Max measured distance: 3.29 m"
+    }
+  },
+  "last_updated": "2025-06-09T16:37:20.674696"
+}
