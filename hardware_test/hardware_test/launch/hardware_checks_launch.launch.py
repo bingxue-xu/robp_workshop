@@ -43,14 +43,20 @@ def generate_launch_description():
     json_folder= LaunchConfiguration('json_folder')
 
     # --- 1. start tf  ---
-    static_tf_node = Node(
+    static_map_to_odom_node = Node(
         package='tf2_ros',
         executable='static_transform_publisher',
         name='static_map_to_odom',
         output='screen',
         arguments=['0', '0', '0', '0', '0', '0', 'map', 'odom']
     )
-
+    static_base_link_to_laser_node = Node(
+        package='tf2_ros',
+        executable='static_transform_publisher',
+        name='static_base_link_to_laser',
+        output='screen',
+        arguments=['0', '0', '0', '0', '0', '0', 'base_link','laser']
+    )
     odometry_node = Node(
         package='odometry',
         executable='odometry',
@@ -109,16 +115,16 @@ def generate_launch_description():
         )
     )
 
-    # RPLidar
-    rplidar_launch = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource(
-            os.path.join(
-                get_package_share_directory('rplidar_ros'),
-                'launch',
-                'rplidar.launch.py'  
-            )
-        )
-    )
+    # # RPLidar
+    # rplidar_launch = IncludeLaunchDescription(
+    #     PythonLaunchDescriptionSource(
+    #         os.path.join(
+    #             get_package_share_directory('rplidar_ros'),
+    #             'launch',
+    #             'rplidar.launch.py'  
+    #         )
+    #     )
+    # )
 
     # # USB Camera
     # usb_cam_launch = IncludeLaunchDescription(
@@ -158,26 +164,26 @@ def generate_launch_description():
             {'domain_id':  domain_id},
             # {'json_folder':json_folder},
             # {'topic_name':'/camera/camera/color/image_raw'},
-            # {'timeout_s':   50.0},
+            # {'timeout_s':   10.0},
         ]
     )
 
-    rplidar_check = Node(
-        package='hardware_test',
-        executable='rplidar_check',
-        name='rplidar_check',
-        output='screen',
-        emulate_tty=True,
-        parameters=[
-            {'robot_name':          robot_name},
-            {'domain_id':           domain_id},
-            {'json_folder':         json_folder},
-            {'topic_name':          '/scan'},
-            {'timeout_s':           100.0},
-            {'point_count_threshold':100},
-            {'range_threshold':     1.0},
-        ]
-    )
+    # rplidar_check = Node(
+    #     package='hardware_test',
+    #     executable='rplidar_check',
+    #     name='rplidar_check',
+    #     output='screen',
+    #     emulate_tty=True,
+    #     parameters=[
+    #         {'robot_name':          robot_name},
+    #         {'domain_id':           domain_id},
+    #         {'json_folder':         json_folder},
+    #         {'topic_name':          '/scan'},
+    #         {'timeout_s':           10.0},
+    #         {'point_count_threshold':100},
+    #         {'range_threshold':     1.0},
+    #     ]
+    # )
 
     # usb_cam_check = Node(
     #     package='hardware_test',
@@ -190,7 +196,7 @@ def generate_launch_description():
     #         {'domain_id':   domain_id},
     #         {'json_folder': json_folder},
     #         {'topic_name':  '/camera1/image_raw'},
-    #         {'timeout_s':   50.0},
+    #         {'timeout_s':   10.0},
     #     ]
     # )
 
@@ -216,20 +222,21 @@ def generate_launch_description():
         json_folder_arg,
         OpaqueFunction(function=_validate_required_args),
         # tf
-        static_tf_node,
+        static_map_to_odom_node,
+        static_base_link_to_laser_node,
         odometry_node,
         robot_state_publisher_node,
         cartesian_controller_node,
 
         # # driver launch
         realsense_launch,
-        rplidar_launch,
+        # rplidar_launch,
         # usb_cam_launch,
         phidgets_launch,
 
         # # check nodes
         realsense_check,
-        rplidar_check,
+        # rplidar_check,
         # usb_cam_check,
 
         # RViz2

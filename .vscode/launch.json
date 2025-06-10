@@ -13,10 +13,10 @@
             "console": "integratedTerminal"
         },
         {
-            "name": "realsense",
+            "name": "check",
             "type": "debugpy",
             "request": "launch",
-            "program": "${workspaceFolder}/hardware_test/hardware_test/realsense_check.py",
+            "program": "${workspaceFolder}/hardware_test/hardware_test/phidgets_check.py",
             "args": [
                 "--ros-args",
                 "-p", "robot_name:=sneezy",
