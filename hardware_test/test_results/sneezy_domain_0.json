@@ -3,13 +3,17 @@
   "domain_id": 0,
   "results": {
     "RPLidar": {
-      "status": "PASS",
-      "detail": "Total rplidar points: 360, Max measured distance: 3.29 m"
+      "status": "FAIL",
+      "detail": "topic /scan did not publish any message"
     },
     "USBCam": {
       "status": "PASS",
       "detail": "Received valid frame (640\u00d7480), not all-black/white"
+    },
+    "RealSense": {
+      "status": "PASS",
+      "detail": "Received valid color frame (1280\u00d7720)"
     }
   },
-  "last_updated": "2025-06-09T18:33:21.714453"
+  "last_updated": "2025-06-10T12:27:51.504083"
 }

@@ -39,7 +39,7 @@ class CartesianController(Node):
     def twist_callback(self, msg):
         self.desired_linear = msg.linear.x
         self.desired_angular = msg.angular.z
-        self.get_logger().info(f'desired velocity {self.desired_linear}, {self.desired_angular}')
+        self.get_logger().debug(f'desired velocity {self.desired_linear}, {self.desired_angular}')
 
     def encoder_callback(self, msg):
 
@@ -54,7 +54,7 @@ class CartesianController(Node):
 
         self.estimated_v_left = radians_per_tick * msg.delta_encoder_left * frequency * wr
         self.estimated_v_right = radians_per_tick * msg.delta_encoder_right * frequency * wr
-        self.get_logger().info(f'estimated velocity {self.estimated_v_left}, {self.estimated_v_right}')
+        self.get_logger().debug(f'estimated velocity {self.estimated_v_left}, {self.estimated_v_right}')
 
         desired_v_left = self.desired_linear - self.desired_angular * wb
         desired_v_right = self.desired_linear + self.desired_angular * wb

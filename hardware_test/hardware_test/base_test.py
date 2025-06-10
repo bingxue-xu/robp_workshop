@@ -38,7 +38,7 @@ class BaseTest(Node):
         if json_folder:
             self.json_folder = os.path.expanduser(json_folder)
         else:
-            self.json_folder = os.path.expanduser('~/hardware_test_results')
+            self.json_folder = os.path.expanduser('~/dd2419/workshop_ws/src/hardware_test/test_results')
 
         self._init_json()
 
@@ -87,6 +87,7 @@ class BaseTest(Node):
 
         # sub only once
         self.received_msg = None
+        rclpy.spin_once(self, timeout_sec=0.1)
         sub = self.create_subscription(msg_type, topic_name, self._generic_callback, 10)
         start = self.get_clock().now()
         while self.received_msg is None and \

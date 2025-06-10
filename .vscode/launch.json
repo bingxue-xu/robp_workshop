@@ -13,17 +13,14 @@
             "console": "integratedTerminal"
         },
         {
-            "name": "USBCam",
+            "name": "realsense",
             "type": "debugpy",
             "request": "launch",
-            "program": "${workspaceFolder}/hardware_test/hardware_test/usb_cam_check.py",
+            "program": "${workspaceFolder}/hardware_test/hardware_test/realsense_check.py",
             "args": [
                 "--ros-args",
                 "-p", "robot_name:=sneezy",
                 "-p", "domain_id:=0",
-                "-p", "json_folder:=/home/bingxue/dd2419/workshop_ws/src/hardware_test/test_results",
-                "-p", "topic_name:=/camera1/image_raw",
-                "-p", "timeout_s:=100.0",
             ],
             "console": "integratedTerminal",
             "env": {
