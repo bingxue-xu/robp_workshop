@@ -15,7 +15,7 @@
   <depend>robp_interfaces</depend>
   <depend>robp_boot_camp_interfaces</depend>
 
-  <depend>phidgets_ros2_msgs</depend>
+  <depend>phidgets_msgs</depend>
   <depend>realsense2_camera</depend>
   <depend>rplidar_ros</depend>
   <depend>image_transport</depend>
