@@ -16,11 +16,11 @@
             "name": "check",
             "type": "debugpy",
             "request": "launch",
-            "program": "${workspaceFolder}/hardware_test/hardware_test/phidgets_check.py",
+            "program": "${workspaceFolder}/hardware_test/hardware_test/arm_check.py",
             "args": [
                 "--ros-args",
-                "-p", "robot_name:=sneezy",
-                "-p", "domain_id:=0",
+                "-p", "robot_name:=Sneezy",
+                "-p", "domain_id:=4",
             ],
             "console": "integratedTerminal",
             "env": {

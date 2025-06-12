@@ -36,7 +36,6 @@ class Odometry(Node):
         self._y = 0.0
         self._yaw = 0.0
         self.stamp = self.get_clock().now().to_msg()
-        self.create_timer(0.1, self.timer_callback)
         
         self.declare_parameter('frequency', 20)
         self.declare_parameter('wheel_base', 0.311)
@@ -74,6 +73,8 @@ class Odometry(Node):
         self.stamp = msg.header.stamp
         
         self.publish_path(self.stamp, self._x, self._y, self._yaw)
+        self.broadcast_transform(self.stamp, self._x, self._y, self._yaw)
+
 
     def broadcast_transform(self, stamp, x, y, yaw):
         """Takes a 2D pose and broadcasts it as a ROS transform.
@@ -111,8 +112,6 @@ class Odometry(Node):
         self._tf_broadcaster.sendTransform(t)
         # self.get_logger().info(f'Broadcasted odom→base_link TF: {x}, {y}, {yaw}')
 
-    def timer_callback(self):
-        self.broadcast_transform(self.stamp, self._x, self._y, self._yaw)
 
     def publish_path(self, stamp, x, y, yaw):
         """Takes a 2D pose appends it to the path and publishes the whole path.
