@@ -16,7 +16,7 @@
             "name": "check",
             "type": "debugpy",
             "request": "launch",
-            "program": "${workspaceFolder}/hardware_test/hardware_test/arm_check.py",
+            "program": "${workspaceFolder}/hardware_test/hardware_test/rplidar_check.py",
             "args": [
                 "--ros-args",
                 "-p", "robot_name:=Sneezy",

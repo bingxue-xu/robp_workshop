@@ -46,9 +46,11 @@ class PhidgetsCheck(BaseTest):
         for _ in range(5):
             twist_pub.publish(twist_msg)
             rclpy.spin_once(self, timeout_sec=0.05)
+        self.get_logger().info("Published initial twist message to /motor_controller/twist")
 
         # 2. sub topic
         def enc_cb(msg):
+            self.get_logger().info(f"Encoders received: left={msg.delta_encoder_left}, right={msg.delta_encoder_right}")
             self._received["Encoders"] = True
             self._encoders_value = msg
         enc_sub = self.create_subscription(Encoders, '/motor/encoders', enc_cb, 1)

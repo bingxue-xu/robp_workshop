@@ -70,7 +70,42 @@
           }
         }
       }
+    },
+    "RealSense": {
+      "status": "PASS",
+      "detail": "Received valid color frame (1280\u00d7720)"
+    },
+    "RPLidar": {
+      "status": "PASS",
+      "detail": "Total rplidar points: 360, Max measured distance: 4.81 m"
+    },
+    "Phidgets": {
+      "status": "PASS",
+      "detail": {
+        "status": "PASS",
+        "detail": "All phidgets passed",
+        "Encoders": {
+          "status": "PASS",
+          "detail": "delta_encoder_left=38, delta_encoder_right=45"
+        },
+        "Motors": {
+          "status": "PASS",
+          "detail": "duty_cycle_left=0.166, duty_cycle_right=0.222"
+        },
+        "Spatial": {
+          "status": "PASS",
+          "detail": "acc=(-0.32,-0.16,-12.15)"
+        },
+        "Temperature": {
+          "status": "PASS",
+          "detail": "Temperature=30.45\u00b0C"
+        }
+      }
+    },
+    "USBCam": {
+      "status": "PASS",
+      "detail": "Received valid frame (640\u00d7480), not all-black/white"
     }
   },
-  "last_updated": "2025-06-12T12:00:14.473603"
+  "last_updated": "2025-06-12T17:22:05.298480"
 }

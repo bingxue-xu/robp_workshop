@@ -26,6 +26,7 @@ setup(
             'base_test = hardware_test.base_test:main',
             'realsense_check = hardware_test.realsense_check:main',
             'rplidar_check = hardware_test.rplidar_check:main',
+            'phidgets_check = hardware_test.phidgets_check:main',
             'usb_cam_check = hardware_test.usb_cam_check:main',
             'arm_check = hardware_test.arm_check:main',
         ],

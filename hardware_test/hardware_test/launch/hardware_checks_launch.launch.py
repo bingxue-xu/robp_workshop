@@ -50,13 +50,13 @@ def generate_launch_description():
         output='screen',
         arguments=['0', '0', '0', '0', '0', '0', 'map', 'odom']
     )
-    # static_base_link_to_laser_node = Node(
-    #     package='tf2_ros',
-    #     executable='static_transform_publisher',
-    #     name='static_base_link_to_laser',
-    #     output='screen',
-    #     arguments=['0', '0', '0', '0', '0', '0', 'base_link','laser']
-    # )
+    static_base_link_to_laser_node = Node(
+        package='tf2_ros',
+        executable='static_transform_publisher',
+        name='static_base_link_to_laser',
+        output='screen',
+        arguments=['0', '0', '0', '0', '0', '0', 'base_link','laser']
+    )
     odometry_node = Node(
         package='odometry',
         executable='odometry',
@@ -105,26 +105,26 @@ def generate_launch_description():
 
     # --- 2. launch drivers ---
     # RealSense
-    # realsense_launch = IncludeLaunchDescription(
-    #     PythonLaunchDescriptionSource(
-    #         os.path.join(
-    #             get_package_share_directory('realsense2_camera'),
-    #             'launch',
-    #             'rs_launch.py'    
-    #         )
-    #     )
-    # )
+    realsense_launch = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource(
+            os.path.join(
+                get_package_share_directory('realsense2_camera'),
+                'launch',
+                'rs_launch.py'    
+            )
+        )
+    )
 
     # # RPLidar
-    # rplidar_launch = IncludeLaunchDescription(
-    #     PythonLaunchDescriptionSource(
-    #         os.path.join(
-    #             get_package_share_directory('rplidar_ros'),
-    #             'launch',
-    #             'rplidar.launch.py'  
-    #         )
-    #     )
-    # )
+    rplidar_launch = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource(
+            os.path.join(
+                get_package_share_directory('rplidar_ros'),
+                'launch',
+                'rplidar.launch.py'  
+            )
+        )
+    )
 
     # # USB Camera
     # usb_cam_launch = IncludeLaunchDescription(
@@ -137,54 +137,64 @@ def generate_launch_description():
     #     )
     # )
 
-    # # phidgets_container 
-    # phidgets_launch = IncludeLaunchDescription(
-    #     PythonLaunchDescriptionSource(
-    #         os.path.join(
-    #             get_package_share_directory('robp_launch'),
-    #             'launch',
-    #             'phidgets_launch.py'
-    #         )
-    #     ),
-    #     launch_arguments={
-    #         'robot_name': robot_name,
-    #         'domain_id':  domain_id,
-    #     }.items()
-    # )
+    # phidgets_container 
+    phidgets_launch = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource(
+            os.path.join(
+                get_package_share_directory('robp_launch'),
+                'launch',
+                'phidgets_launch.py'
+            )
+        ),
+        launch_arguments={
+            'robot_name': robot_name,
+            'domain_id':  domain_id,
+        }.items()
+    )
 
     # --- 3. hardware checks ---
-    # realsense_check = Node(
-    #     package='hardware_test',
-    #     executable='realsense_check',
-    #     name='realsense_check',
-    #     output='screen',
-    #     emulate_tty=True,
-    #     parameters=[
-    #         {'robot_name': robot_name},
-    #         {'domain_id':  domain_id},
-    #         # {'json_folder':json_folder},
-    #         # {'topic_name':'/camera/camera/color/image_raw'},
-    #         # {'timeout_s':   10.0},
-    #     ]
-    # )
+    realsense_check = Node(
+        package='hardware_test',
+        executable='realsense_check',
+        name='realsense_check',
+        output='screen',
+        emulate_tty=True,
+        parameters=[
+            {'robot_name': robot_name},
+            {'domain_id':  domain_id},
+            # {'json_folder':json_folder},
+            # {'topic_name':'/camera/camera/color/image_raw'},
+            # {'timeout_s':   10.0},
+        ]
+    )
 
-    # rplidar_check = Node(
-    #     package='hardware_test',
-    #     executable='rplidar_check',
-    #     name='rplidar_check',
-    #     output='screen',
-    #     emulate_tty=True,
-    #     parameters=[
-    #         {'robot_name':          robot_name},
-    #         {'domain_id':           domain_id},
-    #         {'json_folder':         json_folder},
-    #         {'topic_name':          '/scan'},
-    #         {'timeout_s':           10.0},
-    #         {'point_count_threshold':100},
-    #         {'range_threshold':     1.0},
-    #     ]
-    # )
-
+    rplidar_check = Node(
+        package='hardware_test',
+        executable='rplidar_check',
+        name='rplidar_check',
+        output='screen',
+        emulate_tty=True,
+        parameters=[
+            {'robot_name':          robot_name},
+            {'domain_id':           domain_id},
+            {'json_folder':         json_folder},
+            {'topic_name':          '/scan'},
+            {'timeout_s':           10.0},
+            {'point_count_threshold':100},
+            {'range_threshold':     1.0},
+        ]
+    )
+    phidgets_check = Node(
+        package='hardware_test',
+        executable='phidgets_check',
+        name='phidgets_check',
+        output='screen',
+        emulate_tty=True,
+        parameters=[
+            {'robot_name': robot_name},
+            {'domain_id':  domain_id},
+        ]
+    )
     # usb_cam_check = Node(
     #     package='hardware_test',
     #     executable='usb_cam_check',
@@ -200,18 +210,18 @@ def generate_launch_description():
     #     ]
     # )
 
-    arm_check = Node(
-        package='hardware_test',
-        executable='arm_check',
-        name='arm_check',
-        output='screen',
-        emulate_tty=True,
-        parameters=[
-            {'robot_name': robot_name},
-            {'domain_id':  domain_id},
-            {'json_folder': json_folder},
-        ]
-    )
+    # arm_check = Node(
+    #     package='hardware_test',
+    #     executable='arm_check',
+    #     name='arm_check',
+    #     output='screen',
+    #     emulate_tty=True,
+    #     parameters=[
+    #         {'robot_name': robot_name},
+    #         {'domain_id':  domain_id},
+    #         {'json_folder': json_folder},
+    #     ]
+    # )
 
     # --- 4. RViz ---
     rviz_cfg = os.path.join(
@@ -242,16 +252,17 @@ def generate_launch_description():
         cartesian_controller_node,
 
         # # driver launch
-        # realsense_launch,
-        # rplidar_launch,
+        realsense_launch,
+        rplidar_launch,
         # usb_cam_launch,
-        # phidgets_launch,
+        phidgets_launch,
 
         # # check nodes
-        # realsense_check,
-        # rplidar_check,
+        realsense_check,
+        rplidar_check,
         # usb_cam_check,
-        arm_check,
+        phidgets_check,
+        # arm_check,
 
         # RViz2
         rviz_node,

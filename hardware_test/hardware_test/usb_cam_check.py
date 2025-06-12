@@ -61,7 +61,7 @@ class USBCamCheck(BaseTest):
         # save the first good frame
         if not self.saved and self.json_folder:
             # build filename from topic, e.g. camera1_image_raw.png
-            safe_name = 'usbcam_' + self.topic_name.strip('/').replace('/', '_') + '.png'
+            safe_name = self.robot_name + '_usbcam_' + self.topic_name.strip('/').replace('/', '_') + '.png'
             out_path = os.path.join(self.json_folder, safe_name)
             try:
                 cv2.imwrite(out_path, cv_img)
