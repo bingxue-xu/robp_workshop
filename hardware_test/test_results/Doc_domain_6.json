@@ -1,0 +1,111 @@
+{
+  "robot_name": "Doc",
+  "domain_id": 6,
+  "results": {
+    "RealSense": {
+      "status": "PASS",
+      "detail": "Received valid color frame (1280\u00d7720)"
+    },
+    "Phidgets": {
+      "status": "PASS",
+      "detail": {
+        "status": "PASS",
+        "detail": "All phidgets passed",
+        "Encoders": {
+          "status": "PASS",
+          "detail": "delta_encoder_left=49, delta_encoder_right=75"
+        },
+        "Motors": {
+          "status": "PASS",
+          "detail": "duty_cycle_left=0.155, duty_cycle_right=0.195"
+        },
+        "Spatial": {
+          "status": "PASS",
+          "detail": "acc=(0.12,-1.21,-9.42)"
+        },
+        "Temperature": {
+          "status": "PASS",
+          "detail": "Temperature=25.52\u00b0C"
+        }
+      }
+    },
+    "RPLidar": {
+      "status": "PASS",
+      "detail": "Total rplidar points: 360, Max measured distance: 5.10 m"
+    },
+    "USBCam": {
+      "status": "PASS",
+      "detail": "Received valid frame (640\u00d7480), not all-black/white"
+    },
+    "Arm": {
+      "status": "PASS",
+      "detail": {
+        "status": "PASS",
+        "detail": "All servos moved",
+        "servo_pos_publisher": {
+          "status": "PASS",
+          "detail": "Range: 1992.0 ~ 12096.0"
+        },
+        "servo_temp_publisher": {
+          "status": "PASS",
+          "detail": "Range: 28 ~ 43"
+        },
+        "servo_volt_publisher": {
+          "status": "PASS",
+          "detail": "Range: 7407 ~ 7543"
+        },
+        "servo_results": {
+          "servo_1_min": {
+            "moved": true,
+            "detail": "Moved from 1992.0 to 3408.0"
+          },
+          "servo_1_max": {
+            "moved": true,
+            "detail": "Moved from 1992.0 to 4680.0"
+          },
+          "servo_2_min": {
+            "moved": true,
+            "detail": "Moved from 12024.0 to 11760.0"
+          },
+          "servo_2_max": {
+            "moved": true,
+            "detail": "Moved from 12024.0 to 10680.0"
+          },
+          "servo_3_min": {
+            "moved": true,
+            "detail": "Moved from 11952.0 to 11736.0"
+          },
+          "servo_3_max": {
+            "moved": true,
+            "detail": "Moved from 11952.0 to 10512.0"
+          },
+          "servo_4_min": {
+            "moved": true,
+            "detail": "Moved from 12072.0 to 11856.0"
+          },
+          "servo_4_max": {
+            "moved": true,
+            "detail": "Moved from 12072.0 to 10560.0"
+          },
+          "servo_5_min": {
+            "moved": true,
+            "detail": "Moved from 12000.0 to 12120.0"
+          },
+          "servo_5_max": {
+            "moved": true,
+            "detail": "Moved from 12000.0 to 12120.0"
+          },
+          "servo_6_min": {
+            "moved": true,
+            "detail": "Moved from 11952.0 to 10416.0"
+          },
+          "servo_6_max": {
+            "moved": true,
+            "detail": "Moved from 11952.0 to 8808.0"
+          }
+        }
+      }
+    }
+  },
+  "last_updated": "2025-06-13T11:24:15.980449"
+}

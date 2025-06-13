@@ -126,16 +126,16 @@ def generate_launch_description():
         )
     )
 
-    # # USB Camera
-    # usb_cam_launch = IncludeLaunchDescription(
-    #     PythonLaunchDescriptionSource(
-    #         os.path.join(
-    #             get_package_share_directory('usb_cam'),
-    #             'launch',
-    #             'camera.launch.py'
-    #         )
-    #     )
-    # )
+    # USB Camera
+    usb_cam_launch = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource(
+            os.path.join(
+                get_package_share_directory('usb_cam'),
+                'launch',
+                'camera.launch.py'
+            )
+        )
+    )
 
     # phidgets_container 
     phidgets_launch = IncludeLaunchDescription(
@@ -195,33 +195,33 @@ def generate_launch_description():
             {'domain_id':  domain_id},
         ]
     )
-    # usb_cam_check = Node(
-    #     package='hardware_test',
-    #     executable='usb_cam_check',
-    #     name='usb_cam_check',
-    #     output='screen',
-    #     emulate_tty=True,
-    #     parameters=[
-    #         {'robot_name':  robot_name},
-    #         {'domain_id':   domain_id},
-    #         {'json_folder': json_folder},
-    #         {'topic_name':  '/camera1/image_raw'},
-    #         {'timeout_s':   10.0},
-    #     ]
-    # )
+    usb_cam_check = Node(
+        package='hardware_test',
+        executable='usb_cam_check',
+        name='usb_cam_check',
+        output='screen',
+        emulate_tty=True,
+        parameters=[
+            {'robot_name':  robot_name},
+            {'domain_id':   domain_id},
+            {'json_folder': json_folder},
+            {'topic_name':  '/camera1/image_raw'},
+            {'timeout_s':   10.0},
+        ]
+    )
 
-    # arm_check = Node(
-    #     package='hardware_test',
-    #     executable='arm_check',
-    #     name='arm_check',
-    #     output='screen',
-    #     emulate_tty=True,
-    #     parameters=[
-    #         {'robot_name': robot_name},
-    #         {'domain_id':  domain_id},
-    #         {'json_folder': json_folder},
-    #     ]
-    # )
+    arm_check = Node(
+        package='hardware_test',
+        executable='arm_check',
+        name='arm_check',
+        output='screen',
+        emulate_tty=True,
+        parameters=[
+            {'robot_name': robot_name},
+            {'domain_id':  domain_id},
+            {'json_folder': json_folder},
+        ]
+    )
 
     # --- 4. RViz ---
     rviz_cfg = os.path.join(
@@ -246,7 +246,7 @@ def generate_launch_description():
         OpaqueFunction(function=_validate_required_args),
         # tf
         static_map_to_odom_node,
-        # static_base_link_to_laser_node,
+        static_base_link_to_laser_node,
         odometry_node,
         robot_state_publisher_node,
         cartesian_controller_node,
@@ -254,15 +254,15 @@ def generate_launch_description():
         # # driver launch
         realsense_launch,
         rplidar_launch,
-        # usb_cam_launch,
+        usb_cam_launch,
         phidgets_launch,
 
         # # check nodes
-        realsense_check,
-        rplidar_check,
+        # realsense_check,
+        # rplidar_check,
         # usb_cam_check,
-        phidgets_check,
-        # arm_check,
+        # phidgets_check,
+        arm_check,
 
         # RViz2
         rviz_node,
