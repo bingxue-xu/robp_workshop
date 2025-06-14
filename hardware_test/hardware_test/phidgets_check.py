@@ -41,7 +41,7 @@ class PhidgetsCheck(BaseTest):
         # 1. publish once /motor_controller/twist
         twist_pub = self.create_publisher(Twist, '/motor_controller/twist', 1)
         twist_msg = Twist()
-        twist_msg.linear.x = 0.5
+        twist_msg.linear.x = 0.3
         twist_msg.angular.z = 0.3
         for _ in range(5):
             twist_pub.publish(twist_msg)
