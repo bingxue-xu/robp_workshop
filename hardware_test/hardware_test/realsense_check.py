@@ -57,7 +57,7 @@ class RealSenseCheck(BaseTest):
 
         if not self.saved:
             safe_name = self.robot_name + '_realsense_' + self.topic_name.strip('/').replace('/', '_') + '.png'
-            out_path = os.path.join(self.json_folder, safe_name)
+            out_path = os.path.join(self.json_folder + '/images', safe_name)
             try:
                 cv2.imwrite(out_path, cv_img)
                 self.get_logger().info(f"Saved sample image to {out_path}")

@@ -16,11 +16,11 @@
             "name": "check",
             "type": "debugpy",
             "request": "launch",
-            "program": "${workspaceFolder}/hardware_test/hardware_test/rplidar_check.py",
+            "program": "${workspaceFolder}/hardware_test/hardware_test/usb_cam_check.py",
             "args": [
                 "--ros-args",
-                "-p", "robot_name:=Sneezy",
-                "-p", "domain_id:=4",
+                "-p", "robot_name:=Sleepy",
+                "-p", "domain_id:=7",
             ],
             "console": "integratedTerminal",
             "env": {
