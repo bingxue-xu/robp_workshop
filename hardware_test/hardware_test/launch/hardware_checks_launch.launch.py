@@ -259,7 +259,7 @@ def generate_launch_description():
 
         # # check nodes
         # realsense_check,
-        # rplidar_check,
+        rplidar_check,
         # usb_cam_check,
         # phidgets_check,
         arm_check,
