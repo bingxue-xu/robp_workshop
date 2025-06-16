@@ -1,0 +1,12 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "build icp_odometry",
+      "type": "shell",
+      "command": "colcon build --packages-select icp_odometry --cmake-args -DCMAKE_BUILD_TYPE=Debug",
+      "group": "build",
+      "problemMatcher": []
+    }
+  ]
+}

@@ -17,7 +17,7 @@ class Controller(Node):
         self.subscription = self.create_subscription(
             PointPixel, '/found_point', self.point_on_line_callback, 10)
         self.publisher_ = self.create_publisher(
-            Twist, '/motor_controller/twist', 10)
+            Twist, '/cmd_vel', 10)
 
     def point_on_line_control(self,  column: int, row: int):
         """

@@ -12,8 +12,7 @@ class CartesianController(Node):
 
     def __init__(self):
         super().__init__('cartesian_controller')
-        
-        self.subscp_twist = self.create_subscription(Twist, '/motor_controller/twist', self.twist_callback, 10)
+        self.subscp_twist = self.create_subscription(Twist, '/cmd_vel', self.twist_callback, 10)
         self.subscp_encoder = self.create_subscription(Encoders, '/motor/encoders', self.encoder_callback, 10)
         self.publish_dutycycle = self.create_publisher(DutyCycles, '/motor/duty_cycles', 10)
 

@@ -3,8 +3,8 @@
 <package format="3">
   <name>hardware_test</name>
   <version>0.0.0</version>
-  <description>TODO: Package description</description>
-  <maintainer email="autoxue@gmail.com">bingxue</maintainer>
+  <description>Test hardware components</description>
+  <maintainer email="autoxue@gmail.com">Bingxue Xu</maintainer>
   <license>MIT</license>
 
   <depend>geometry_msgs</depend>

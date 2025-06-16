@@ -26,6 +26,24 @@
             "env": {
                 "PYTHONUNBUFFERED": "1"
             }
+        },
+        {
+            "name": "Debug ICP Odometry",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "install/icp_odometry/lib/icp_odometry/icp_odometry",
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}",
+            "environment": [],
+            "externalConsole": true,
+            "MIMode": "gdb",
+            "setupCommands": [
+                { "description": "Enable pretty-printing for gdb", "text": "-enable-pretty-printing", "ignoreFailures": true }
+            ],
+            "preLaunchTask": "build icp_odometry",
+            "miDebuggerPath": "/usr/bin/gdb"
         }
+
     ]
 }
