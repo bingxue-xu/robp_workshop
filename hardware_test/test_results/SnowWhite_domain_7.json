@@ -1,7 +1,11 @@
 {
-  "robot_name": "Sweety",
+  "robot_name": "SnowWhite",
   "domain_id": 7,
   "results": {
+    "Nuc": {
+      "status": "PASS",
+      "detail": "No ubuntu installed"
+    },
     "RealSense": {
       "status": "PASS",
       "detail": "Received valid color frame (640\u00d7480)"

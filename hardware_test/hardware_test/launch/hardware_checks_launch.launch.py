@@ -252,18 +252,18 @@ def generate_launch_description():
         cartesian_controller_node,
 
         # # driver launch
-        realsense_launch,
-        rplidar_launch,
-        usb_cam_launch,
-        phidgets_launch,
+        # realsense_launch,
+        # rplidar_launch,
+        # usb_cam_launch,
+        # phidgets_launch,
 
         # # check nodes
         # realsense_check,
-        rplidar_check,
+        # rplidar_check,
         # usb_cam_check,
         # phidgets_check,
         arm_check,
 
         # RViz2
-        rviz_node,
+        # rviz_node,
     ])

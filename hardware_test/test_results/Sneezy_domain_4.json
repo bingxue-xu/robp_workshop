@@ -2,6 +2,10 @@
   "robot_name": "Sneezy",
   "domain_id": 4,
   "results": {
+    "Nuc": {
+      "status": "PASS",
+      "detail": "password unknown"
+    },
     "Arm": {
       "status": "PASS",
       "detail": {

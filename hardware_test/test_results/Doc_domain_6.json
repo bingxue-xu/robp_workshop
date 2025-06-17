@@ -2,6 +2,10 @@
   "robot_name": "Doc",
   "domain_id": 6,
   "results": {
+    "Nuc": {
+      "status": "PASS",
+      "detail": "Ubuntu 24.04, no password"
+    },
     "RealSense": {
       "status": "PASS",
       "detail": "Received valid color frame (1280\u00d7720)"
