@@ -1,0 +1,103 @@
+{
+  "robot_name": "Grumpy",
+  "domain_id": 5,
+  "results": {
+    "Nuc": {
+      "status": "PASS",
+      "detail": "Ubuntu installed"
+    },
+    "Phidgets": {
+      "status": "PASS",
+      "detail": {
+        "status": "PASS",
+        "detail": "All phidgets passed",
+        "Encoders": {
+          "status": "PASS",
+          "detail": "delta_encoder_left=8, delta_encoder_right=15"
+        },
+        "Motors": {
+          "status": "PASS",
+          "detail": "duty_cycle_left=0.100, duty_cycle_right=0.100"
+        },
+        "Spatial": {
+          "status": "PASS",
+          "detail": "acc=(0.27,0.21,-10.02)"
+        },
+        "Temperature": {
+          "status": "PASS",
+          "detail": "Temperature=30.33\u00b0C"
+        }
+      }
+    },
+    "RPLidar": {
+      "status": "PASS",
+      "detail": "Total rplidar points: 360, Max measured distance: 4.00 m"
+    },
+    "RealSense": {
+      "status": "PASS",
+      "detail": "Received valid color frame (1280\u00d7720)"
+    },
+    "Arm": {
+      "status": "PASS",
+      "detail": {
+        "status": "PASS",
+        "detail": "All servos moved",
+        "servo_pos_publisher": {
+          "status": "PASS",
+          "detail": "Range: 0.0 ~ 12024.0"
+        },
+        "servo_temp_publisher": {
+          "status": "PASS",
+          "detail": "Range: 0 ~ 33"
+        },
+        "servo_volt_publisher": {
+          "status": "PASS",
+          "detail": "Range: 0 ~ 7465"
+        },
+        "servo_results": {
+          "servo_2_max": {
+            "moved": true,
+            "detail": "Moved from 0.0 to 12024.0"
+          },
+          "servo_3_min": {
+            "moved": true,
+            "detail": "Moved from 9936.0 to 8136.0"
+          },
+          "servo_3_max": {
+            "moved": true,
+            "detail": "Moved from 8136.0 to 9888.0"
+          },
+          "servo_4_min": {
+            "moved": true,
+            "detail": "Moved from 12000.0 to 11352.0"
+          },
+          "servo_4_max": {
+            "moved": true,
+            "detail": "Moved from 11952.0 to 9816.0"
+          },
+          "servo_5_min": {
+            "moved": true,
+            "detail": "Moved from 12072.0 to 11304.0"
+          },
+          "servo_5_max": {
+            "moved": true,
+            "detail": "Moved from 11976.0 to 9768.0"
+          },
+          "servo_6_min": {
+            "moved": true,
+            "detail": "Moved from 12024.0 to 11664.0"
+          },
+          "servo_6_max": {
+            "moved": true,
+            "detail": "Moved from 12000.0 to 10200.0"
+          }
+        }
+      }
+    },
+    "USBCam": {
+      "status": "PASS",
+      "detail": "Received valid frame (640\u00d7480), not all-black/white"
+    }
+  },
+  "last_updated": "2025-06-24T20:38:34.068515"
+}
