@@ -249,21 +249,20 @@ def generate_launch_description():
         static_base_link_to_laser_node,
         odometry_node,
         robot_state_publisher_node,
-        cartesian_controller_node,
 
-        # # driver launch
-        # realsense_launch,
-        # rplidar_launch,
-        # usb_cam_launch,
-        # phidgets_launch,
-
-        # # check nodes
-        # realsense_check,
-        # rplidar_check,
-        # usb_cam_check,
-        # phidgets_check,
+        # driver launch
+        realsense_launch,
+        rplidar_launch,
+        usb_cam_launch,
+        phidgets_launch,
+# 
+        # check nodes
+        realsense_check,
+        rplidar_check,
+        usb_cam_check,
+        phidgets_check,
         arm_check,
 
         # RViz2
-        # rviz_node,
+        rviz_node,
     ])

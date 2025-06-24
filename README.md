@@ -62,9 +62,9 @@ https://github.com/user-attachments/assets/4e851c0b-155f-403f-a164-380398083e3c
 
 You can customize the system to your own needs by modifying perception and control, for example, following an object instead of a line
 
-- **Perception**:  *src/perception/perception/perception.py*
+- **Perception**:  `src/perception/perception/perception.py`
 
-- **Controller**: *src/controller/controller/controller.py*
+- **Controller**: `src/controller/controller/controller.py`
 
 ## Documentation 
 Here are some useful links:

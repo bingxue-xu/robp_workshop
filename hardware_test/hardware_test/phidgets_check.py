@@ -9,7 +9,7 @@ class PhidgetsCheck(BaseTest):
     def __init__(self):
         super().__init__(node_name='phidgets_check')
         self.hardware_key = 'Phidgets'
-        self.timeout_s = 10.0
+        self.timeout_s = 20.0
 
         self.results = {
             "Encoders": {"status": "FAIL", "detail": "No data received"},
@@ -23,13 +23,22 @@ class PhidgetsCheck(BaseTest):
         self._imu_value = None
         self._temp_value = None
 
+        self.duty_pub = self.create_publisher(DutyCycles, '/motor/duty_cycles', 1)
+        self.duty_msg = DutyCycles()
+        self.duty_msg.duty_cycle_left = 0.1
+        self.duty_msg.duty_cycle_right = 0.1
+        self.duty_timer = self.create_timer(0.1, self.publish_duty_cycle)  
+
+    def publish_duty_cycle(self):
+        self.duty_pub.publish(self.duty_msg)
+
     def setup_parameters(self):
         robot_name = self.declare_parameter('robot_name', '').value
         domain_id = self.declare_parameter('domain_id', 0).value
         json_folder = self.declare_parameter(
             'json_folder', '~/dd2419/workshop_ws/src/hardware_test/test_results'
         ).value
-        self.timeout_s = self.declare_parameter('timeout_s', 10.0).value
+        self.timeout_s = self.declare_parameter('timeout_s', 30.0).value
 
         self.update_config(
             robot_name=robot_name,
@@ -38,21 +47,25 @@ class PhidgetsCheck(BaseTest):
         )
 
     def is_passing(self, **kwargs):
-        # 1. publish once /motor_controller/twist
-        twist_pub = self.create_publisher(Twist, '/motor_controller/twist', 1)
-        twist_msg = Twist()
-        twist_msg.linear.x = 0.3
-        twist_msg.angular.z = 0.3
-        for _ in range(5):
-            twist_pub.publish(twist_msg)
-            rclpy.spin_once(self, timeout_sec=0.05)
-        self.get_logger().info("Published initial twist message to /motor_controller/twist")
 
         # 2. sub topic
+        self._last_encoder_left = None
+        self._last_encoder_right = None
+
         def enc_cb(msg):
-            self.get_logger().info(f"Encoders received: left={msg.delta_encoder_left}, right={msg.delta_encoder_right}")
-            self._received["Encoders"] = True
-            self._encoders_value = msg
+            changed = False
+            if self._last_encoder_left is not None and self._last_encoder_right is not None:
+                if (msg.delta_encoder_left != self._last_encoder_left) or (msg.delta_encoder_right != self._last_encoder_right):
+                    changed = True
+            self.get_logger().info(
+                f"Encoders received: left={msg.delta_encoder_left}, right={msg.delta_encoder_right}, changed={changed}"
+            )
+            if changed and (msg.delta_encoder_left != 0 or msg.delta_encoder_right != 0):
+                self._received["Encoders"] = True
+                self._encoders_value = msg
+            self._last_encoder_left = msg.delta_encoder_left
+            self._last_encoder_right = msg.delta_encoder_right
+
         enc_sub = self.create_subscription(Encoders, '/motor/encoders', enc_cb, 1)
 
         def mot_cb(msg):
@@ -74,7 +87,6 @@ class PhidgetsCheck(BaseTest):
         start = self.get_clock().now()
         while (not all(self._received.values())) and \
               (self.get_clock().now() - start).nanoseconds / 1e9 < self.timeout_s:
-            twist_pub.publish(twist_msg)
             rclpy.spin_once(self, timeout_sec=0.1)
 
         # 4. check
@@ -164,6 +176,7 @@ class PhidgetsCheck(BaseTest):
 
     def perform_test(self):
         self.setup_parameters()
+        
         passed, phidgets_detail = self.is_passing()
         self.save_result(self.hardware_key, passed, phidgets_detail)
         return passed, phidgets_detail

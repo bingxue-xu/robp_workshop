@@ -71,11 +71,12 @@ class ArmCheck(BaseTest):
     def check_servo_movement(self, i, initial_pos, results, servo_name):
         # Wait up to 2 seconds for feedback to change
         timeout = 2.0
-        interval = 0.1
+        interval = 0.2
         elapsed = 0.0
         moved = False
         before = initial_pos[i]
         after = before
+        time.sleep(interval)  # Ensure we have time to receive initial position
         while elapsed < timeout:
             rclpy.spin_once(self, timeout_sec=interval)
             moved_pos = list(getattr(self.servo_pos, 'position', []))
@@ -167,12 +168,13 @@ class ArmCheck(BaseTest):
 
         for i in range(6):
             servo_name = f"servo_{i+1}"
-            initial_pos = list(getattr(self.servo_pos, 'position', []))
 
             # Move to min
             pos = [-1] * 6
             pos[i] = min_pos
             self.move_servos(pos, upright_time)
+            time.sleep(0.3)  # 等待反馈刷新
+            initial_pos = list(getattr(self.servo_pos, 'position', []))
             t_min = threading.Thread(target=self.check_servo_movement, args=(i, initial_pos, results, servo_name + "_min"))
             t_min.start()
             threads.append(t_min)
@@ -180,6 +182,8 @@ class ArmCheck(BaseTest):
             # Move to max
             pos[i] = max_pos
             self.move_servos(pos, upright_time)
+            time.sleep(0.3)  # 等待反馈刷新
+            initial_pos = list(getattr(self.servo_pos, 'position', []))
             t_max = threading.Thread(target=self.check_servo_movement, args=(i, initial_pos, results, servo_name + "_max"))
             t_max.start()
             threads.append(t_max)
