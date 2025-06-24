@@ -12,7 +12,7 @@ LobotSerialServoControl BusServo(mySerial, RECEIVE_ENABLE_PIN, TRANSMIT_ENABLE_P
 void setup() {
   Serial.begin(115200);
   delay(1000);
-  Serial.println("启动：设置舵机 ID");
+  Serial.println("Startup: Setting servo ID");
 
   // Start UART2, TX only
   mySerial.begin(115200, SERIAL_8N1, SERVO_RX_PIN, SERVO_TX_PIN);
@@ -23,25 +23,24 @@ void setup() {
   int oldID = 254;  // Broadcast ID (factory default)
 
   // Step 1: Move servo using old ID (broadcast)
-  Serial.println("使用旧 ID (254) 移动舵机");
+  Serial.println("Moving servo with old ID (254)");
   BusServo.LobotSerialServoMove(oldID, 500, 1000);
   delay(1500);
 
   // Step 2: Change ID
   int newID = 3;
-  Serial.print("发送更改 ID 命令：254 -> ");
+  Serial.print("Sending change ID command: 254 -> 3 ");
   Serial.println(newID);
   BusServo.LobotSerialServoSetID(oldID, newID);
   delay(1000);
 
   // Step 3: Move using new ID
-  Serial.println("使用新 ID (3) 移动舵机");
+  Serial.println("Moving servo with new ID (3)");
   BusServo.LobotSerialServoMove(newID, 250, 1000);
   delay(1500);
 
-  Serial.println("设置 ID 完成");
+  Serial.println("Done setting ID");
 }
 
 void loop() {
-  // 可选添加循环控制逻辑
 }
