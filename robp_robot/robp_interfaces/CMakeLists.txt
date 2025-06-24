@@ -13,16 +13,10 @@ find_package(std_msgs REQUIRED)
 set(msg_files
   "msg/DutyCycles.msg"
   "msg/Encoders.msg"
-  "msg/HSVFilter.msg"
-  "msg/PointPixel.msg"
   )
-
-set(action_files
-  "action/LineFollower.action")
 
 rosidl_generate_interfaces(${PROJECT_NAME}
   ${msg_files}
-  ${action_files}
   DEPENDENCIES std_msgs
 )
 
