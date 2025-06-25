@@ -9,7 +9,7 @@ def extract_servo_pass(servo_results):
         max_key = f"servo_{i}_max"
         min_moved = servo_results.get(min_key, {}).get("moved", False)
         max_moved = servo_results.get(max_key, {}).get("moved", False)
-        servo_pass[f"servo_{i}_pass"] = "PASS" if (min_moved and max_moved) else "FAIL"
+        servo_pass[f"servo_{i}"] = "PASS" if (min_moved and max_moved) else "FAIL"
     return servo_pass
 
 def truncate(text, maxlen=50):
@@ -24,10 +24,13 @@ def gather_json_to_table(folder):
             continue
         with open(os.path.join(folder, fname), "r") as f:
             data = json.load(f)
+        last_updated = data.get("last_updated")
+        if isinstance(last_updated, str) and "." in last_updated:
+            last_updated = last_updated.split(".")[0]
         row = {
             "robot_name": data.get("robot_name"),
             "domain_id": data.get("domain_id"),
-            "last_updated": data.get("last_updated"),
+            "last_updated": last_updated,
         }
         results = data.get("results", {})
 
