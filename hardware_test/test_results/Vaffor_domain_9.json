@@ -82,7 +82,34 @@
     "RealSense": {
       "status": "PASS",
       "detail": "Received valid color frame (1280\u00d7720)"
+    },
+    "Phidgets": {
+      "status": "PASS",
+      "detail": {
+        "status": "PASS",
+        "detail": "All phidgets passed",
+        "Encoders": {
+          "status": "PASS",
+          "detail": "delta_encoder_left=40, delta_encoder_right=8"
+        },
+        "Motors": {
+          "status": "PASS",
+          "detail": "duty_cycle_left=0.100, duty_cycle_right=0.100"
+        },
+        "Spatial": {
+          "status": "PASS",
+          "detail": "acc=(0.14,0.22,-10.00)"
+        },
+        "Temperature": {
+          "status": "PASS",
+          "detail": "Temperature=29.57\u00b0C"
+        }
+      }
+    },
+    "RPLidar": {
+      "status": "FAIL",
+      "detail": "No rplidar hardware"
     }
   },
-  "last_updated": "2025-06-24T18:31:34.459770"
+  "last_updated": "2025-06-25T10:55:19.804618"
 }
