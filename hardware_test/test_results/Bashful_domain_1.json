@@ -6,6 +6,10 @@
       "status": "PASS",
       "detail": "password: robot"
     },
+    "Power": {
+      "status": "PASS",
+      "detail": "works with battery, voltage: 15.8V"
+    },
     "USBCam": {
       "status": "PASS",
       "detail": "Received valid frame (640\u00d7480), not all-black/white"

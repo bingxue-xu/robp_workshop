@@ -6,6 +6,10 @@
       "status": "PASS",
       "detail": "No ubuntu installed"
     },
+    "Power": {
+      "status": "PASS",
+      "detail": "works with battery, voltage: 15.8V"
+    },
     "RPLidar": {
       "status": "FAIL",
       "detail": "No rplidar hardware"
@@ -109,11 +113,10 @@
           "detail": "Temperature=30.77\u00b0C"
         }
       }
+    },
+    "Comment": {
+      "detail": "Servo5 is loose"
     }
   },
-  "Others": {
-      "status": "FAIL",
-      "detail": "Voltage display not working, Multimeter: 18.9V"
-    },
   "last_updated": "2025-06-17T15:51:15.373151"
 }

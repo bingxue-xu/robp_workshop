@@ -6,6 +6,10 @@
       "status": "PASS",
       "detail": "No ubuntu installed"
     },
+    "Power": {
+      "status": "PASS",
+      "detail": "works with battery, voltage: 15.8V"
+    },
     "RealSense": {
       "status": "PASS",
       "detail": "Received valid color frame (640\u00d7480)"
@@ -109,6 +113,9 @@
           }
         }
       }
+    },
+    "Comment": {
+      "detail": "No voltage display"
     }
   },
   "last_updated": "2025-06-14T11:35:29.682265"

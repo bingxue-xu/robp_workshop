@@ -6,6 +6,10 @@
       "status": "PASS",
       "detail": "password unknown"
     },
+    "Power": {
+      "status": "PASS",
+      "detail": "works with battery, voltage: 16.1V"
+    },
     "Arm": {
       "status": "PASS",
       "detail": {

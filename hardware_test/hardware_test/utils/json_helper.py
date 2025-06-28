@@ -36,6 +36,7 @@ def gather_json_to_table(folder):
 
         # Only show PASS/FAIL for each hardware
         row["nuc"] = results.get("Nuc", {}).get("status", "")
+        row["power"] = results.get("Power", {}).get("status", "")
         row["usb_cam"] = results.get("USBCam", {}).get("status", "")
         row["phidgets"] = results.get("Phidgets", {}).get("status", "")
         row["rplidar"] = results.get("RPLidar", {}).get("status", "")
@@ -62,6 +63,10 @@ def gather_json_to_table(folder):
             if row.get(key, "") == "FAIL":
                 detail = results.get(key.capitalize(), {}).get("detail", "")
                 row["fail_detail"] += f"{key}: {truncate(detail)}; "
+                
+        # Add comment detail if exists
+        comment = results.get("Comment", {})
+        row["comment"] = comment.get("detail", "") if isinstance(comment, dict) else ""
 
         rows.append(row)
     df = pd.DataFrame(rows)

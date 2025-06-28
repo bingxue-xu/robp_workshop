@@ -6,6 +6,10 @@
       "status": "PASS",
       "detail": "Ubuntu installed"
     },
+    "Power": {
+      "status": "PASS",
+      "detail": "confirmed with Waqas"
+    },
     "Phidgets": {
       "status": "PASS",
       "detail": {

@@ -6,6 +6,10 @@
       "status": "PASS",
       "detail": "Ubuntu 24.04, no password"
     },
+    "Power": {
+      "status": "PASS",
+      "detail": "works with battery, voltage: 15.4V"
+    },
     "RealSense": {
       "status": "PASS",
       "detail": "Received valid color frame (1280\u00d7720)"
