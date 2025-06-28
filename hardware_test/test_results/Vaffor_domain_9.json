@@ -6,6 +6,10 @@
       "status": "PASS",
       "detail": "Ubuntu installed"
     },
+    "Power": {
+      "status": "PASS",
+      "detail": "works with battery, voltage: 15.7V"
+    },
     "Arm": {
       "status": "PASS",
       "detail": {
@@ -107,9 +111,12 @@
       }
     },
     "RPLidar": {
-      "status": "FAIL",
-      "detail": "No rplidar hardware"
+      "status": "PASS",
+      "detail": "Total rplidar points: 720, Max measured distance: 6.70 m"
+    },
+    "Comment": {
+      "status": "good to adjust deviation for servos"
     }
   },
-  "last_updated": "2025-06-25T10:55:19.804618"
+  "last_updated": "2025-06-27T15:55:55.548321"
 }
