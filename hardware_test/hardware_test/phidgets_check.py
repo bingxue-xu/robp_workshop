@@ -23,7 +23,7 @@ class PhidgetsCheck(BaseTest):
         self._imu_value = None
         self._temp_value = None
 
-        self.duty_pub = self.create_publisher(DutyCycles, '/motor/duty_cycles', 1)
+        self.duty_pub = self.create_publisher(DutyCycles, '/motor/duty_cycles', 10)
         self.duty_msg = DutyCycles()
         self.duty_msg.duty_cycle_left = 0.1
         self.duty_msg.duty_cycle_right = 0.1
@@ -31,6 +31,7 @@ class PhidgetsCheck(BaseTest):
 
     def publish_duty_cycle(self):
         self.duty_pub.publish(self.duty_msg)
+        # self.get_logger().info(f"Publishing duty cycles: left={self.duty_msg.duty_cycle_left}, right={self.duty_msg.duty_cycle_right}")
 
     def setup_parameters(self):
         robot_name = self.declare_parameter('robot_name', '').value

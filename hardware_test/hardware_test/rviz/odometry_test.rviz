@@ -1,0 +1,173 @@
+# 编辑 ~/dd2419/workshop_ws/src/hardware_test/hardware_test/rviz/odometry_test.rviz
+
+Panels:
+  - Class: rviz_common/Displays
+    Help Height: 0
+    Name: Displays
+    Property Tree Widget:
+      Expanded:
+        - /Global Options1
+        - /Theoretical Square1
+        - /Odometry1
+      Splitter Ratio: 0.5
+    Tree Height: 574
+  - Class: rviz_common/Selection
+    Name: Selection
+  - Class: rviz_common/Views
+    Expanded:
+      - /Current View1
+    Name: Views
+    Splitter Ratio: 0.5
+  - Class: rviz_common/Time
+    Name: Time
+
+Visualization Manager:
+  Class: ""
+  Displays:
+    # 保留网格
+    - Alpha: 0.5
+      Cell Size: 1
+      Class: rviz_default_plugins/Grid
+      Color: 160; 160; 164
+      Enabled: true
+      Line Style:
+        Line Width: 0.03
+        Value: Lines
+      Name: Grid
+      Plane Cell Count: 10
+      Reference Frame: <Fixed Frame>
+      Value: true
+
+    # 保留机器人模型（重要！）
+    - Alpha: 1
+      Class: rviz_default_plugins/RobotModel
+      Collision Enabled: false
+      Description Source: Topic
+      Description Topic:
+        Value: /robot_description  # 使用现有的机器人描述
+      Enabled: true
+      Links:
+        All Links Enabled: true
+        base_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        camera_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+      Name: RobotModel
+      Value: true
+      Visual Enabled: true
+
+    # 保留TF变换（重要！）
+    - Class: rviz_default_plugins/TF
+      Enabled: true
+      Frame Timeout: 15
+      Frames:
+        All Enabled: false
+        base_link:
+          Value: true
+        map:
+          Value: false  # 里程计测试不需要map
+        odom:
+          Value: true   # 保留odom坐标系
+      Marker Scale: 0.5
+      Name: TF
+      Show Arrows: true
+      Show Axes: true
+      Show Names: true
+      Tree:
+        odom:           # 以odom为根坐标系
+          base_link: {} # base_link在odom下
+      Value: true
+
+    # 添加里程计轨迹显示
+    - Alpha: 1
+      Buffer Length: 1000
+      Class: rviz_default_plugins/Odometry
+      Covariance:
+        Orientation:
+          Alpha: 0.5
+          Color: 255; 255; 127
+          Value: false
+        Position:
+          Alpha: 0.3
+          Color: 204; 51; 204
+          Value: false
+        Value: false
+      Enabled: true
+      Keep: 1000
+      Name: Odometry
+      Position Tolerance: 0.1
+      Shape:
+        Alpha: 1
+        Axes Length: 0.1
+        Color: 255; 255; 255  # 白色轨迹
+        Value: Arrow
+      Topic:
+        Value: /odom
+      Value: true
+
+    # 添加理论方形路径
+    - Alpha: 1
+      Autocompute Intensity Bounds: true
+      Class: rviz_default_plugins/PointCloud2
+      Color: 0; 255; 0
+      Color Transformer: RGB8  # 重要！使用RGB8来显示颜色
+      Decay Time: 0
+      Enabled: true
+      Name: Theoretical Square
+      Position Transformer: XYZ
+      Size (m): 0.02
+      Style: Points
+      Topic:
+        Durability Policy: Transient Local  # 持久显示
+        Value: /theoretical_square
+      Use Fixed Frame: true
+      Value: true
+
+    # 移除不需要的显示器
+    # - RGB-D 点云 (删除)
+    # - Color 图像 (删除) 
+    # - Path (删除，因为我们用理论方形)
+    # - Marker (删除)
+
+  # 全局选项
+  Enabled: true
+  Global Options:
+    Background Color: 0; 0; 0
+    Fixed Frame: odom  # 改为odom坐标系
+    Frame Rate: 30
+
+  # 保留工具栏
+  Tools:
+    - Class: rviz_default_plugins/Interact
+    - Class: rviz_default_plugins/MoveCamera
+    - Class: rviz_default_plugins/Select
+    - Class: rviz_default_plugins/FocusCamera
+    - Class: rviz_default_plugins/Measure
+
+  # 保留第三人称跟随视角
+  Views:
+    Current:
+      Class: rviz_default_plugins/ThirdPersonFollower
+      Distance: 8.0  # 调整距离更适合观察方形路径
+      Enable Stereo Rendering:
+        Value: false
+      Focal Point:
+        X: 0
+        Y: 0
+        Z: 0
+      Name: Current View
+      Pitch: 0.8
+      Target Frame: base_link  # 跟随机器人
+      Value: ThirdPersonFollower (rviz_default_plugins)
+      Yaw: 2.0
+
+Window Geometry:
+  Displays:
+    collapsed: false
+  Height: 1043
+  Width: 1920

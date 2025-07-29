@@ -4,7 +4,7 @@ import os
 
 from ament_index_python.packages import get_package_share_directory
 from launch import LaunchDescription
-from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription, OpaqueFunction
+from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription, OpaqueFunction, TimerAction
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.substitutions import LaunchConfiguration, PathJoinSubstitution
 from launch_ros.actions import Node
@@ -37,10 +37,37 @@ def generate_launch_description():
         description='Folder to store JSON results'
     )
 
+    # odometry config handle
+    square_size_arg = DeclareLaunchArgument(
+        'square_size',
+        default_value='1.0',
+        description='Size of the square path in meters'
+    )
+    speed_arg = DeclareLaunchArgument(
+        'speed',
+        default_value='0.2',
+        description='Linear speed in m/s'
+    )
+    angular_speed_arg = DeclareLaunchArgument(
+        'angular_speed',
+        default_value='0.5',
+        description='Angular speed in rad/s'
+    )
+
+    laps_per_direction_arg = DeclareLaunchArgument(
+        'laps_per_direction',
+        default_value='2',
+        description='Number of laps to perform in each direction'
+    )
+
     # config handle
     robot_name = LaunchConfiguration('robot_name')
     domain_id  = LaunchConfiguration('domain_id')
     json_folder= LaunchConfiguration('json_folder')
+    square_size= LaunchConfiguration('square_size')
+    speed      = LaunchConfiguration('speed')
+    angular_speed = LaunchConfiguration('angular_speed')
+    laps       = LaunchConfiguration('laps_per_direction')
 
     # --- 1. start tf  ---
     static_map_to_odom_node = Node(
@@ -57,14 +84,35 @@ def generate_launch_description():
         output='screen',
         arguments=['0', '0', '0', '0', '0', '0', 'base_link','laser']
     )
-    # --- ICP Odometry Node ---
-    icp_odometry_node = Node(
-        package='icp_odometry',
-        executable='icp_odometry',
-        name='icp_odometry',
+
+    # --- Odometry Node ---
+    odometry_node = Node(
+        package='odometry',
+        executable='odometry',
+        name='odometry_node',
         output='screen'
     )
 
+    odometry_test_node = Node(
+        package='hardware_test',
+        executable='odometry_test',
+        name='odometry_test',
+        output='screen',
+        parameters=[
+            {'robot_name': robot_name},
+            {'domain_id': domain_id},
+            {'json_folder': json_folder},
+            {'square_size': square_size},
+            {'speed': speed},
+            {'angular_speed': angular_speed},
+            {'laps_per_direction': laps},
+        ]
+    )
+
+    delayed_odometry_test_node = TimerAction(
+        period=3.0,
+        actions=[odometry_test_node]
+    )
 
     robot_state_publisher_node = Node(
         package='robot_state_publisher',
@@ -137,7 +185,6 @@ def generate_launch_description():
         )
     )
 
-
     # phidgets_container 
     phidgets_launch = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
@@ -147,10 +194,6 @@ def generate_launch_description():
                 'phidgets_launch.py'
             )
         ),
-        launch_arguments={
-            'robot_name': robot_name,
-            'domain_id':  domain_id,
-        }.items()
     )
 
     # --- 4. RViz ---
@@ -173,23 +216,28 @@ def generate_launch_description():
         robot_name_arg,
         domain_id_arg,
         json_folder_arg,
+        square_size_arg,
+        speed_arg,
+        angular_speed_arg,
+        laps_per_direction_arg,
         OpaqueFunction(function=_validate_required_args),
         # tf
         static_map_to_odom_node,
         static_base_link_to_laser_node,
-        icp_odometry_node,
+        odometry_node,
         robot_state_publisher_node,
         cartesian_controller_node,
 
-        # marker nodes
-        marker_1_node,
-        marker_2_node,
+        # # marker nodes
+        # marker_1_node,
+        # marker_2_node,
 
         # # driver launch
-        # realsense_launch,
-        rplidar_launch,
+        # # realsense_launch,
+        # rplidar_launch,
         phidgets_launch,
 
         # RViz2
         rviz_node,
+        delayed_odometry_test_node
     ])

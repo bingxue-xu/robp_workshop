@@ -29,6 +29,7 @@ setup(
             'phidgets_check = hardware_test.phidgets_check:main',
             'usb_cam_check = hardware_test.usb_cam_check:main',
             'arm_check = hardware_test.arm_check:main',
+            'odometry_test = hardware_test.odometry_test:main',
         ],
     },
 )
