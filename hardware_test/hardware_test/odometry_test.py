@@ -163,7 +163,6 @@ class OdometryTest(BaseTest):
                 self.get_logger().info(f"CCW lap {lap + 1}: {result['closure_error']:.4f}m")
             else:
                 return False
-
         for lap in range(self.laps):
             result = self.run_single_square('cw')
             if result:
@@ -255,6 +254,7 @@ class OdometryTest(BaseTest):
                 continue
 
             angle_diff = current_pose['yaw'] - start_pose['yaw']
+            self.get_logger().info(f"Current angle: {math.degrees(angle_diff):.2f}°")
             while angle_diff > math.pi:
                 angle_diff -= 2 * math.pi
             while angle_diff < -math.pi:
@@ -293,7 +293,7 @@ class OdometryTest(BaseTest):
             "test_config": f"{self.square_size:.1f}m square path, {len(self.test_results)} laps bidirectional",
             "mean_error_m": f"{round(mean_error, 4)} out of {self.square_size}",
             "std_error_m": f"{round(std_error, 4)}",
-            "ccw_mean_error_m": f"{round(ccw_mean_error, 4)} VS cw_mean_error_m: {round(cw_mean_error, 4)}",
+            "ccw VS cw_mean_error_m": f"{round(ccw_mean_error, 4)} VS {round(cw_mean_error, 4)}",
             "relative_accuracy_percent": f"{round(relative_accuracy, 4)}% out of total {self.square_size * 4} m",
         }
 

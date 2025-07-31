@@ -15,15 +15,37 @@ find_package(nav_msgs REQUIRED)
 find_package(geometry_msgs REQUIRED)
 find_package(tf2_ros REQUIRED)
 find_package(laser_geometry REQUIRED)
+find_package(robp_interfaces REQUIRED)
+find_package(tf2_geometry_msgs REQUIRED)
 
 include_directories(${PCL_INCLUDE_DIRS})
 
-add_executable(icp_odometry src/icp_odometry.cpp)
+# ICP main executable
+add_executable(icp_odometry
+  src/icp_odometry.cpp)
 ament_target_dependencies(icp_odometry
-  rclcpp sensor_msgs nav_msgs geometry_msgs tf2_ros pcl_conversions laser_geometry
+  rclcpp sensor_msgs nav_msgs geometry_msgs tf2_ros pcl_conversions laser_geometry robp_interfaces tf2_geometry_msgs
 )
+target_include_directories(icp_odometry
+  PUBLIC
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+    $<INSTALL_INTERFACE:include>)
 target_link_libraries(icp_odometry ${PCL_LIBRARIES})
-install(TARGETS icp_odometry
+
+# Encoder IMU 
+add_executable(encoder_imu_odometry_node
+  src/encoder_imu_odometry.cpp
+  src/encoder_imu_odometry_node.cpp)
+
+ament_target_dependencies(encoder_imu_odometry_node
+  rclcpp sensor_msgs nav_msgs geometry_msgs tf2_ros robp_interfaces tf2_geometry_msgs
+)
+target_include_directories(encoder_imu_odometry_node
+  PUBLIC
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+    $<INSTALL_INTERFACE:include>)
+
+install(TARGETS icp_odometry encoder_imu_odometry_node
   DESTINATION lib/${PROJECT_NAME}
 )
 add_compile_options(-Wall -Wextra -Wpedantic -g)

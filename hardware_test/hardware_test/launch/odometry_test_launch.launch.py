@@ -93,6 +93,16 @@ def generate_launch_description():
         output='screen'
     )
 
+    encoder_imu_odometry_node = Node(
+        package='icp_odometry',
+        executable='encoder_imu_odometry_node',
+        name='encoder_imu_odometry_node',
+        output='screen',
+        parameters=[
+            {'use_imu': False},
+        ]
+    )
+
     odometry_test_node = Node(
         package='hardware_test',
         executable='odometry_test',
@@ -224,7 +234,8 @@ def generate_launch_description():
         # tf
         static_map_to_odom_node,
         static_base_link_to_laser_node,
-        odometry_node,
+        # odometry_node,
+        encoder_imu_odometry_node,
         robot_state_publisher_node,
         cartesian_controller_node,
 
@@ -239,5 +250,5 @@ def generate_launch_description():
 
         # RViz2
         rviz_node,
-        delayed_odometry_test_node
+        # delayed_odometry_test_node
     ])

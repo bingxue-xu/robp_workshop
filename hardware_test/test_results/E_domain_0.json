@@ -3,15 +3,9 @@
   "domain_id": 0,
   "results": {
     "Odometry": {
-      "status": "PASS",
-      "detail": {
-        "test_config": "1.0m square path, 4 laps bidirectional",
-        "mean_error_m": "0.2545 out of 1.0",
-        "std_error_m": "0.1758",
-        "ccw_mean_error_m": "0.0912 VS cw_mean_error_m: 0.4177",
-        "relative_accuracy_percent": "93.6386% out of total 4.0 m"
-      }
+      "status": "FAIL",
+      "detail": "Failed to receive odometry data"
     }
   },
-  "last_updated": "2025-07-29T18:36:00.571662"
+  "last_updated": "2025-07-31T12:18:49.818338"
 }
