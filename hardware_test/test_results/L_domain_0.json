@@ -1,5 +1,5 @@
 {
-  "robot_name": "unset",
+  "robot_name": "L",
   "domain_id": 0,
   "results": {
     "Odometry": {
@@ -7,5 +7,5 @@
       "detail": "Failed to receive odometry data"
     }
   },
-  "last_updated": "2025-08-02T14:55:54.560639"
+  "last_updated": "2025-08-01T16:16:50.315816"
 }

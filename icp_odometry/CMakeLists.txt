@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.8)
 project(icp_odometry)
 
 if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
-  add_compile_options(-Wall -Wextra -Wpedantic)
+  add_compile_options(-Wall -Wextra -Wpedantic -g)
 endif()
 
 # find dependencies
@@ -22,7 +22,8 @@ include_directories(${PCL_INCLUDE_DIRS})
 
 # ICP main executable
 add_executable(icp_odometry
-  src/icp_odometry.cpp)
+  src/icp_odometry.cpp
+  src/icp_odometry_node.cpp)
 ament_target_dependencies(icp_odometry
   rclcpp sensor_msgs nav_msgs geometry_msgs tf2_ros pcl_conversions laser_geometry robp_interfaces tf2_geometry_msgs
 )

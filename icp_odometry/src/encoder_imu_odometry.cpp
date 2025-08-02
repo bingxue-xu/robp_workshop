@@ -9,7 +9,7 @@ EncoderImuOdometry::EncoderImuOdometry()
   use_imu_(false), save_drift_(false), imu_initialized_(false)
   {
 
-    this->declare_parameter("use_imu", true);
+    this->declare_parameter("use_imu", false);
     this->declare_parameter("wheel_base", 0.311);
     this->declare_parameter("wheel_radius", 0.098425 / 2);
     this->declare_parameter("ticks_per_revolution", 48 * 64);
@@ -25,12 +25,12 @@ EncoderImuOdometry::EncoderImuOdometry()
     encoder_sub_ = this->create_subscription<robp_interfaces::msg::Encoders>(
         "/motor/encoders", 10,
         std::bind(&EncoderImuOdometry::encoderCallback, this, std::placeholders::_1));
-    
-    path_pub_ = this->create_publisher<nav_msgs::msg::Path>("/path", 10);
+
+    odom_pub_ = this->create_publisher<nav_msgs::msg::Odometry>("/odom/encoder_imu", 10);
+    path_pub_ = this->create_publisher<nav_msgs::msg::Path>("/path/encoder_imu", 10);
     path_.header.frame_id = "odom";
 
     tf_broadcaster_ = std::make_shared<tf2_ros::TransformBroadcaster>(this);
-    last_imu_time_ = this->now();
 
     RCLCPP_INFO(this->get_logger(), "Encoder IMU Odometry Node Initialized");
   }
@@ -41,6 +41,7 @@ void EncoderImuOdometry::encoderCallback(const robp_interfaces::msg::Encoders::S
     int delta_r = msg->delta_encoder_right;
 
     bool is_stationary = (std::abs(delta_l) < 25 && std::abs(delta_r) < 25 && std::abs(delta_l -delta_r) < 3);
+    RCLCPP_INFO(this->get_logger(), "Encoder deltas: left=%d, right=%d, stationary=%s", delta_l, delta_r, is_stationary ? "true" : "false");
     if (is_stationary) {
         if (!save_drift_) {
             RCLCPP_INFO(this->get_logger(), "Stationary calibration started");
@@ -65,17 +66,22 @@ void EncoderImuOdometry::encoderCallback(const robp_interfaces::msg::Encoders::S
         yaw_ += delta_theta;
     }
 
-    publishPathAndTF(msg->header.stamp);
+    static rclcpp::Time last_time = this->now();
+    rclcpp::Time current_time = rclcpp::Time(msg->header.stamp);
+    double dt = (current_time - last_time).seconds();
+    double linear_velo = 0.0;
+    double angular_velo = 0.0;
+    if (dt > 0.001) {
+        linear_velo = D / dt;
+        angular_velo = delta_theta / dt;
+    }
+    last_time = current_time;
+
+    publishOdomPathAndTF(msg->header.stamp, linear_velo, angular_velo);
 }
 
 void EncoderImuOdometry::imuCallback(const sensor_msgs::msg::Imu::SharedPtr msg)
 {
-    // rclcpp::Time now_time = this->now();
-    // double dt = (now_time - last_imu_time_).seconds();
-    // last_imu_time_ = now_time;
-
-    // omega_ = msg->angular_velocity.z;
-
     tf2::Quaternion q(
         msg->orientation.x,
         msg->orientation.y,
@@ -100,7 +106,7 @@ void EncoderImuOdometry::imuCallback(const sensor_msgs::msg::Imu::SharedPtr msg)
     }
 }
 
-void EncoderImuOdometry::publishPathAndTF(const rclcpp::Time& stamp)
+void EncoderImuOdometry::publishOdomPathAndTF(const rclcpp::Time& stamp , double linear_velo, double angular_velo)
 {
     geometry_msgs::msg::PoseStamped pose;
     pose.header.stamp = stamp;
@@ -112,6 +118,18 @@ void EncoderImuOdometry::publishPathAndTF(const rclcpp::Time& stamp)
     tf2::Quaternion q;
     q.setRPY(0.0, 0.0, yaw_);
     pose.pose.orientation = tf2::toMsg(q);
+
+    nav_msgs::msg::Odometry odom_msg;
+    odom_msg.header = pose.header;
+    odom_msg.child_frame_id = "base_link";
+    odom_msg.pose.pose = pose.pose;
+    odom_msg.twist.twist.linear.x = linear_velo;
+    odom_msg.twist.twist.angular.z = angular_velo;
+
+    setSimpleCovariance(odom_msg);
+
+    odom_pub_->publish(odom_msg);
+    RCLCPP_INFO(this->get_logger(), "Published Odometry: x=%.2f, y=%.2f, theta=%.2f", x_, y_, yaw_);
 
     path_.poses.push_back(pose);
     path_.header.stamp = stamp;
@@ -128,4 +146,29 @@ void EncoderImuOdometry::publishPathAndTF(const rclcpp::Time& stamp)
 
     tf_broadcaster_->sendTransform(transform);
     RCLCPP_INFO(this->get_logger(), "Published path and TF");
+}
+
+void EncoderImuOdometry::setSimpleCovariance(
+    nav_msgs::msg::Odometry& odom_msg)
+{
+    // init 0
+    std::fill(odom_msg.pose.covariance.begin(), odom_msg.pose.covariance.end(), 0.0);
+    std::fill(odom_msg.twist.covariance.begin(), odom_msg.twist.covariance.end(), 0.0);
+
+    // only diagonal elements are non-zero
+    // pose covariance
+    odom_msg.pose.covariance[0] = 0.001;   // x
+    odom_msg.pose.covariance[7] = 0.001;   // y
+    odom_msg.pose.covariance[14] = 0.1;    // z (大，因为2D)
+    odom_msg.pose.covariance[21] = 0.1;    // roll (大，因为2D)
+    odom_msg.pose.covariance[28] = 0.1;    // pitch (大，因为2D)
+    odom_msg.pose.covariance[35] = use_imu_ ? 0.0001 : 0.001;  // yaw
+
+    // twist covariance
+    odom_msg.twist.covariance[0] = 0.001;  // vx
+    odom_msg.twist.covariance[7] = 0.1;    // vy (大，差动驱动)
+    odom_msg.twist.covariance[14] = 0.1;   // vz
+    odom_msg.twist.covariance[21] = 0.1;   // wx
+    odom_msg.twist.covariance[28] = 0.1;   // wy
+    odom_msg.twist.covariance[35] = use_imu_ ? 0.0001 : 0.001;  // wz
 }
