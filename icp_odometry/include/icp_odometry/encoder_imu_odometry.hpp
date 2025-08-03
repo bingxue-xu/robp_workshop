@@ -24,6 +24,7 @@ private:
     double yaw_init_;
     double drift_;
     bool use_imu_;
+    bool publish_tf_;
     bool save_drift_;
     bool imu_initialized_;
     int ticks_per_revolution_;

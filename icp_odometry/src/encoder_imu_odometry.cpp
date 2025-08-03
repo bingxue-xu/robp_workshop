@@ -6,15 +6,17 @@ EncoderImuOdometry::EncoderImuOdometry()
 : Node("encoder_imu_odometry"),
   x_(0.0), y_(0.0), yaw_(0.0),
   omega_(0.0), yaw_init_(0.0), drift_(0.0),
-  use_imu_(false), save_drift_(false), imu_initialized_(false)
+  use_imu_(false), publish_tf_(true), save_drift_(false), imu_initialized_(false)
   {
 
     this->declare_parameter("use_imu", false);
+    this->declare_parameter("publish_tf", true);
     this->declare_parameter("wheel_base", 0.311);
     this->declare_parameter("wheel_radius", 0.098425 / 2);
     this->declare_parameter("ticks_per_revolution", 48 * 64);
 
     use_imu_ = this->get_parameter("use_imu").as_bool();
+    publish_tf_ = this->get_parameter("publish_tf").as_bool();
     wheel_base_ = this->get_parameter("wheel_base").as_double();
     wheel_radius_ = this->get_parameter("wheel_radius").as_double();
     ticks_per_revolution_ = this->get_parameter("ticks_per_revolution").as_int();
@@ -41,7 +43,7 @@ void EncoderImuOdometry::encoderCallback(const robp_interfaces::msg::Encoders::S
     int delta_r = msg->delta_encoder_right;
 
     bool is_stationary = (std::abs(delta_l) < 25 && std::abs(delta_r) < 25 && std::abs(delta_l -delta_r) < 3);
-    RCLCPP_INFO(this->get_logger(), "Encoder deltas: left=%d, right=%d, stationary=%s", delta_l, delta_r, is_stationary ? "true" : "false");
+    // RCLCPP_INFO(this->get_logger(), "Encoder deltas: left=%d, right=%d, stationary=%s", delta_l, delta_r, is_stationary ? "true" : "false");
     if (is_stationary) {
         if (!save_drift_) {
             RCLCPP_INFO(this->get_logger(), "Stationary calibration started");
@@ -134,6 +136,7 @@ void EncoderImuOdometry::publishOdomPathAndTF(const rclcpp::Time& stamp , double
     path_.poses.push_back(pose);
     path_.header.stamp = stamp;
     path_pub_->publish(path_);
+    RCLCPP_INFO(this->get_logger(), "Published Path with %zu poses", path_.poses.size());
 
     geometry_msgs::msg::TransformStamped transform;
     transform.header.stamp = stamp;
@@ -144,8 +147,14 @@ void EncoderImuOdometry::publishOdomPathAndTF(const rclcpp::Time& stamp , double
     transform.transform.translation.z = 0.01;
     transform.transform.rotation = pose.pose.orientation;
 
-    tf_broadcaster_->sendTransform(transform);
-    RCLCPP_INFO(this->get_logger(), "Published path and TF");
+    if (publish_tf_) {
+        tf_broadcaster_->sendTransform(transform);
+        RCLCPP_INFO(this->get_logger(), "Publishing TF from odom to base_link");
+    } else {
+        RCLCPP_INFO(this->get_logger(), "Skipping TF publishing");
+        return;
+    }
+    // RCLCPP_INFO(this->get_logger(), "Published path and TF");
 }
 
 void EncoderImuOdometry::setSimpleCovariance(

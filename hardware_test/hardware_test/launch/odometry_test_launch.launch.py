@@ -99,7 +99,8 @@ def generate_launch_description():
         name='encoder_imu_odometry_node',
         output='screen',
         parameters=[
-            {'use_imu': True},
+            {'use_imu': False},
+            {'publish_tf': False},
         ]
     )
 
@@ -108,6 +109,9 @@ def generate_launch_description():
         executable='icp_odometry',
         name='icp_odometry_node',
         output='screen',
+        parameters=[
+            {'publish_tf': False},
+        ]
     )
 
     odometry_test_node = Node(
@@ -213,6 +217,45 @@ def generate_launch_description():
         ),
     )
 
+    # --- EKF ---
+    ekf_node = Node(
+        package='robot_localization',
+        executable='ekf_node',
+        name='ekf_localization',
+        output='screen',
+        parameters=[{
+            'frequency': 30.0,
+            'sensor_timeout': 0.1,
+            'two_d_mode': True,
+
+            # encoder_imu 
+            'odom0': '/odom/encoder_imu',
+            'odom0_config': [False, False, False,
+                             False, False, False,
+                             True, True, False, 
+                             False, False, True,
+                             False, False, False],
+            
+            'odom1': '/odom/icp',
+            'odom1_config': [True, True, False,
+                             False, False, True,
+                             False, False, False,
+                             False, False, False,
+                             False, False, False],
+            
+            'map_frame': 'map',
+            'odom_frame': 'odom',
+            'base_link_frame': 'base_link',
+            'world_frame': 'odom',
+
+            'publish_tf': True,
+            'publish_acceleration': False,
+
+            'debug': True,
+            'print_diagnostics': True,
+        }]
+    )
+
     # --- 4. RViz ---
     rviz_cfg = os.path.join(
         get_package_share_directory('hardware_test'),
@@ -243,7 +286,9 @@ def generate_launch_description():
         static_base_link_to_laser_node,
         # odometry_node,
         encoder_imu_odometry_node,
-        # icp_odometry_node,
+        icp_odometry_node,
+        ekf_node,
+
         robot_state_publisher_node,
         cartesian_controller_node,
 
@@ -253,7 +298,7 @@ def generate_launch_description():
 
         # # driver launch
         # # realsense_launch,
-        # rplidar_launch,
+        rplidar_launch,
         phidgets_launch,
 
         # RViz2

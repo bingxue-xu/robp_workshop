@@ -1,5 +1,8 @@
 {
     "cmake.sourceDirectory": "/home/bingxue/dd2419/workshop_ws/src/rplidar_ros2",
     "files.insertFinalNewline": true,
-    "C_Cpp.default.cppStandard": "c++23"
+    "C_Cpp.default.cppStandard": "c++23",
+    "files.associations": {
+        "functional": "cpp"
+    }
 }

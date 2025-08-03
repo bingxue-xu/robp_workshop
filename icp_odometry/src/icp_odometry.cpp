@@ -15,8 +15,9 @@
 using std::placeholders::_1;
 
 ICPOdometry::ICPOdometry()
-    : Node("icp_odometry"), first_cloud_(true), has_last_stamp_(false)
+    : Node("icp_odometry"), publish_tf_(true), first_cloud_(true), has_last_stamp_(false)
     {
+        this->declare_parameter("publish_tf", true);
         scan_sub_ = this->create_subscription<sensor_msgs::msg::LaserScan>(
             "/scan", 10, std::bind(&ICPOdometry::scan_callback, this, _1));
 
@@ -39,7 +40,6 @@ void ICPOdometry::scan_callback(const sensor_msgs::msg::LaserScan::SharedPtr sca
         projector_.projectLaser(*scan_msg, cloud);
         cloud.header = scan_msg->header; 
         pointcloud_pub_->publish(cloud);
-        RCLCPP_DEBUG(this->get_logger(), "Received scan with %zu points", cloud.data.size() / cloud.point_step);
 
         // Convert to PCL
         pcl::PointCloud<pcl::PointXYZ>::Ptr current_cloud(new pcl::PointCloud<pcl::PointXYZ>());
@@ -81,10 +81,11 @@ void ICPOdometry::scan_callback(const sensor_msgs::msg::LaserScan::SharedPtr sca
         current_pose_ = current_pose_ * delta;
         *last_cloud_ = *current_cloud;
 
-        publish_odometry(scan_msg->header.stamp, delta);
+        publish_odometry(scan_msg->header.stamp, delta, icp);
     }
 
-void ICPOdometry::publish_odometry(const rclcpp::Time& stamp, const Eigen::Matrix4f& delta) {
+void ICPOdometry::publish_odometry(const rclcpp::Time& stamp, const Eigen::Matrix4f& delta,
+    pcl::IterativeClosestPoint<pcl::PointXYZ, pcl::PointXYZ>& icp) {
     nav_msgs::msg::Odometry odom;
     odom.header.stamp = stamp;
     odom.header.frame_id = "odom";
@@ -115,8 +116,10 @@ void ICPOdometry::publish_odometry(const rclcpp::Time& stamp, const Eigen::Matri
     float angular_velocity = rot_vec.angle() / dt; 
     odom.twist.twist.angular.z = angular_velocity;
 
+    setICPCovariance(odom, icp);
+
     odom_pub_->publish(odom);
-    // RCLCPP_INFO(this->get_logger(), "Publishing odom to /odom");
+    // RCLCPP_INFO(this->get_logger(), "Publishing odom to /odom/icp");
 
     // Broadcast TF
     geometry_msgs::msg::TransformStamped t;
@@ -127,7 +130,13 @@ void ICPOdometry::publish_odometry(const rclcpp::Time& stamp, const Eigen::Matri
     t.transform.translation.y = odom.pose.pose.position.y;
     t.transform.translation.z = odom.pose.pose.position.z;
     t.transform.rotation = odom.pose.pose.orientation;
-    tf_broadcaster_->sendTransform(t);
+    if (publish_tf_) {
+        tf_broadcaster_->sendTransform(t);
+        RCLCPP_INFO(this->get_logger(), "Publishing TF from odom to base_link");
+    } else {
+        RCLCPP_INFO(this->get_logger(), "Skipping TF publishing");
+        return;
+    }
 
     // Path 
     geometry_msgs::msg::PoseStamped pose_stamped;
@@ -139,5 +148,42 @@ void ICPOdometry::publish_odometry(const rclcpp::Time& stamp, const Eigen::Matri
     path_pub_->publish(path_msg_);
 }
 
+void ICPOdometry::setICPCovariance(nav_msgs::msg::Odometry& odom, 
+    pcl::IterativeClosestPoint<pcl::PointXYZ, pcl::PointXYZ>& icp) {
+
+    std::fill(odom.pose.covariance.begin(), odom.pose.covariance.end(), 0.0);
+    std::fill(odom.twist.covariance.begin(), odom.twist.covariance.end(), 0.0);
+
+    if (icp.hasConverged()) {
+        double fitness_score = icp.getFitnessScore();
+
+        double base_pos_var = 0.001 + fitness_score * 0.1;
+        double base_ang_var = 0.0001 + fitness_score * 0.01;
+
+        odom.pose.covariance[0] = base_pos_var; // x
+        odom.pose.covariance[7] = base_pos_var; // y
+        odom.pose.covariance[14] = 0.1; // z
+        odom.pose.covariance[21] = 0.1; // roll
+        odom.pose.covariance[28] = 0.1; // pitch
+        odom.pose.covariance[35] = base_ang_var; // yaw
+
+        odom.twist.covariance[0] = 0.1; // linear x
+        odom.twist.covariance[7] = 0.1; // linear y
+        odom.twist.covariance[14] = 0.5; // linear z
+        odom.twist.covariance[21] = 0.5; // angular x
+        odom.twist.covariance[28] = 0.5; // angular y
+        odom.twist.covariance[35] = 0.1;
+
+        RCLCPP_DEBUG(this->get_logger(), "ICPCovariance set with fitness score: %.4f", fitness_score);
+    } else {
+        odom.pose.covariance[0] = 1.0; // x
+        odom.pose.covariance[7] = 1.0; // y
+        odom.pose.covariance[14] = 0.1; // z
+        odom.twist.covariance[0] = 1.0; // roll
+        odom.twist.covariance[7] = 1.0; // pitch
+        odom.twist.covariance[35] = 1.0; // yaw
+        RCLCPP_WARN(this->get_logger(), "ICP did not converge, setting default covariance");
+    }
+}
 
 

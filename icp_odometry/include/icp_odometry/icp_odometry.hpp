@@ -21,8 +21,10 @@ class ICPOdometry : public rclcpp::Node {
 
     private:
         void scan_callback(const sensor_msgs::msg::LaserScan::SharedPtr scan_msg);
-        void publish_odometry(const rclcpp::Time& stamp, const Eigen::Matrix4f& delta);
- 
+        void publish_odometry(const rclcpp::Time& stamp, const Eigen::Matrix4f& delta,
+                             pcl::IterativeClosestPoint<pcl::PointXYZ, pcl::PointXYZ>& icp);
+        void setICPCovariance(nav_msgs::msg::Odometry& odom, pcl::IterativeClosestPoint<pcl::PointXYZ, pcl::PointXYZ>& icp);
+        
         rclcpp::Subscription<sensor_msgs::msg::LaserScan>::SharedPtr scan_sub_;
         rclcpp::Subscription<sensor_msgs::msg::PointCloud2>::SharedPtr pointcloud_sub_;
         rclcpp::Publisher<sensor_msgs::msg::PointCloud2>::SharedPtr pointcloud_pub_;
@@ -32,6 +34,7 @@ class ICPOdometry : public rclcpp::Node {
 
         pcl::PointCloud<pcl::PointXYZ>::Ptr last_cloud_;
         
+        bool publish_tf_;
         bool first_cloud_;
         bool has_last_stamp_;
         Eigen::Matrix4f current_pose_;
