@@ -1,5 +1,6 @@
 <?xml version="1.0"?>
 <launch>
+	<!-- comment out emulate_tty="true" when running on humble -->
 	<node pkg="perception" exec="perception" name="perception" emulate_tty="true" output="screen" />
 	<node pkg="controller" exec="controller" name="controller" emulate_tty="true" output="screen" />
 </launch>
