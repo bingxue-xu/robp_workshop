@@ -11,6 +11,7 @@ from rclpy.qos import QoSProfile, QoSDurabilityPolicy
 from std_msgs.msg import Header
 import struct
 from sensor_msgs.msg import PointField
+import json, csv, os
 
 class PoseTracker:
     def __init__(self, node):
@@ -31,7 +32,8 @@ class PoseTracker:
             self.node.get_logger().error(f"Failed to get transform: {e}")
             return None
 
-    def quaternion_to_yaw(self, quaternion):
+    @staticmethod
+    def quaternion_to_yaw(quaternion):
         """convert quaternion to yaw angle"""
         from tf_transformations import euler_from_quaternion
         _, _, yaw = euler_from_quaternion(
@@ -39,12 +41,12 @@ class PoseTracker:
         return yaw
 
 
-class OdometryTest(BaseTest):
+class UMBmarkOdometryTest(BaseTest):
     def __init__(self):
-        super().__init__(node_name='odometry_test')
+        super().__init__(node_name='umbmark_odometry_test')
         self.cmd_pub = None
         self.pose_tracker = None
-        self.test_results = []
+        self.test_results = [] # store manual error entries
 
         latching_qos = QoSProfile(depth=1, durability=QoSDurabilityPolicy.TRANSIENT_LOCAL)
         self.theoretical_square_pub = self.create_publisher(PointCloud2, '/theoretical_square', latching_qos)
@@ -53,22 +55,20 @@ class OdometryTest(BaseTest):
         robot_name = self.declare_parameter('robot_name', '').value
         domain_id = self.declare_parameter('domain_id', 0).value
         json_folder = self.declare_parameter('json_folder', '').value
-
-        self.square_size = self.declare_parameter('square_size', 1.0).value
-        self.laps = self.declare_parameter('laps_per_direction', 2).value
-        self.speed = self.declare_parameter('speed', 0.2).value
-        self.angular_speed = self.declare_parameter('angular_speed', 0.5).value
-
         self.update_config(
             robot_name=robot_name,
             domain_id=domain_id,
             json_folder=json_folder
         )
 
+        self.square_size = self.declare_parameter('square_size', 4.0).value
+        self.laps = self.declare_parameter('laps_per_direction', 5).value
+        self.speed = self.declare_parameter('speed', 0.2).value
+        self.angular_speed = self.declare_parameter('angular_speed', 0.5).value
         self.cmd_pub = self.create_publisher(Twist, '/cmd_vel', 10)
+        self.pub_theoretical_square_pc2()
         self.pose_tracker = PoseTracker(self) 
 
-        self.pub_theoretical_square_pc2()
 
     def pub_theoretical_square_pc2(self):
         """Publish a theoretical square path as PointCloud2 for visualization."""
@@ -122,205 +122,163 @@ class OdometryTest(BaseTest):
         self.theoretical_square_pub.publish(pc2_msg)
 
     def perform_test(self):
-        try:
-            self.setup_parameters()
-            self.get_logger().info("Starting Odometry Test")
+        self.setup_parameters()
+        self.get_logger().info("Starting UMBmark Odometry Test (Manual Measurement Mode)")
 
-            if not self.wait_for_odometry():
-                self.save_result('Odometry', False, "Failed to receive odometry data")
+        for direction in ['cw', 'ccw']:
+            for lap in range(self.laps):
+                self.get_logger().info(f"Starting lap {lap+1}/{self.laps} ({direction})")
+                self.run_single_square(direction)
+
+                # Manual measurement input
+                x_abs = float(input("Enter measured x_abs [m]: "))
+                y_abs = float(input("Enter measured y_abs [m]: "))
+                theta_abs = input("Enter measured theta_abs [deg] (optional, Enter to skip): ")
+                theta_abs = float(theta_abs) if theta_abs.strip() else None
+
+                odom_pose = self.pose_tracker.get_pose() or {'x': 0, 'y': 0, 'yaw': 0}
+                dx = x_abs - odom_pose['x']
+                dy = y_abs - odom_pose['y']
+                dtheta = None
+                if theta_abs is not None:
+                    dtheta = theta_abs - math.degrees(odom_pose['yaw'])
+
+                self.results.append({
+                    'lap': lap + 1,
+                    'direction': direction,
+                    'x_abs': x_abs,
+                    'y_abs': y_abs,
+                    'theta_abs_deg': theta_abs,
+                    'x_calc': odom_pose['x'],
+                    'y_calc': odom_pose['y'],
+                    'theta_calc_deg': math.degrees(odom_pose['yaw']),
+                    'dx': dx,
+                    'dy': dy,
+                    'dtheta_deg': dtheta,
+                    'closure_error': math.sqrt(dx**2 + dy**2)
+                })
+
+                input("Reposition robot to origin and press Enter to start next run...")
+
+        self.analyze_results()
+        self.save_json_csv()
+        self.save_result("UMBmark_Odometry", True, self.results)
+        return True
+
+    def run_single_square(self, direction='cw'):
+        for edge in range(4):
+            if not self.move_straight(self.square_size):
                 return False
-            
-            success = self.run_all_squares()
-
-            if success:
-                return self.analyze_and_save_results()
-            else:
-                self.save_result('Odometry', False, "Failed to complete square path")
-                return False    
-            
-        except Exception as e:
-            self.get_logger().error(f"Error during Odometry Test: {e}")
-            self.save_result('Odometry', False, str(e))
-            return False
-        finally:
-            self.stop_robot()
-
-
-    def wait_for_odometry(self):
-        retry_count = 0
-        while retry_count < 20:
-            if self.pose_tracker and self.pose_tracker.get_pose():
-                return True
-            rclpy.spin_once(self, timeout_sec=1.0)
-            retry_count += 1
-        return False
-    
-    def run_all_squares(self):
-        for lap in range(self.laps):
-            result = self.run_single_square('ccw')
-            if result:
-                self.test_results.append(result)
-                self.get_logger().info(f"CCW lap {lap + 1}: {result['closure_error']:.4f}m")
-            else:
-                return False
-        for lap in range(self.laps):
-            result = self.run_single_square('cw')
-            if result:
-                self.test_results.append(result)
-                self.get_logger().info(f"CW lap {lap + 1}: {result['closure_error']:.4f}m")
-            else:
+            if not self.turn(direction):
                 return False
         return True
     
-    def run_single_square(self, direction='ccw'):
-        start_pose = self.pose_tracker.get_pose()
-        if not start_pose:
-            return None
-        
-        try:
-            for edge in range(4):
-                if not self.move_straight(self.square_size):
-                    return None
-                if not self.turn(direction):
-                    return None
-                    
-            end_pose = self.pose_tracker.get_pose()
-            if not end_pose:
-                return None
-            
-            dx = end_pose['x'] - start_pose['x']
-            dy = end_pose['y'] - start_pose['y']
-            closure_error = math.sqrt(dx**2 + dy**2)
-
-            return {
-                'direction': direction,
-                'closure_error': closure_error,
-                'dx': dx,
-                'dy': dy,
-            }
-
-        except Exception as e:
-            self.get_logger().error(f"Error during square run: {e}")
-            return None
-        
     def move_straight(self, distance):
-        start_pose = self.pose_tracker.get_pose()
-        if not start_pose:
-            self.get_logger().error("Failed to get start pose for straight movement")
-            return False
-        
         twist = Twist()
         twist.linear.x = self.speed
-        self.get_logger().info(f"Moving straight for {distance}m at speed {self.speed}m/s")
-
-        while True:
-            self.cmd_pub.publish(twist)
-            rclpy.spin_once(self, timeout_sec=0.1)
-
-            current_pose = self.pose_tracker.get_pose()
-            if not current_pose:
-                self.get_logger().warn("Temporarily lost pose tracking, continuing...")
-                continue
-
-            moved = math.sqrt((current_pose['x'] - start_pose['x'])**2 +
-                              (current_pose['y'] - start_pose['y'])**2)
-            if moved >= distance:
-                self.get_logger().info(f"Moved {moved:.2f}m, stopping")
-                break
-
-        twist.linear.x = 0.0
-        self.cmd_pub.publish(twist)
-        time.sleep(0.3)  # Allow time for stop command to take effect 
-        self.get_logger().info("Straight movement complete")
-        return True
-
-    def turn(self, direction='ccw'):
+        moved = 0.0
         start_pose = self.pose_tracker.get_pose()
         if not start_pose:
-            self.get_logger().error("Failed to get start pose for turn")
             return False
         
-        twist = Twist()
-        twist.angular.z = self.angular_speed if direction == 'ccw' else -self.angular_speed
-        target_angle = math.pi / 2  if direction == 'ccw' else -math.pi / 2
-
-        while True:
+        while moved < distance:
             self.cmd_pub.publish(twist)
             rclpy.spin_once(self, timeout_sec=0.1)
-
             current_pose = self.pose_tracker.get_pose()
-            if not current_pose:
-                self.get_logger().warn("Temporarily lost pose tracking, continuing...")
-                continue
+            if current_pose:
+                moved = math.sqrt((current_pose['x'] - start_pose['x'])**2 + (current_pose['y'] - start_pose['y'])**2)
+        twist.linear.x = 0.0
+        self.cmd_pub.publish(twist)
+        time.sleep(0.3)  # Allow time for stop command to take effect
+        return True
+    
+    def turn(self, direction='cw'):
+        twist = Twist()
+        twist.angular.z = self.angular_speed if direction == 'ccw' else -self.angular_speed
+        start_pose = self.pose_tracker.get_pose()
+        if not start_pose:
+            return False
 
-            angle_diff = current_pose['yaw'] - start_pose['yaw']
-            self.get_logger().info(f"Current angle: {math.degrees(angle_diff):.2f}°")
-            while angle_diff > math.pi:
-                angle_diff -= 2 * math.pi
-            while angle_diff < -math.pi:
-                angle_diff += 2 * math.pi
-
-            if abs(angle_diff) >= abs(target_angle):
-                turned_degrees = math.degrees(abs(angle_diff))
-                self.get_logger().info(f"Turned {turned_degrees:.1f} ° / 90°, stopping")
-                break
+        turned = 0.0
+        while abs(turned) < math.pi/2:
+            self.cmd_pub.publish(twist)
+            rclpy.spin_once(self, timeout_sec=0.1)
+            current_pose = self.pose_tracker.get_pose()
+            if current_pose:
+                turned = self.normalize_angle(current_pose['yaw'] - start_pose['yaw'])
 
         twist.angular.z = 0.0
         self.cmd_pub.publish(twist)
         time.sleep(0.3)  # Allow time for stop command to take effect
-
-        final_angle_degrees = math.degrees(abs(angle_diff))
-        self.get_logger().info(f"Turn complete, final angle: {final_angle_degrees:.1f} °")
         return True
     
-
-    def analyze_and_save_results(self):
-        if not self.test_results:
-            self.save_result('Odometry', False, "No test results to analyze")
-            return False
+    @staticmethod
+    def normalize_angle(angle):
+        """Normalize angle to the range [-pi, pi]."""
+        while angle > math.pi:
+            angle -= 2 * math.pi
+        while angle < -math.pi:
+            angle += 2 * math.pi
+        return angle
+    
+    def analyze_results(self):
+        cw  = [(r['dx'], r['dy']) for r in self.results if r['direction'] == 'cw']
+        ccw = [(r['dx'], r['dy']) for r in self.results if r['direction'] == 'ccw']
+               
+        def center_of_gravity(points):
+            if not points:
+                return (0.0, 0.0)
+            xs, ys = zip(*points)
+            return (np.mean(xs), np.mean(ys))
         
-        all_errors = [result['closure_error'] for result in self.test_results]
-        ccw_errors = [result['closure_error'] for result in self.test_results if result['direction'] == 'ccw']
-        cw_errors = [result['closure_error'] for result in self.test_results if result['direction'] == 'cw']
+        cg_cw = center_of_gravity(cw)
+        cg_ccw = center_of_gravity(ccw)
 
-        mean_error = np.mean(all_errors)
-        std_error = np.std(all_errors)
-        ccw_mean_error = np.mean(ccw_errors) if ccw_errors else 0.0
-        cw_mean_error = np.mean(cw_errors) if cw_errors else 0.0
-        relative_accuracy = (1 - mean_error / (self.square_size * 4)) * 100
+        r_cw = math.sqrt(cg_cw[0]**2 + cg_cw[1]**2)
+        r_ccw = math.sqrt(cg_ccw[0]**2 + cg_ccw[1]**2)
+        e_max_syst = max(r_cw, r_ccw)
 
-        detail_dict = {
-            "test_config": f"{self.square_size:.1f}m square path, {len(self.test_results)} laps bidirectional",
-            "mean_error_m": f"{round(mean_error, 4)} out of {self.square_size}",
-            "std_error_m": f"{round(std_error, 4)}",
-            "ccw VS cw_mean_error_m": f"{round(ccw_mean_error, 4)} VS {round(cw_mean_error, 4)}",
-            "relative_accuracy_percent": f"{round(relative_accuracy, 4)}% out of total {self.square_size * 4} m",
-        }
+        self.get_logger().info(f"CW cluster center: {cg_cw}, radius {r_cw:.3f} m")
+        self.get_logger().info(f"CCW cluster center: {cg_ccw}, radius {r_ccw:.3f} m")
+        self.get_logger().info(f"E_max_system: {e_max_syst:.3f} m")
 
-        self.save_result("Odometry", True, detail_dict)
+        self.results.append({
+            'analysis': {
+                'cw_cluster_center': cg_cw,
+                'ccw_cluster_center': cg_ccw,
+                'cw_radius_m': r_cw,
+                'ccw_radius_m': r_ccw,
+                'E_max_syst_m': e_max_syst
+            }
+        })
 
-        return True
-    
-    def stop_robot(self):
-        if self.cmd_pub:
-            twist = Twist()
-            self.cmd_pub.publish(twist)
+    def save_json_csv(self):
+        os.makedirs(self.json_folder, exist_ok=True)
+        umbmark_json_path = os.path.join(self.json_folder, f"{self.robot_name}_umbmark.json")
+        umbmark_csv_path = os.path.join(self.json_folder, f"{self.robot_name}_umbmark.csv")
 
+        with open(umbmark_json_path, 'w') as f:
+            json.dump(self.results, f, indent=2)
 
+        keys = list(self.results[0].keys())
+        with open(umbmark_csv_path, 'w', newline='') as cf:
+            writer = csv.DictWriter(cf, fieldnames=keys)
+            writer.writeheader()
+            for r in self.results:
+                if isinstance(r.get('analysis'), dict):
+                    continue
+                writer.writerow(r)
+
+        self.get_logger().info(f"Saved UMBmark results to {umbmark_json_path} and {umbmark_csv_path}")
+        
+        
 def main(args=None):
     rclpy.init(args=args)
-    test_node = OdometryTest()
-
+    node = UMBmarkOdometryTest()
     try:
-        success = test_node.perform_test()
-        if success:
-            test_node.get_logger().info("Odometry Test completed successfully")
-        else:
-            test_node.get_logger().error("Odometry Test failed")
-    except Exception as e:
-        test_node.get_logger().error(f"Exception in Odometry Test: {e}")
+        node.perform_test()
     finally:
-        test_node.destroy_node()
+        node.destroy_node()
         rclpy.shutdown()
 
 

@@ -3,6 +3,10 @@
     "files.insertFinalNewline": true,
     "C_Cpp.default.cppStandard": "c++23",
     "files.associations": {
-        "functional": "cpp"
+        "functional": "cpp",
+        "random": "cpp",
+        "tuple": "cpp",
+        "type_traits": "cpp",
+        "variant": "cpp"
     }
 }
