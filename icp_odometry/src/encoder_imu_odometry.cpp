@@ -21,9 +21,9 @@ EncoderImuOdometry::EncoderImuOdometry()
     wheel_radius_ = this->get_parameter("wheel_radius").as_double();
     ticks_per_revolution_ = this->get_parameter("ticks_per_revolution").as_int();
 
-    imu_sub_ = this->create_subscription<sensor_msgs::msg::Imu>(
-        "imu/data_raw", 10,
-        std::bind(&EncoderImuOdometry::imuCallback, this, std::placeholders::_1));
+    // imu_sub_ = this->create_subscription<sensor_msgs::msg::Imu>(
+        // "imu/data_raw", 10,
+        // std::bind(&EncoderImuOdometry::imuCallback, this, std::placeholders::_1));
     encoder_sub_ = this->create_subscription<robp_interfaces::msg::Encoders>(
         "/motor/encoders", 10,
         std::bind(&EncoderImuOdometry::encoderCallback, this, std::placeholders::_1));
@@ -42,19 +42,19 @@ void EncoderImuOdometry::encoderCallback(const robp_interfaces::msg::Encoders::S
     int delta_l = msg->delta_encoder_left;
     int delta_r = msg->delta_encoder_right;
 
-    bool is_stationary = (std::abs(delta_l) < 25 && std::abs(delta_r) < 25 && std::abs(delta_l -delta_r) < 3);
-    // RCLCPP_INFO(this->get_logger(), "Encoder deltas: left=%d, right=%d, stationary=%s", delta_l, delta_r, is_stationary ? "true" : "false");
-    if (is_stationary) {
-        if (!save_drift_) {
-            RCLCPP_INFO(this->get_logger(), "Stationary calibration started");
-        }
-        save_drift_ = true;
-        } else {
-            if (save_drift_) {
-                RCLCPP_INFO(this->get_logger(), "Stationary calibration ended");
-            }
-            save_drift_ = false;
-        }
+    // bool is_stationary = (std::abs(delta_l) < 25 && std::abs(delta_r) < 25 && std::abs(delta_l -delta_r) < 3);
+    // // RCLCPP_INFO(this->get_logger(), "Encoder deltas: left=%d, right=%d, stationary=%s", delta_l, delta_r, is_stationary ? "true" : "false");
+    // if (is_stationary) {
+    //     if (!save_drift_) {
+    //         RCLCPP_INFO(this->get_logger(), "Stationary calibration started");
+    //     }
+    //     save_drift_ = true;
+    //     } else {
+    //         if (save_drift_) {
+    //             RCLCPP_INFO(this->get_logger(), "Stationary calibration ended");
+    //         }
+    //         save_drift_ = false;
+    //     }
 
     double K = 2 * M_PI / ticks_per_revolution_;
     double D = (wheel_radius_/2.0) * (K*(delta_r+delta_l));
@@ -66,6 +66,7 @@ void EncoderImuOdometry::encoderCallback(const robp_interfaces::msg::Encoders::S
     if (use_imu_){
     } else{
         yaw_ += delta_theta;
+        RCLCPP_INFO(this->get_logger(), "Using encoder only, yaw updated to: %f =========== for debugging ============", yaw_);
     }
 
     static rclcpp::Time last_time = this->now();
@@ -136,7 +137,6 @@ void EncoderImuOdometry::publishOdomPathAndTF(const rclcpp::Time& stamp , double
     path_.poses.push_back(pose);
     path_.header.stamp = stamp;
     path_pub_->publish(path_);
-    RCLCPP_INFO(this->get_logger(), "Published Path with %zu poses", path_.poses.size());
 
     geometry_msgs::msg::TransformStamped transform;
     transform.header.stamp = stamp;

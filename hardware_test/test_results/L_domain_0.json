@@ -1,11 +1,6 @@
 {
   "robot_name": "L",
   "domain_id": 0,
-  "results": {
-    "Odometry": {
-      "status": "FAIL",
-      "detail": "Failed to receive odometry data"
-    }
-  },
-  "last_updated": "2025-08-01T16:16:50.315816"
+  "results": {},
+  "last_updated": null
 }

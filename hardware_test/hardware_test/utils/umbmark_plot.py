@@ -7,15 +7,24 @@ from datetime import datetime
 def plot_umbmark(json_file, save_dir=None):
     with open(json_file, 'r') as f:
         data = json.load(f)
+    robot_name = data.get('robot_name', 'robot') 
+    test_results = []
 
-    # Extract CW and CCW points
-    cw_points = [(d['dx'], d['dy']) for d in data if d.get('direction') == 'cw']
-    ccw_points = [(d['dx'], d['dy']) for d in data if d.get('direction') == 'ccw']
+    if 'results' in data:
+        umbmark_data = data['results'].get('UMBmark_odometry', {})
+        test_results = umbmark_data.get('detail', [])
+    else:
+        test_results = data
+        
+    # Extract CW and CCW points from the correct data
+    cw_points = [(d['dx'], d['dy']) for d in test_results if isinstance(d, dict) and d.get('direction') == 'cw']
+    ccw_points = [(d['dx'], d['dy']) for d in test_results if isinstance(d, dict) and d.get('direction') == 'ccw']
 
     # Extract analysis info
-    analysis = next((d['analysis'] for d in data if 'analysis' in d), None)
-    robot_name = analysis.get('robot_name', 'robot') if analysis else 'robot'
-
+    analysis = next((d.get('analysis', {}) for d in test_results if isinstance(d, dict) and 'analysis' in d), {})
+    
+    print(f"Plotting UMBmark for {robot_name}")
+    
     # Start plotting
     plt.figure(figsize=(7, 7))
 
@@ -32,7 +41,7 @@ def plot_umbmark(json_file, save_dir=None):
         ccw_cg = analysis['ccw_cluster_center']
         plt.scatter(*cw_cg, c='blue', marker='x', s=100, label='CW cluster center')
         plt.scatter(*ccw_cg, c='red', marker='x', s=100, label='CCW cluster center')
-        plt.title(f"UMBmark Result (E_max,syst = {analysis['E_max_syst_m']:.3f} m)")
+        plt.title(f"{robot_name} UMBmark Result (E_max,syst = {analysis['E_max_syst_m']:.3f} m)")
 
     # Axes and grid
     plt.xlabel('ΔX [m]')
@@ -46,6 +55,8 @@ def plot_umbmark(json_file, save_dir=None):
     # Automatically save PNG
     if save_dir is None:
         save_dir = os.path.dirname(json_file)
+        save_dir = os.path.join(save_dir, "odometry_test")
+
     os.makedirs(save_dir, exist_ok=True)
     timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
     png_filename = os.path.join(save_dir, f"{robot_name}_umbmark_{timestamp}.png")
@@ -57,7 +68,7 @@ def plot_umbmark(json_file, save_dir=None):
 
 if __name__ == '__main__':
     if len(sys.argv) < 2:
-        print("Usage: python umbmark_plot.py <json_file> [save_dir]")
+        print("Usage: python3 umbmark_plot.py <json_file> [save_dir]")
     else:
         json_file = sys.argv[1]
         save_dir = sys.argv[2] if len(sys.argv) >= 3 else None

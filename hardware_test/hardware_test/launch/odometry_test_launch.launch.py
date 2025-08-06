@@ -100,7 +100,7 @@ def generate_launch_description():
         output='screen',
         parameters=[
             {'use_imu': False},
-            {'publish_tf': False},
+            {'publish_tf': True},
         ]
     )
 
@@ -286,8 +286,8 @@ def generate_launch_description():
         static_base_link_to_laser_node,
         # odometry_node,
         encoder_imu_odometry_node,
-        icp_odometry_node,
-        ekf_node,
+        # icp_odometry_node,
+        # ekf_node,
 
         robot_state_publisher_node,
         cartesian_controller_node,
@@ -303,5 +303,5 @@ def generate_launch_description():
 
         # RViz2
         rviz_node,
-        delayed_odometry_test_node
+        # delayed_odometry_test_node
     ])

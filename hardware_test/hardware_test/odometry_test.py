@@ -1,3 +1,4 @@
+from datetime import datetime
 import rclpy
 from geometry_msgs.msg import Twist
 import time
@@ -46,7 +47,7 @@ class UMBmarkOdometryTest(BaseTest):
         super().__init__(node_name='umbmark_odometry_test')
         self.cmd_pub = None
         self.pose_tracker = None
-        self.test_results = [] # store manual error entries
+        self.results = [] 
 
         latching_qos = QoSProfile(depth=1, durability=QoSDurabilityPolicy.TRANSIENT_LOCAL)
         self.theoretical_square_pub = self.create_publisher(PointCloud2, '/theoretical_square', latching_qos)
@@ -62,6 +63,7 @@ class UMBmarkOdometryTest(BaseTest):
         )
 
         self.square_size = self.declare_parameter('square_size', 4.0).value
+        self.get_logger().info(f"Square size: {self.square_size}m ==================== for debugging ...............")
         self.laps = self.declare_parameter('laps_per_direction', 5).value
         self.speed = self.declare_parameter('speed', 0.2).value
         self.angular_speed = self.declare_parameter('angular_speed', 0.5).value
@@ -128,20 +130,43 @@ class UMBmarkOdometryTest(BaseTest):
         for direction in ['cw', 'ccw']:
             for lap in range(self.laps):
                 self.get_logger().info(f"Starting lap {lap+1}/{self.laps} ({direction})")
-                self.run_single_square(direction)
+
+                while self.pose_tracker.get_pose() is None:
+                    self.get_logger().info("Waiting for initial pose...")
+                    rclpy.spin_once(self, timeout_sec=0.1)
+
+                self.get_logger().info(f"TF is ready")
+                input(f"Press Enter when ready to start lap {lap+1} ({direction})...")
+                success = self.run_single_square(direction)
+                if not success:
+                    self.get_logger().error(f"Failed to complete lap {lap+1} ({direction})")
+                    return False
+                odom_pose = self.pose_tracker.get_pose() or {'x': 0, 'y': 0, 'yaw': 0}
+                self.get_logger().info(f"Final odometry pose: {odom_pose}")
 
                 # Manual measurement input
-                x_abs = float(input("Enter measured x_abs [m]: "))
-                y_abs = float(input("Enter measured y_abs [m]: "))
-                theta_abs = input("Enter measured theta_abs [deg] (optional, Enter to skip): ")
-                theta_abs = float(theta_abs) if theta_abs.strip() else None
+                while True:
+                    try:
+                        x_abs = float(input("Enter measured x_abs [m]: "))
+                        y_abs = float(input("Enter measured y_abs [m]: "))
+                        break
+                    except ValueError:
+                        print("Invalid input for x_abs or y_abs. Please enter valid numbers.")
 
-                odom_pose = self.pose_tracker.get_pose() or {'x': 0, 'y': 0, 'yaw': 0}
+                theta_abs = None
+                theta_input = input("Enter measured yaw [deg] (Enter to skip): ")
+                if theta_input.strip():
+                    try:
+                        theta_abs = float(theta_input)
+                    except ValueError:
+                        pass
+
                 dx = x_abs - odom_pose['x']
                 dy = y_abs - odom_pose['y']
                 dtheta = None
                 if theta_abs is not None:
                     dtheta = theta_abs - math.degrees(odom_pose['yaw'])
+                    dtheta = self.normalize_angle_deg(dtheta)
 
                 self.results.append({
                     'lap': lap + 1,
@@ -158,12 +183,16 @@ class UMBmarkOdometryTest(BaseTest):
                     'closure_error': math.sqrt(dx**2 + dy**2)
                 })
 
-                input("Reposition robot to origin and press Enter to start next run...")
+                if not (lap == self.laps - 1 and direction == 'ccw'):
+                    input("\n Reposition robot to origin and press Enter to start next run...")
 
         self.analyze_results()
         self.save_json_csv()
         self.save_result("UMBmark_Odometry", True, self.results)
         return True
+        
+    def save_result(self, hardware_key, passed, detail=""):
+        pass
 
     def run_single_square(self, direction='cw'):
         for edge in range(4):
@@ -182,6 +211,7 @@ class UMBmarkOdometryTest(BaseTest):
             return False
         
         while moved < distance:
+            self.get_logger().info(f"Moving straight: {moved:.2f}/{distance:.2f} m ===== for debugging ========")
             self.cmd_pub.publish(twist)
             rclpy.spin_once(self, timeout_sec=0.1)
             current_pose = self.pose_tracker.get_pose()
@@ -221,6 +251,15 @@ class UMBmarkOdometryTest(BaseTest):
             angle += 2 * math.pi
         return angle
     
+    @staticmethod
+    def normalize_angle_deg(angle_deg):
+        """Normalize angle in degrees to the range [-180, 180]."""
+        while angle_deg > 180:
+            angle_deg -= 360
+        while angle_deg < -180:
+            angle_deg += 360
+        return angle_deg
+
     def analyze_results(self):
         cw  = [(r['dx'], r['dy']) for r in self.results if r['direction'] == 'cw']
         ccw = [(r['dx'], r['dy']) for r in self.results if r['direction'] == 'ccw']
@@ -253,12 +292,26 @@ class UMBmarkOdometryTest(BaseTest):
         })
 
     def save_json_csv(self):
-        os.makedirs(self.json_folder, exist_ok=True)
-        umbmark_json_path = os.path.join(self.json_folder, f"{self.robot_name}_umbmark.json")
-        umbmark_csv_path = os.path.join(self.json_folder, f"{self.robot_name}_umbmark.csv")
+        save_dir = os.path.join(self.json_folder, "odometry_test")
+        os.makedirs(save_dir, exist_ok=True)
+        timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+        umbmark_json_path = os.path.join(save_dir, f"{self.robot_name}_umbmark_{timestamp}.json")
+        umbmark_csv_path = os.path.join(save_dir, f"{self.robot_name}_umbmark_{timestamp}.csv")
+
+        data = {
+            "robot_name": self.robot_name,
+            "domain_id": self.domain_id,
+            "results": {
+                "UMBmark_odometry": {
+                    "status": "Completed",
+                    "detail": self.results
+                }
+            },
+            "last_updated": datetime.now().isoformat()
+        }
 
         with open(umbmark_json_path, 'w') as f:
-            json.dump(self.results, f, indent=2)
+            json.dump(data, f, indent=2)
 
         keys = list(self.results[0].keys())
         with open(umbmark_csv_path, 'w', newline='') as cf:
@@ -270,7 +323,6 @@ class UMBmarkOdometryTest(BaseTest):
                 writer.writerow(r)
 
         self.get_logger().info(f"Saved UMBmark results to {umbmark_json_path} and {umbmark_csv_path}")
-        
         
 def main(args=None):
     rclpy.init(args=args)
