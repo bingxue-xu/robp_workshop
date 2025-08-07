@@ -284,8 +284,8 @@ def generate_launch_description():
         # tf
         static_map_to_odom_node,
         static_base_link_to_laser_node,
-        # odometry_node,
-        encoder_imu_odometry_node,
+        odometry_node,
+        # encoder_imu_odometry_node,
         # icp_odometry_node,
         # ekf_node,
 
@@ -297,7 +297,7 @@ def generate_launch_description():
         # marker_2_node,
 
         # # driver launch
-        # # realsense_launch,
+        realsense_launch,
         rplidar_launch,
         phidgets_launch,
 
