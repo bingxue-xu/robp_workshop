@@ -62,10 +62,10 @@ class Odometry(Node):
 
         ticks_per_rev = self.get_parameter('ticks_per_revolution').get_parameter_value().integer_value
         wheel_radius = self.get_parameter('wheel_radius').get_parameter_value().double_value
-        whell_base = self.get_parameter('wheel_base').get_parameter_value().double_value
+        wheel_base = self.get_parameter('wheel_base').get_parameter_value().double_value
         K = 2*np.pi/ticks_per_rev
         D = (wheel_radius/2)*(K*(delta_ticks_right+delta_ticks_left))
-        delta_theta = (wheel_radius/whell_base)*(K*(delta_ticks_right-delta_ticks_left))
+        delta_theta = (wheel_radius/wheel_base)*(K*(delta_ticks_right-delta_ticks_left))
 
         self._x = self._x + D*np.cos(self._yaw) 
         self._y = self._y + D*np.sin(self._yaw) 

@@ -17,7 +17,7 @@ class CartesianController(Node):
         self.publish_dutycycle = self.create_publisher(DutyCycles, '/motor/duty_cycles', 10)
 
         self.declare_parameter('frequency', 20)
-        self.declare_parameter('wheel_base', 0.3)
+        self.declare_parameter('wheel_base', 0.311)
         self.declare_parameter('wheel_radius', 0.04921)
         self.declare_parameter('ticks_per_revolution', 3072)
 
@@ -31,8 +31,8 @@ class CartesianController(Node):
 
         self.alpha_left = 0.5
         self.beta_left = 0.00065
-        self.alpha_right = 0.44
-        self.beta_right = 0.0005
+        self.alpha_right = 0.47 # 0.44
+        self.beta_right = 0.00065 # 0.0005
 
         
     def twist_callback(self, msg):
@@ -55,8 +55,8 @@ class CartesianController(Node):
         self.estimated_v_right = radians_per_tick * msg.delta_encoder_right * frequency * wr
         self.get_logger().debug(f'estimated velocity {self.estimated_v_left}, {self.estimated_v_right}')
 
-        desired_v_left = self.desired_linear - self.desired_angular * wb
-        desired_v_right = self.desired_linear + self.desired_angular * wb
+        desired_v_left = self.desired_linear - self.desired_angular * (wb/2.0)
+        desired_v_right = self.desired_linear + self.desired_angular * (wb/2.0)
 
         error_left = desired_v_left - self.estimated_v_left
         self.int_err_left += error_left * dt
@@ -68,10 +68,12 @@ class CartesianController(Node):
 
         abs_left = abs(pwm_left)
         abs_right = abs(pwm_right)
+        max_abs = max(abs_left, abs_right)
         # Might want to limit to 0.5 instead of 1.0
-        if abs_left > 0.5 or abs_right > 0.5:
-            pwm_left /= max(abs_left, abs_right)
-            pwm_right /= max(abs_left, abs_right)
+        if max_abs > 0.5:
+            scale_factor = 0.5 / max_abs
+            pwm_left *= scale_factor
+            pwm_right *= scale_factor
 
         msg = DutyCycles()
         msg.header.stamp = self.get_clock().now().to_msg()
