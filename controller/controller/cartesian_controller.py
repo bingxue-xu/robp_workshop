@@ -29,10 +29,10 @@ class CartesianController(Node):
         self.int_err_left = 0
         self.int_err_right = 0
 
-        self.alpha_left = 0.5
+        self.alpha_left = 0.50
         self.beta_left = 0.00065
         self.alpha_right = 0.47 # 0.44
-        self.beta_right = 0.00065 # 0.0005
+        self.beta_right = 0.0006 # 0.0005
 
         
     def twist_callback(self, msg):
@@ -74,6 +74,14 @@ class CartesianController(Node):
             scale_factor = 0.5 / max_abs
             pwm_left *= scale_factor
             pwm_right *= scale_factor
+
+        I_LIM = 1.0
+        self.int_err_left = float(np.clip(self.int_err_left, -I_LIM, I_LIM))
+        self.int_err_right = float(np.clip(self.int_err_right, -I_LIM, I_LIM))
+
+        if abs(self.desired_linear) < 0.01 and abs(self.desired_angular) < 0.01:
+            self.int_err_left = 0.0
+            self.int_err_right = 0.0
 
         msg = DutyCycles()
         msg.header.stamp = self.get_clock().now().to_msg()

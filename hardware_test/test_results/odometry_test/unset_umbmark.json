@@ -1,0 +1,52 @@
+{
+  "unset": {
+    "square_size": 4.0,
+    "speed": 0.2,
+    "angular_speed": 0.5,
+    "ccw": {
+      "1": {
+        "detailed_results": {
+          "x_abs": 0.7,
+          "y_abs": -0.4,
+          "theta_abs_deg": null,
+          "x_calc": 0.6669983310636569,
+          "y_calc": -0.4720469228523119,
+          "theta_calc_deg": 15.899286889574773,
+          "dx": 0.03300166893634304,
+          "dy": 0.0720469228523119,
+          "dtheta_deg": null,
+          "closure_error": 0.07924562603116321,
+          "timestamp": "2025-08-09T17:54:29"
+        }
+      }
+    },
+    "cw": {},
+    "umbmark_analysis": {
+      "cg_cw": [
+        0.0,
+        0.0
+      ],
+      "cg_ccw": [
+        0.03300166893634304,
+        0.0720469228523119
+      ],
+      "r_cw": 0.0,
+      "r_ccw": 0.07924562603116321,
+      "emax": 0.07924562603116321,
+      "emax_percentage": 0.4952851626947701,
+      "total_path_length": 16.0,
+      "umbmark_pass": true,
+      "analysis_timestamp": "2025-08-09T17:56:16",
+      "systematic": [
+        0.01650083446817152,
+        0.03602346142615595
+      ],
+      "non_systematic": [
+        -0.01650083446817152,
+        -0.03602346142615595
+      ],
+      "wheel_radius_error": 0.3282768493395467,
+      "encoder_mismatch": 0.3282768493395467
+    }
+  }
+}

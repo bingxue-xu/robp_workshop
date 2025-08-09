@@ -54,5 +54,33 @@
             // "preLaunchTask": "build icp_odometry",
             "miDebuggerPath": "/usr/bin/gdb"
         },
+        {
+            "name": "Debug odometry_test",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/hardware_test/hardware_test/odometry_test.py",
+            "args": [
+                "--ros-args",
+                "-p",
+                "robot_name:=E",
+                "-p",
+                "domain_id:=0",
+                "-p",
+                "direction:=ccw",
+                "-p",
+                "lap:=1",
+                "-p",
+                "square_size:=1.0",
+                "-p",
+                "speed:=0.2",
+                "-p",
+                "angular_speed:=0.5"
+            ],
+            "console": "integratedTerminal",
+            "env": {
+                "PYTHONUNBUFFERED": "1",
+                "ROS_DOMAIN_ID": "0"
+            }
+        },
     ]
 }
