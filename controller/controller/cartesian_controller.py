@@ -38,6 +38,9 @@ class CartesianController(Node):
     def twist_callback(self, msg):
         self.desired_linear = msg.linear.x
         self.desired_angular = msg.angular.z
+        if abs(self.desired_linear) < 0.01 and abs(self.desired_angular) < 0.01:
+            self.int_err_left = 0.0
+            self.int_err_right = 0.0
         self.get_logger().debug(f'desired velocity {self.desired_linear}, {self.desired_angular}')
 
     def encoder_callback(self, msg):
@@ -65,7 +68,6 @@ class CartesianController(Node):
         error_right = desired_v_right - self.estimated_v_right
         self.int_err_right += error_right * dt
         pwm_right = self.alpha_right * error_right + self.beta_right * self.int_err_right
-
         abs_left = abs(pwm_left)
         abs_right = abs(pwm_right)
         max_abs = max(abs_left, abs_right)
@@ -78,10 +80,6 @@ class CartesianController(Node):
         I_LIM = 1.0
         self.int_err_left = float(np.clip(self.int_err_left, -I_LIM, I_LIM))
         self.int_err_right = float(np.clip(self.int_err_right, -I_LIM, I_LIM))
-
-        if abs(self.desired_linear) < 0.01 and abs(self.desired_angular) < 0.01:
-            self.int_err_left = 0.0
-            self.int_err_right = 0.0
 
         msg = DutyCycles()
         msg.header.stamp = self.get_clock().now().to_msg()

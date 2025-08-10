@@ -72,7 +72,7 @@ class UMBmarkOdometryTest(BaseTest):
 
         self.square_size = self.declare_parameter('square_size', 4.0).value
         self.speed = self.declare_parameter('speed', 0.2).value
-        self.angular_speed = self.declare_parameter('angular_speed', 0.5).value
+        self.angular_speed = self.declare_parameter('angular_speed', 1.0).value
         self.direction = str(self.declare_parameter('direction', 'ccw').value).lower()
         self.lap_index = int(self.declare_parameter('lap', 1).value)       
 

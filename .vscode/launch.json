@@ -62,7 +62,7 @@
             "args": [
                 "--ros-args",
                 "-p",
-                "robot_name:=E",
+                "robot_name:=Eager",
                 "-p",
                 "domain_id:=0",
                 "-p",
@@ -71,10 +71,6 @@
                 "lap:=2",
                 "-p",
                 "square_size:=1.0",
-                "-p",
-                "speed:=0.2",
-                "-p",
-                "angular_speed:=0.5"
             ],
             "console": "integratedTerminal",
             "env": {
