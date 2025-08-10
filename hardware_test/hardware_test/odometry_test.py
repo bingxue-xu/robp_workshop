@@ -260,7 +260,7 @@ class UMBmarkOdometryTest(BaseTest):
             return False
 
         turned = 0.0
-        while abs(turned) < math.pi/2 * 0.98:
+        while abs(turned) < math.pi/2 : 
             self.cmd_pub.publish(twist)
             rclpy.spin_once(self, timeout_sec=0.02)
             current_pose = self.pose_tracker.get_pose()
