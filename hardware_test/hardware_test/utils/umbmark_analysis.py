@@ -1,3 +1,9 @@
+"""
+UMBmark analysis and calibration following Borenstein & Feng (1996)
+
+Author: Bingxue Xu (2025)
+"""
+
 import json
 import matplotlib.pyplot as plt
 import sys
@@ -44,7 +50,6 @@ def load_points(json_file):
     
     return robot_name, cw, ccw, square_size
 
-
 def center_of_gravity(points):
     if not points:
         return (0.0, 0.0)
@@ -67,59 +72,94 @@ def save_analysis_to_json(json_file, robot_name, analysis_data):
     except Exception as e:
         print(f"Failed to save analysis results: {e}")
 
-def analysis_system_error(cg_cw, cg_ccw, square_size=4.0):
-    systematic_x = (cg_cw[0] + cg_ccw[0]) / 2.0
-    systematic_y = (cg_cw[1] + cg_ccw[1]) / 2.0
-    non_systematic_x = (cg_cw[0] - cg_ccw[0]) / 2.0
-    non_systematic_y = (cg_cw[1] - cg_ccw[1]) / 2.0
-    total_path = 4 * square_size
 
-    wheel_radius_error = (systematic_x + systematic_y) / total_path * 100  # in percentage
-    encoder_mismatch = (abs(non_systematic_x) + abs(non_systematic_y)) / total_path * 100  # in percentage
-
-    print("\n Systematic Error Analysis:")
-    print(f"Systematic X Error: dx={systematic_x:.2f} m, dy={systematic_y:.2f} m")
-    print(f"Non-Systematic X Error: dx={non_systematic_x:.2f} m, dy={non_systematic_y:.2f} m")
-    print(f"Wheel Radius Error: {wheel_radius_error:.2f}%")
-    print(f"Encoder Mismatch: {encoder_mismatch:.2f}%")
-    return {
-        'systematic': (systematic_x, systematic_y),
-        'non_systematic': (non_systematic_x, non_systematic_y),
-        'wheel_radius_error': wheel_radius_error,
-        'encoder_mismatch': encoder_mismatch
-    }
-
-def plot_umbmark(json_file, save_dir=None):
-    robot_name, cw_points, ccw_points, square_size = load_points(json_file)
-
-    cg_cw = center_of_gravity(cw_points)
-    cg_ccw = center_of_gravity(ccw_points)
+def compute_emax(cg_cw, cg_ccw):
     r_cw = math.hypot(*cg_cw)
     r_ccw = math.hypot(*cg_ccw)
     emax = max(r_cw, r_ccw)
+    return r_cw, r_ccw, emax
 
-    error_analysis = analysis_system_error(cg_cw, cg_ccw, square_size=square_size)
+def compute_alpha_beta(cg_cw, cg_ccw, L=4.0):
+    """
+    Compute alpha (per-corner turn error, rad) and beta (straight-line curvature term)
+    Paper forms (sign per their convention):
+      alpha_x = (x_cg,CW + x_cg,CCW)/(-4L)   (4.24a, x-version)
+      alpha_y = (y_cg,CW + y_cg,CCW)/(-4L)   (4.24b, y-version)
+      beta_x  = (x_cg,CW - x_cg,CCW)/(-4L)   (from 4.17-4.20)
+      beta_y  = (y_cg,CW - y_cg,CCW)/(-4L)
+    We compute both x/y and average (as suggested in the paper’s practice).
+    """
+    xcw, ycw = cg_cw
+    xccw, yccw = cg_ccw
 
-    print(f"\n === UMBmark test: {robot_name} {square_size} m square path ===")
+    alpha_y = (ycw + yccw) / (-4.0 * L)
+    beta_y  = (ycw - yccw) / (-4.0 * L)
+    alpha_x = (xcw + xccw) / (-4.0 * L)
+    beta_x  = (xcw - xccw) / (-4.0 * L)
+
+    alpha = 0.5*(alpha_x + alpha_y)
+    beta = 0.5*(beta_x + beta_y)
+
+    return alpha, beta
+
+def wheel_diameter_ratio_from_beta(beta):
+    if abs(beta) < 0.001:
+        return (1.0+beta) / (1.0-beta)
+
+def wheelbase_corrected(nominal_b, alpha_rad):
+    return nominal_b * ((math.pi/2) / ((math.pi/2) - alpha_rad))
+
+
+def plot_umbmark(json_file, save_dir=None, nominal_wheelbase=0.311/2, run_calibration=True):
+    robot_name, cw_points, ccw_points, square_size = load_points(json_file)
+    cg_cw = center_of_gravity(cw_points)
+    cg_ccw = center_of_gravity(ccw_points)
+    r_cw, r_ccw, emax = compute_emax(cg_cw, cg_ccw)
+
+    print(f"\n === UMBmark test: {robot_name} {square_size}*{square_size} m square path ===")
     print(f"CW Center of Gravity: {cg_cw}, Radius: {r_cw:.3f} m")
     print(f"CCW Center of Gravity: {cg_ccw}, Radius: {r_ccw:.3f} m")
     print(f"Max Radius (E_max): {emax:.3f} m")
     
-    save_analysis_to_json(json_file, robot_name, {
+    analysis_data = {
         'umbmark_analysis': {
-            'cg_cw': cg_cw,
-            'cg_ccw': cg_ccw, 
-            'r_cw': r_cw,
-            'r_ccw': r_ccw,
-            'emax': emax,
-            'emax_percentage': (emax / (4 * square_size)) * 100,
+            'cg_cw': cg_cw, 'cg_ccw': cg_ccw, 
+            'r_cw': r_cw, 'r_ccw': r_ccw, 'emax': emax,
+            'emax_percentage': f"{(emax / (4 * square_size)) * 100:.2f}%",
             'total_path_length': 4 * square_size,
-            'umbmark_pass': emax < (4 * square_size * 0.01),  # 1% 标准
+            'umbmark_pass': emax < (4 * square_size * 0.01),  # 1% standard
             'analysis_timestamp': datetime.now().strftime("%Y-%m-%dT%H:%M:%S"),
-            **error_analysis  # 包含所有系统误差分析结果
         }
-    })
+    }
 
+    if run_calibration and len(cw_points) > 0 and len(ccw_points) > 0:
+        print(f"\n === Running Calibration ===")
+
+        alpha, beta, parts = compute_alpha_beta(cg_cw, cg_ccw, square_size)
+        Ed = wheel_diameter_ratio_from_beta(beta)
+        wb_corr = wheelbase_corrected(nominal_wheelbase, alpha)
+
+        print(f"Alpha (wheelbase error): {alpha:.8f} rad")
+        print(f"Beta (wheel diameter difference): {beta:.8f} rad")
+        print(f"Effective wheel diameter ratio: {Ed:.6f}")
+        print(f"wheelbase nominal: {nominal_wheelbase:.6f} m")
+        print(f"Wheelbase correction: {wb_corr:.6f}")
+
+        analysis_data['umbmark_calibration'] = {
+            'alpha_rad': alpha,
+            'beta': beta,
+            'alpha_beta_parts': parts,
+            'Ed_ratio_DR_over_DL': Ed,
+            'wheelbase_nominal': nominal_wheelbase,
+            'wheelbase_corrected': wb_corr,
+            'calibration_timestamp': datetime.now().strftime("%Y-%m-%dT%H:%M:%S")
+        }
+    elif run_calibration:
+        print("Need both CW and CCW data for calibration.")
+
+
+    save_analysis_to_json(json_file, robot_name, analysis_data)
+    
     plt.figure(figsize=(7, 7))
     if cw_points:
         xs = [p['dx'] for p in cw_points]
@@ -144,7 +184,6 @@ def plot_umbmark(json_file, save_dir=None):
 
     if save_dir is None:
         save_dir = os.path.dirname(json_file)
-        save_dir = os.path.join(save_dir, "odometry_test")
 
     os.makedirs(save_dir, exist_ok=True)
     timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
@@ -152,13 +191,19 @@ def plot_umbmark(json_file, save_dir=None):
     plt.savefig(png_filename, dpi=300)
     print(f"Saved figure to {png_filename}")
 
-    # Show interactive plot
     plt.show()
 
 if __name__ == '__main__':
-    if len(sys.argv) < 2:
-        print("Usage: python3 umbmark_plot.py <json_file> [save_dir]")
-    else:
-        json_file = sys.argv[1]
-        save_dir = sys.argv[2] if len(sys.argv) >= 3 else None
-        plot_umbmark(json_file, save_dir)
+    import argparse
+
+    parser = argparse.ArgumentParser(description="Run UMBmark analysis & calibration")
+    parser.add_argument('json_file', help='UMBmark test data JSON file')
+    parser.add_argument('--save-dir', '-d', help='Directory to save plots')
+    parser.add_argument('--wheelbase', '-w', type=float, default=0.311/2,
+                       help='Nominal wheelbase in meters (default: 0.311/2)')
+    parser.add_argument('--no-calibration', action='store_true',
+                       help='Skip calibration analysis')
+    
+    args = parser.parse_args()
+    
+    plot_umbmark(args.json_file, args.save_dir, args.wheelbase, not args.no_calibration)

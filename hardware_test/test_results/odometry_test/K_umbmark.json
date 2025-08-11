@@ -1,6 +1,6 @@
 {
   "K": {
-    "square_size": 1.0,
+    "square_size": 4.0,
     "speed": 0.2,
     "angular_speed": 1.0,
     "ccw": {
@@ -80,6 +80,34 @@
         }
       }
     },
-    "cw": {}
+    "cw": {},
+    "umbmark_analysis": {
+      "cg_cw": [
+        0.0,
+        0.0
+      ],
+      "cg_ccw": [
+        -0.15989814057143312,
+        0.5811228233957347
+      ],
+      "r_cw": 0.0,
+      "r_ccw": 0.6027197949541994,
+      "emax": 0.6027197949541994,
+      "emax_percentage": 3.766998718463746,
+      "total_path_length": 16.0,
+      
+      "umbmark_pass": false,
+      "analysis_timestamp": "2025-08-11T09:31:41",
+      "systematic": [
+        -0.07994907028571656,
+        0.29056141169786737
+      ],
+      "non_systematic": [
+        0.07994907028571656,
+        -0.29056141169786737
+      ],
+      "wheel_radius_error": 1.3163271338259426,
+      "encoder_mismatch": 2.3156905123973996
+    }
   }
 }

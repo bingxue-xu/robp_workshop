@@ -31,8 +31,8 @@ class CartesianController(Node):
 
         self.alpha_left = 0.50
         self.beta_left = 0.00065
-        self.alpha_right = 0.50 #0.47 # 0.44
-        self.beta_right = 0.00065 # 0.0006 # 0.0005
+        self.alpha_right = 0.47 # 0.44
+        self.beta_right = 0.0006 # 0.0005
 
         
     def twist_callback(self, msg):
