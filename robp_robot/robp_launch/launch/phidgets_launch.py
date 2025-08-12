@@ -17,7 +17,7 @@ def generate_launch_description():
                 'motors_braking_strength': 1.0,
                 'motors_data_rate': 10.0,
                 'motors_failsafe_timeout_ms': 5000,
-                'motors_native_failsafe': True,
+                'motors_native_failsafe': False,
                 'motors_native_failsafe_extra_timeout_ms': 1000
             }]
         )
