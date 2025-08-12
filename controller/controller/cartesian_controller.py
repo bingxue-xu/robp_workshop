@@ -31,7 +31,7 @@ class CartesianController(Node):
 
         self.alpha_left = 0.50
         self.beta_left = 0.00065
-        self.alpha_right = 0.47 # 0.44
+        self.alpha_right = 0.48 # 0.44
         self.beta_right = 0.0006 # 0.0005
 
         
