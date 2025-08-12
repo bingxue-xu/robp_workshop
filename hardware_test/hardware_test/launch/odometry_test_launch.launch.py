@@ -161,7 +161,7 @@ def generate_launch_description():
         output='screen',
         parameters=[
             {'frequency': 20},
-            {'wheel_base': 0.311},
+            {'wheel_base': 0.3199},
             {'wheel_radius': 0.04921},
             {'ticks_per_revolution': 3072},
         ]
@@ -284,7 +284,7 @@ def generate_launch_description():
         # tf
         static_map_to_odom_node,
         static_base_link_to_laser_node,
-        odometry_node,
+        # odometry_node,
         # encoder_imu_odometry_node,
         # icp_odometry_node,
         # ekf_node,
@@ -297,8 +297,8 @@ def generate_launch_description():
         # marker_2_node,
 
         # # driver launch
-        realsense_launch,
-        rplidar_launch,
+        # realsense_launch,
+        # rplidar_launch,
         phidgets_launch,
 
         # RViz2
