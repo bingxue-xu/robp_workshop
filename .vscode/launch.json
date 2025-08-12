@@ -80,5 +80,23 @@
                 "ROS_DOMAIN_ID": "0"
             }
         },
+        {
+            "name": "Debug umbmark_analysis",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/hardware_test/hardware_test/utils/umbmark_analysis.py",
+            "args": [
+                "hardware_test/test_results/odometry_test/SnowWhite_umbmark.json",
+                "--save-dir", 
+                "hardware_test/test_results/odometry_test/",
+            ],
+            "console": "integratedTerminal",
+            "cwd": "${workspaceFolder}",
+            "env": {
+                "PYTHONUNBUFFERED": "1"
+            },
+            "stopOnEntry": false,
+            "justMyCode": false
+        }
     ]
 }
