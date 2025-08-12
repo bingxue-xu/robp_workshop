@@ -104,7 +104,8 @@ def compute_alpha_beta(cg_cw, cg_ccw, L=4.0):
 
 def wheel_diameter_ratio_from_beta(beta):
     if abs(beta) < 0.001:
-        return (1.0+beta) / (1.0-beta)
+        return 1.0
+    return (1.0+beta) / (1.0-beta)
 
 def wheelbase_corrected(nominal_b, alpha_rad):
     return nominal_b * ((math.pi/2) / ((math.pi/2) - alpha_rad))
@@ -135,7 +136,7 @@ def plot_umbmark(json_file, save_dir=None, nominal_wheelbase=0.311/2, run_calibr
     if run_calibration and len(cw_points) > 0 and len(ccw_points) > 0:
         print(f"\n === Running Calibration ===")
 
-        alpha, beta, parts = compute_alpha_beta(cg_cw, cg_ccw, square_size)
+        alpha, beta = compute_alpha_beta(cg_cw, cg_ccw, square_size)
         Ed = wheel_diameter_ratio_from_beta(beta)
         wb_corr = wheelbase_corrected(nominal_wheelbase, alpha)
 
@@ -148,7 +149,6 @@ def plot_umbmark(json_file, save_dir=None, nominal_wheelbase=0.311/2, run_calibr
         analysis_data['umbmark_calibration'] = {
             'alpha_rad': alpha,
             'beta': beta,
-            'alpha_beta_parts': parts,
             'Ed_ratio_DR_over_DL': Ed,
             'wheelbase_nominal': nominal_wheelbase,
             'wheelbase_corrected': wb_corr,
@@ -172,15 +172,16 @@ def plot_umbmark(json_file, save_dir=None, nominal_wheelbase=0.311/2, run_calibr
 
     plt.scatter(*cg_cw, c='blue', marker='x', s=100, label='CW CoG')
     plt.scatter(*cg_ccw, c='red', marker='x', s=100, label='CCW CoG')
-    
-    plt.title(f"{robot_name} UMBmark (E_max = {emax:.3f} m)")
+
+    plt.title(f"{robot_name} Odometry Error (E_max = {emax:.3f}m / {4*square_size}m)", pad=30)
+    plt.figtext(0.5, 0.9, f"UMBmark: {square_size}x{square_size}m bidirectional square path", ha='center', fontsize=10)
     plt.xlabel('ΔX [m]')
     plt.ylabel('ΔY [m]')
     plt.axhline(0, color='black', linewidth=1)
     plt.axvline(0, color='black', linewidth=1)
     plt.grid(True)
     plt.axis('equal')
-    plt.legend()
+    plt.legend(loc='upper left')
 
     if save_dir is None:
         save_dir = os.path.dirname(json_file)
