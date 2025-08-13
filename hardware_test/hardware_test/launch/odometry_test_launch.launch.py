@@ -53,11 +53,15 @@ def generate_launch_description():
         default_value='1.0',
         description='Angular speed in rad/s'
     )
-
-    laps_per_direction_arg = DeclareLaunchArgument(
-        'laps_per_direction',
-        default_value='2',
-        description='Number of laps to perform in each direction'
+    direction_arg = DeclareLaunchArgument(
+        'direction',
+        default_value='cw',
+        description='Direction of the test, either "cw" or "ccw"'
+    )
+    lap_arg = DeclareLaunchArgument(
+        'lap',
+        default_value='1',
+        description='Number of laps to perform in the test'
     )
 
     # config handle
@@ -67,7 +71,8 @@ def generate_launch_description():
     square_size= LaunchConfiguration('square_size')
     speed      = LaunchConfiguration('speed')
     angular_speed = LaunchConfiguration('angular_speed')
-    laps       = LaunchConfiguration('laps_per_direction')
+    direction = LaunchConfiguration('direction')
+    lap = LaunchConfiguration('lap')
 
     # --- 1. start tf  ---
     static_map_to_odom_node = Node(
@@ -123,10 +128,11 @@ def generate_launch_description():
             {'robot_name': robot_name},
             {'domain_id': domain_id},
             {'json_folder': json_folder},
+            {'direction': direction},
+            {'lap': lap},
             {'square_size': square_size},
             {'speed': speed},
             {'angular_speed': angular_speed},
-            {'laps_per_direction': laps},
         ]
     )
 
@@ -161,7 +167,7 @@ def generate_launch_description():
         output='screen',
         parameters=[
             {'frequency': 20},
-            {'wheel_base': 0.3199},
+            {'wheel_base': 0.3111},
             {'wheel_radius': 0.04921},
             {'ticks_per_revolution': 3072},
         ]
@@ -279,12 +285,13 @@ def generate_launch_description():
         square_size_arg,
         speed_arg,
         angular_speed_arg,
-        laps_per_direction_arg,
+        direction_arg,
+        lap_arg,
         OpaqueFunction(function=_validate_required_args),
         # tf
         static_map_to_odom_node,
         static_base_link_to_laser_node,
-        # odometry_node,
+        odometry_node,
         # encoder_imu_odometry_node,
         # icp_odometry_node,
         # ekf_node,

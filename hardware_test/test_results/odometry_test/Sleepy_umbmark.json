@@ -203,7 +203,7 @@
       "emax_percentage": "4.01%",
       "total_path_length": 12.0,
       "umbmark_pass": false,
-      "analysis_timestamp": "2025-08-12T19:24:17"
+      "analysis_timestamp": "2025-08-13T04:07:41"
     },
     "umbmark_calibration": {
       "alpha_rad": 0.01150733109434399,
@@ -211,7 +211,7 @@
       "Ed_ratio_DR_over_DL": 1.0810157661376372,
       "wheelbase_nominal": 0.1555,
       "wheelbase_corrected": 0.15664756789158674,
-      "calibration_timestamp": "2025-08-12T19:24:17"
+      "calibration_timestamp": "2025-08-13T04:07:41"
     }
   }
 }
