@@ -1,0 +1,201 @@
+{
+  "Sneezy": {
+    "square_size": 3.0,
+    "speed": 0.2,
+    "angular_speed": 1.2,
+    "ccw": {
+      "1": {
+        "detailed_results": {
+          "x_abs": -0.25,
+          "y_abs": 0.945,
+          "theta_abs_deg": null,
+          "x_calc": -0.20990790137808452,
+          "y_calc": 0.9977001117099671,
+          "theta_calc_deg": -5.463052338723921,
+          "dx": -0.040092098621915484,
+          "dy": -0.052700111709967135,
+          "dtheta_deg": null,
+          "closure_error": 0.06621690226937842,
+          "timestamp": "2025-08-13T05:18:09"
+        }
+      },
+      "2": {
+        "detailed_results": {
+          "x_abs": 2.81,
+          "y_abs": -0.82,
+          "theta_abs_deg": null,
+          "x_calc": 2.834715997243704,
+          "y_calc": -0.9638146613772275,
+          "theta_calc_deg": 44.60493022758346,
+          "dx": -0.024715997243704102,
+          "dy": 0.14381466137722754,
+          "dtheta_deg": null,
+          "closure_error": 0.14592305282852813,
+          "timestamp": "2025-08-13T05:26:10"
+        }
+      },
+      "3": {
+        "detailed_results": {
+          "x_abs": 2.61,
+          "y_abs": -1.01,
+          "theta_abs_deg": null,
+          "x_calc": 2.73899791945579,
+          "y_calc": -1.1232662859596496,
+          "theta_calc_deg": 57.58551830033985,
+          "dx": -0.1289979194557902,
+          "dy": 0.1132662859596496,
+          "dtheta_deg": null,
+          "closure_error": 0.171667453988855,
+          "timestamp": "2025-08-13T05:34:19"
+        }
+      },
+      "4": {
+        "detailed_results": {
+          "x_abs": 1.75,
+          "y_abs": -0.785,
+          "theta_abs_deg": null,
+          "x_calc": 1.822426619852343,
+          "y_calc": -0.8083711541144013,
+          "theta_calc_deg": 30.17793376959208,
+          "dx": -0.07242661985234311,
+          "dy": 0.02337115411440127,
+          "dtheta_deg": null,
+          "closure_error": 0.07610404790728885,
+          "timestamp": "2025-08-13T05:43:07"
+        }
+      },
+      "5": {
+        "detailed_results": {
+          "x_abs": 3.29,
+          "y_abs": 0.555,
+          "theta_abs_deg": null,
+          "x_calc": 3.480949904702042,
+          "y_calc": 0.44985578916167834,
+          "theta_calc_deg": 85.49378265675156,
+          "dx": -0.19094990470204198,
+          "dy": 0.1051442108383217,
+          "dtheta_deg": null,
+          "closure_error": 0.2179843370027589,
+          "timestamp": "2025-08-13T05:51:14"
+        }
+      },
+      "6": {
+        "detailed_results": {
+          "x_abs": 1.265,
+          "y_abs": 0.0,
+          "theta_abs_deg": null,
+          "x_calc": 1.3673317810712033,
+          "y_calc": -0.11070874062099538,
+          "theta_calc_deg": 27.711622035780664,
+          "dx": -0.10233178107120344,
+          "dy": 0.11070874062099538,
+          "dtheta_deg": null,
+          "closure_error": 0.1507588095836908,
+          "timestamp": "2025-08-13T05:59:43"
+        }
+      }
+    },
+    "cw": {
+      "1": {
+        "detailed_results": {
+          "x_abs": 2.77,
+          "y_abs": -1.738,
+          "theta_abs_deg": null,
+          "x_calc": 3.105400830146163,
+          "y_calc": -1.7493617737872675,
+          "theta_calc_deg": -141.03215591088912,
+          "dx": -0.33540083014616284,
+          "dy": 0.011361773787267548,
+          "dtheta_deg": null,
+          "closure_error": 0.3355932162102331,
+          "timestamp": "2025-08-13T06:10:11"
+        }
+      },
+      "2": {
+        "detailed_results": {
+          "x_abs": 3.04,
+          "y_abs": -0.835,
+          "theta_abs_deg": null,
+          "x_calc": 3.3275523189423253,
+          "y_calc": -0.8106115213596821,
+          "theta_calc_deg": -119.87379735230591,
+          "dx": -0.28755231894232525,
+          "dy": -0.0243884786403179,
+          "dtheta_deg": null,
+          "closure_error": 0.28858470856838203,
+          "timestamp": "2025-08-13T06:18:52"
+        }
+      },
+      "3": {
+        "detailed_results": {
+          "x_abs": 0.01,
+          "y_abs": 0.7,
+          "theta_abs_deg": null,
+          "x_calc": 0.35192347793225603,
+          "y_calc": 0.8150383314282945,
+          "theta_calc_deg": -27.915602705485544,
+          "dx": -0.341923477932256,
+          "dy": -0.11503833142829456,
+          "dtheta_deg": null,
+          "closure_error": 0.36075681900567885,
+          "timestamp": "2025-08-13T06:28:08"
+        }
+      },
+      "4": {
+        "detailed_results": {
+          "x_abs": 0.89,
+          "y_abs": 0.4,
+          "theta_abs_deg": null,
+          "x_calc": 1.1617036723127667,
+          "y_calc": 0.4979083996725294,
+          "theta_calc_deg": -60.96047119926523,
+          "dx": -0.2717036723127667,
+          "dy": -0.0979083996725294,
+          "dtheta_deg": null,
+          "closure_error": 0.28880605996876013,
+          "timestamp": "2025-08-13T06:37:09"
+        }
+      },
+      "5": {
+        "detailed_results": {
+          "x_abs": 2.345,
+          "y_abs": -0.025,
+          "theta_abs_deg": null,
+          "x_calc": 2.586840994568171,
+          "y_calc": 0.07501738941533317,
+          "theta_calc_deg": -81.69232472116971,
+          "dx": -0.24184099456817076,
+          "dy": -0.10001738941533317,
+          "dtheta_deg": null,
+          "closure_error": 0.26170698278643695,
+          "timestamp": "2025-08-13T06:45:21"
+        }
+      }
+    },
+    "umbmark_analysis": {
+      "cg_cw": [
+        -0.29568425878033633,
+        -0.06519816507384149
+      ],
+      "cg_ccw": [
+        -0.09325238682449973,
+        0.07393415686677139
+      ],
+      "r_cw": 0.3027870235321732,
+      "r_ccw": 0.1190053242509195,
+      "emax": 0.3027870235321732,
+      "emax_percentage": "2.52%",
+      "total_path_length": 12.0,
+      "umbmark_pass": false,
+      "analysis_timestamp": "2025-08-13T06:46:42"
+    },
+    "umbmark_calibration": {
+      "alpha_rad": 0.015841693908829422,
+      "beta": 0.01423184141235206,
+      "Ed_ratio_DR_over_DL": 1.0288746218639129,
+      "wheelbase_nominal": 0.1555,
+      "wheelbase_corrected": 0.15708421561036212,
+      "calibration_timestamp": "2025-08-13T06:46:42"
+    }
+  }
+}

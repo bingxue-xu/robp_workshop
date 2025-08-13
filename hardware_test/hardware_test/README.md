@@ -3,23 +3,24 @@
 Example 
 ```bash
 # Terminal 1: Start odometry system
-ros2 launch hardware_test odometry_test_launch.launch.py robot_name:=L domain_id:=0
+ros2 launch hardware_test odometry_test_launch.launch.py robot_name:=Sneezy domain_id:=0
 
 # Terminal 2: Run test
-ros2 run hardware_test odometry_test --ros-args -p robot_name:=L -p square_size:=1.0 -p square_size:=4.0 -p speed:=0.2 -p laps_per_direction:=5
+ros2 run hardware_test odometry_test --ros-args -p robot_name:=Sneezy -p domain_id:=0 -p direction:=ccw -p square_size:=3.0 -p lap:=4 -p angular_speed:=1.2
 
-# Follow prompts:
-Press Enter when ready to start lap 1 (cw)...
-# Robot moves in square automatically
-Enter measured x_abs [m]: 0.05
-Enter measured y_abs [m]: -0.12
-Enter measured yaw [deg] (Enter to skip): 23
+# After each run, input measurement:
+Enter measured x_abs [m]: 1.75
+Enter measured y_abs [m]: -0.785
+Enter measured theta_abs [deg] (optional, Enter to skip): 
 
-Reposition robot to origin and press Enter to start next run...
-# Repeat for all laps
+# results saved
+[INFO] [1755056587.144777617] [umbmark_odometry_test]: Saved lap 4 ccw → /home/bingxue/dd2419/workshop_ws/src/hardware_test/test_results/odometry_test/Sneezy_umbmark.json
 
-# Plot results
-python3 src/hardware_test/hardware_test/utils/umbmark_plot.py \
-    src/hardware_test/test_results/odometry_test/L_umbmark_2025-08-06_17-55-58.json
+# Repeat for all 5 laps counter-clockwise(ccw) and clockwise(cw)
+
+# Analysis and plot results
+cd /home/bingxue/dd2419/workshop_ws/src
+
+python3 hardware_test/hardware_test/utils/umbmark_analysis.py hardware_test/test_results/odometry_test/Sneezy_umbmark.json  --save-dir hardware_test/test_results/odometry_test/
 ```
 
