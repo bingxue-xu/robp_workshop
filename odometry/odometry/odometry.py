@@ -41,7 +41,9 @@ class Odometry(Node):
         self.declare_parameter('wheel_base', 0.311)
         self.declare_parameter('wheel_radius', 0.098425/2)
         self.declare_parameter('ticks_per_revolution', 48 * 64)
-
+        self.ticks_per_rev = self.get_parameter('ticks_per_revolution').get_parameter_value().integer_value
+        self.wheel_radius = self.get_parameter('wheel_radius').get_parameter_value().double_value
+        self.wheel_base = self.get_parameter('wheel_base').get_parameter_value().double_value
 
     def encoder_callback(self, msg: Encoders):
         """Takes encoder readings and updates the odometry.
@@ -60,12 +62,9 @@ class Odometry(Node):
         delta_ticks_left = msg.delta_encoder_left
         delta_ticks_right = msg.delta_encoder_right
 
-        ticks_per_rev = self.get_parameter('ticks_per_revolution').get_parameter_value().integer_value
-        wheel_radius = self.get_parameter('wheel_radius').get_parameter_value().double_value
-        wheel_base = self.get_parameter('wheel_base').get_parameter_value().double_value
-        K = 2*np.pi/ticks_per_rev
-        D = (wheel_radius/2)*(K*(delta_ticks_right+delta_ticks_left))
-        delta_theta = (wheel_radius/wheel_base)*(K*(delta_ticks_right-delta_ticks_left))
+        K = 2*np.pi/self.ticks_per_rev
+        D = (self.wheel_radius/2)*(K*(delta_ticks_right+delta_ticks_left))
+        delta_theta = (self.wheel_radius/self.wheel_base)*(K*(delta_ticks_right-delta_ticks_left))
 
         self._x = self._x + D*np.cos(self._yaw) 
         self._y = self._y + D*np.sin(self._yaw) 
