@@ -141,6 +141,11 @@ def generate_launch_description():
         actions=[odometry_test_node]
     )
 
+    delayed_odometry_node = TimerAction(
+        period=3.0,
+        actions=[odometry_node]
+    )
+
     robot_state_publisher_node = Node(
         package='robot_state_publisher',
         executable='robot_state_publisher',
@@ -291,7 +296,8 @@ def generate_launch_description():
         # tf
         static_map_to_odom_node,
         static_base_link_to_laser_node,
-        odometry_node,
+        # odometry_node,
+        delayed_odometry_node,
         # encoder_imu_odometry_node,
         # icp_odometry_node,
         # ekf_node,

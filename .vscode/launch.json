@@ -86,7 +86,7 @@
             "request": "launch",
             "program": "${workspaceFolder}/hardware_test/hardware_test/utils/umbmark_analysis.py",
             "args": [
-                "hardware_test/test_results/odometry_test/Doc_umbmark.json",
+                "hardware_test/test_results/odometry_test/Grumpy_umbmark.json",
                 "--save-dir", 
                 "hardware_test/test_results/odometry_test/",
             ],
