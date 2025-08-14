@@ -137,6 +137,10 @@ class UMBmarkOdometryTest(BaseTest):
         pc2_msg = point_cloud2.create_cloud(header, fields, points)
         self.theoretical_square_pub.publish(pc2_msg)
 
+    def save_result(self, test_name, passed, results):
+        self.get_logger().info(f"Skipping BaseTest save_result -- using custom json format")
+        pass 
+    
     def encoder_callback(self, msg):
         """Callback for encoder messages to update the last delta values."""
         self.last_delta_left = msg.delta_encoder_left
