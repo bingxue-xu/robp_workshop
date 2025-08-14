@@ -1,0 +1,122 @@
+{
+  "robot_name": "Sleepy",
+  "domain_id": 7,
+  "results": {
+    "Nuc": {
+      "status": "PASS",
+      "detail": "No ubuntu installed"
+    },
+    "Power": {
+      "status": "PASS",
+      "detail": "works with battery, voltage: 15.8V"
+    },
+    "RPLidar": {
+      "status": "FAIL",
+      "detail": "No rplidar hardware"
+    },
+    "Arm": {
+      "status": "PASS",
+      "detail": {
+        "status": "PASS",
+        "detail": "All servos moved",
+        "servo_pos_publisher": {
+          "status": "PASS",
+          "detail": "Range: 2520.0 ~ 12000.0"
+        },
+        "servo_temp_publisher": {
+          "status": "PASS",
+          "detail": "Range: 30 ~ 63"
+        },
+        "servo_volt_publisher": {
+          "status": "PASS",
+          "detail": "Range: 12107 ~ 12322"
+        },
+        "servo_results": {
+          "servo_1_min": {
+            "moved": true,
+            "detail": "Moved from 2520.0 to 3360.0"
+          },
+          "servo_1_max": {
+            "moved": true,
+            "detail": "Moved from 2520.0 to 4512.0"
+          },
+          "servo_2_min": {
+            "moved": true,
+            "detail": "Moved from 12000.0 to 11640.0"
+          },
+          "servo_2_max": {
+            "moved": true,
+            "detail": "Moved from 12000.0 to 10560.0"
+          },
+          "servo_3_min": {
+            "moved": true,
+            "detail": "Moved from 12000.0 to 10584.0"
+          },
+          "servo_3_max": {
+            "moved": true,
+            "detail": "Moved from 12000.0 to 9528.0"
+          },
+          "servo_4_min": {
+            "moved": true,
+            "detail": "Moved from 11952.0 to 11592.0"
+          },
+          "servo_4_max": {
+            "moved": true,
+            "detail": "Moved from 11952.0 to 10536.0"
+          },
+          "servo_5_min": {
+            "moved": true,
+            "detail": "Moved from 12000.0 to 10944.0"
+          },
+          "servo_5_max": {
+            "moved": true,
+            "detail": "Moved from 12000.0 to 9888.0"
+          },
+          "servo_6_min": {
+            "moved": true,
+            "detail": "Moved from 11976.0 to 10968.0"
+          },
+          "servo_6_max": {
+            "moved": true,
+            "detail": "Moved from 11976.0 to 9912.0"
+          }
+        }
+      }
+    },
+    "RealSense": {
+      "status": "PASS",
+      "detail": "Received valid color frame (1280\u00d7720)"
+    },
+    "USBCam": {
+      "status": "PASS",
+      "detail": "Received valid frame (640\u00d7480), not all-black/white"
+    },
+    "Phidgets": {
+      "status": "PASS",
+      "detail": {
+        "status": "PASS",
+        "detail": "All phidgets passed",
+        "Encoders": {
+          "status": "PASS",
+          "detail": "delta_encoder_left=31, delta_encoder_right=28"
+        },
+        "Motors": {
+          "status": "PASS",
+          "detail": "duty_cycle_left=0.072, duty_cycle_right=0.149"
+        },
+        "Spatial": {
+          "status": "PASS",
+          "detail": "acc=(0.09,-0.29,-9.63)"
+        },
+        "Temperature": {
+          "status": "PASS",
+          "detail": "Temperature=30.77\u00b0C"
+        }
+      }
+    },
+    "Comment": {
+      "detail": "Servo5 is loose"
+    }
+  },
+  "last_updated": "2025-06-17T15:51:15.373151"
+}

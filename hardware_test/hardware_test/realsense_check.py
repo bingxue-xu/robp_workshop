@@ -21,7 +21,7 @@ class RealSenseCheck(BaseTest):
         robot_name = self.declare_parameter('robot_name', '').value
         domain_id = self.declare_parameter('domain_id', 0).value
         json_folder = self.declare_parameter(
-            'json_folder', '~/dd2419/workshop_ws/src/hardware_test/test_results'
+            'json_folder', '~/dd2419/workshop_ws/src/hardware_test/test_results/components_test'
         ).value
 
         self.topic_name = self.declare_parameter(

@@ -30,7 +30,7 @@ def generate_launch_description():
         description='Domain ID of the robot, e.g. 0'
     )
     src_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', '..', '..', '..', 'src','hardware_test'))
-    json_folder = os.path.join(src_dir, 'test_results')
+    json_folder = os.path.join(src_dir, 'test_results/components_test')
     json_folder_arg = DeclareLaunchArgument(
         'json_folder',
         default_value=json_folder,

@@ -18,8 +18,9 @@ class USBCamCheck(BaseTest):
         # common test config
         robot_name = self.declare_parameter('robot_name', '').value
         domain_id   = self.declare_parameter('domain_id', 0).value
-        json_folder = self.declare_parameter('json_folder', '').value
-
+        json_folder = self.declare_parameter(
+            'json_folder', '~/dd2419/workshop_ws/src/hardware_test/test_results/components_test'
+        ).value
         # usb_cam–specific
         self.topic_name = self.declare_parameter(
             'topic_name', '/camera1/image_raw'

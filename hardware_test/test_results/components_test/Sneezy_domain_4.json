@@ -1,0 +1,119 @@
+{
+  "robot_name": "Sneezy",
+  "domain_id": 4,
+  "results": {
+    "Nuc": {
+      "status": "PASS",
+      "detail": "password unknown"
+    },
+    "Power": {
+      "status": "PASS",
+      "detail": "works with battery, voltage: 16.1V"
+    },
+    "Arm": {
+      "status": "PASS",
+      "detail": {
+        "status": "PASS",
+        "detail": "All servos moved",
+        "servo_pos_publisher": {
+          "status": "PASS",
+          "detail": "Range: 7968.0 ~ 12384.0"
+        },
+        "servo_temp_publisher": {
+          "status": "PASS",
+          "detail": "Range: 28 ~ 54"
+        },
+        "servo_volt_publisher": {
+          "status": "PASS",
+          "detail": "Range: 7261 ~ 7405"
+        },
+        "servo_results": {
+          "servo_1_min": {
+            "moved": true,
+            "detail": "Moved from 12384.0 to 11400.0"
+          },
+          "servo_1_max": {
+            "moved": true,
+            "detail": "Moved from 12384.0 to 10152.0"
+          },
+          "servo_2_min": {
+            "moved": true,
+            "detail": "Moved from 12024.0 to 11784.0"
+          },
+          "servo_2_max": {
+            "moved": true,
+            "detail": "Moved from 12024.0 to 10704.0"
+          },
+          "servo_3_min": {
+            "moved": true,
+            "detail": "Moved from 11952.0 to 10680.0"
+          },
+          "servo_3_max": {
+            "moved": true,
+            "detail": "Moved from 11952.0 to 9600.0"
+          },
+          "servo_4_min": {
+            "moved": true,
+            "detail": "Moved from 12000.0 to 11736.0"
+          },
+          "servo_4_max": {
+            "moved": true,
+            "detail": "Moved from 12000.0 to 10632.0"
+          },
+          "servo_5_min": {
+            "moved": true,
+            "detail": "Moved from 12072.0 to 11952.0"
+          },
+          "servo_5_max": {
+            "moved": true,
+            "detail": "Moved from 12072.0 to 11832.0"
+          },
+          "servo_6_min": {
+            "moved": true,
+            "detail": "Moved from 12048.0 to 11112.0"
+          },
+          "servo_6_max": {
+            "moved": true,
+            "detail": "Moved from 12048.0 to 9984.0"
+          }
+        }
+      }
+    },
+    "RealSense": {
+      "status": "PASS",
+      "detail": "Received valid color frame (1280\u00d7720)"
+    },
+    "RPLidar": {
+      "status": "PASS",
+      "detail": "Total rplidar points: 360, Max measured distance: 4.81 m"
+    },
+    "Phidgets": {
+      "status": "PASS",
+      "detail": {
+        "status": "PASS",
+        "detail": "All phidgets passed",
+        "Encoders": {
+          "status": "PASS",
+          "detail": "delta_encoder_left=38, delta_encoder_right=45"
+        },
+        "Motors": {
+          "status": "PASS",
+          "detail": "duty_cycle_left=0.166, duty_cycle_right=0.222"
+        },
+        "Spatial": {
+          "status": "PASS",
+          "detail": "acc=(-0.32,-0.16,-12.15)"
+        },
+        "Temperature": {
+          "status": "PASS",
+          "detail": "Temperature=30.45\u00b0C"
+        }
+      }
+    },
+    "USBCam": {
+      "status": "PASS",
+      "detail": "Received valid frame (640\u00d7480), not all-black/white"
+    }
+  },
+  "last_updated": "2025-06-12T17:22:05.298480"
+}
