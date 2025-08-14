@@ -1,0 +1,40 @@
+{
+  "Sleepy_Ca": {
+    "square_size": 3.0,
+    "speed": 0.2,
+    "angular_speed": 1.2,
+    "ccw": {
+      "1": {
+        "detailed_results": {
+          "x_abs": 2.025,
+          "y_abs": -0.693,
+          "theta_abs_deg": null,
+          "x_calc": 1.4915684444611375,
+          "y_calc": -0.9906398849086948,
+          "theta_calc_deg": 32.86676987037584,
+          "dx": 0.5334315555388625,
+          "dy": 0.29763988490869486,
+          "dtheta_deg": null,
+          "closure_error": 0.6108508210136675,
+          "timestamp": "2025-08-14T11:35:55"
+        }
+      },
+      "2": {
+        "detailed_results": {
+          "x_abs": 2.9,
+          "y_abs": -0.975,
+          "theta_abs_deg": null,
+          "x_calc": 2.5537791532882985,
+          "y_calc": -1.399474878898475,
+          "theta_calc_deg": 50.427651163080526,
+          "dx": 0.3462208467117014,
+          "dy": 0.4244748788984751,
+          "dtheta_deg": null,
+          "closure_error": 0.4784748788984751,
+          "timestamp": "2025-08-14T11:50:42"
+        }
+      }
+    },
+    "cw": {}
+  }
+}

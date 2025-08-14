@@ -24,8 +24,9 @@ class ArmCheck(BaseTest):
     def setup_parameters(self):
         robot_name = self.declare_parameter('robot_name', '').value
         domain_id = self.declare_parameter('domain_id', 0).value
-        json_folder = self.declare_parameter('json_folder', '').value
-
+        json_folder = self.declare_parameter(
+            'json_folder', '~/dd2419/workshop_ws/src/hardware_test/test_results/components_test'
+        ).value
         self.update_config(
             robot_name=robot_name,
             domain_id=domain_id,
