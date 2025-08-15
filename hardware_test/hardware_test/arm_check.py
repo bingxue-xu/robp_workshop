@@ -64,7 +64,8 @@ class ArmCheck(BaseTest):
     def move_servos(self, positions, times):
         msg = Int16MultiArray()
         msg.layout = MultiArrayLayout(dim=[MultiArrayDimension(label='', size=0, stride=0)], data_offset=0)
-        msg.data = positions + times
+        msg.data = positions + times # single command: ros2 topic pub /multi_servo_cmd_sub --once std_msgs/Int16MultiArray "{layout: {dim: [{label: '', size: 0, stride: 0}], data_offset: 0}, data: [1000,-1,2000,-1,-1,-1,2000,2000,2000,2000,2000,2000]}"
+
         self.servo_cmd_pub.publish(msg)
         self.get_logger().info(f"Published servo move: {msg.data}")
         time.sleep(self.move_wait)

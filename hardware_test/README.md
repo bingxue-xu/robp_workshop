@@ -2,10 +2,12 @@
 ### Run hardware test
 ```bash
 # Terminal 1: Start micro-ROS agen 
-run the micro-ROS agent: ros2 run micro_ros_agent micro_ros_agent serial --dev /dev/hiwonder_arm -v6
+ros2 run micro_ros_agent micro_ros_agent serial --dev /dev/hiwonder_arm -v6
 
 # Terminal 2: Launch test
-ros2 launch hardware_test hardware?checks_launch.launch.py robot_name:=Sneezy domain_id:=0
+# Set domain ID for current terminal session
+export ROS_DOMAIN_ID=0
+ros2 launch hardware_test hardware_checks_launch.launch.py robot_name:=Sneezy domain_id:=0
 
 # Summary components results
 cd /home/bingxue/dd2419/workshop_ws/src

@@ -26,10 +26,10 @@
             }
         },
         {
-            "name": "C/C++: Debug icp_odometry",
+            "name": "C/C++: Debug encoder_odometry",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/../install/icp_odometry/lib/icp_odometry/icp_odometry",
+            "program": "${workspaceFolder}/../install/icp_odometry/lib/icp_odometry/encoder_odometry_node",
             "args": [],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}/..",
@@ -39,18 +39,6 @@
             ],
             "externalConsole": false,
             "MIMode": "gdb",
-            "setupCommands": [
-                {
-                    "description": "Enable pretty-printing for gdb",
-                    "text": "-enable-pretty-printing",
-                    "ignoreFailures": true
-                },
-                {
-                    "description": "Set Disassembly Flavor to Intel",
-                    "text": "-gdb-set disassembly-flavor intel",
-                    "ignoreFailures": true
-                }
-            ],
             // "preLaunchTask": "build icp_odometry",
             "miDebuggerPath": "/usr/bin/gdb"
         },

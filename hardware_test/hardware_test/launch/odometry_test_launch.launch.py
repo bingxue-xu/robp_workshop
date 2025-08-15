@@ -98,6 +98,19 @@ def generate_launch_description():
         output='screen'
     )
 
+    encoder_odometry_node = Node(
+        package='icp_odometry',
+        executable='encoder_odometry_node',
+        name='encoder_odometry_node',
+        output='screen',
+        parameters=[
+            {'frequency': 20},
+            {'wheel_base': 0.311},
+            {'wheel_radius': 0.098425/2},
+            {'ticks_per_revolution': 48*64},
+        ]
+    )
+
     encoder_imu_odometry_node = Node(
         package='icp_odometry',
         executable='encoder_imu_odometry_node',
@@ -143,7 +156,7 @@ def generate_launch_description():
 
     delayed_odometry_node = TimerAction(
         period=3.0,
-        actions=[odometry_node]
+        actions=[encoder_odometry_node]
     )
 
     robot_state_publisher_node = Node(
