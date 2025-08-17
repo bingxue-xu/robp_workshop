@@ -93,14 +93,6 @@ Visualization Manager:
           Value: true
         camera_bottom_screw_frame:
           Value: true
-        camera_color_frame:
-          Value: true
-        camera_color_optical_frame:
-          Value: true
-        camera_depth_frame:
-          Value: true
-        camera_depth_optical_frame:
-          Value: true
         camera_link:
           Value: true
         laser:
@@ -120,12 +112,7 @@ Visualization Manager:
             base_link:
               camera_bottom_screw_frame:
                 camera_link:
-                  camera_color_frame:
-                    camera_color_optical_frame:
-                      {}
-                  camera_depth_frame:
-                    camera_depth_optical_frame:
-                      {}
+                  {}
               laser:
                 {}
       Update Interval: 0
@@ -328,7 +315,7 @@ Visualization Manager:
         Filter size: 10
         History Policy: Keep Last
         Reliability Policy: Reliable
-        Value: /path
+        Value: /encoder_path
       Value: true
     - Angle Tolerance: 0.10000000149011612
       Class: rviz_default_plugins/Odometry
@@ -404,7 +391,7 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz_default_plugins/ThirdPersonFollower
-      Distance: 1.9020371437072754
+      Distance: 5.587986946105957
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
@@ -419,10 +406,10 @@ Visualization Manager:
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.7800002694129944
+      Pitch: 1.5697963237762451
       Target Frame: base_link
       Value: ThirdPersonFollower (rviz_default_plugins)
-      Yaw: 0.051815904676914215
+      Yaw: 3.275000810623169
     Saved: ~
 Window Geometry:
   Displays:
