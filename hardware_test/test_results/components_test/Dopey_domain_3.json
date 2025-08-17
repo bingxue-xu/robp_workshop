@@ -1,0 +1,111 @@
+{
+  "robot_name": "Dopey",
+  "domain_id": 3,
+  "results": {
+    "USBCam": {
+      "status": "FAIL",
+      "detail": "topic /camera1/image_raw did not publish any message"
+    },
+    "Phidgets": {
+      "status": "PASS",
+      "detail": {
+        "status": "PASS",
+        "detail": "All phidgets passed",
+        "Encoders": {
+          "status": "PASS",
+          "detail": "delta_encoder_left=4, delta_encoder_right=6"
+        },
+        "Motors": {
+          "status": "PASS",
+          "detail": "duty_cycle_left=0.100, duty_cycle_right=0.100"
+        },
+        "Spatial": {
+          "status": "PASS",
+          "detail": "acc=(-0.40,-0.92,-9.76)"
+        },
+        "Temperature": {
+          "status": "PASS",
+          "detail": "Temperature=33.04\u00b0C"
+        }
+      }
+    },
+    "RPLidar": {
+      "status": "PASS",
+      "detail": "Total rplidar points: 360, Max measured distance: 9.35 m"
+    },
+    "Arm": {
+      "status": "PASS",
+      "detail": {
+        "status": "PASS",
+        "detail": "All servos moved",
+        "servo_pos_publisher": {
+          "status": "PASS",
+          "detail": "Range: 1944.0 ~ 12096.0"
+        },
+        "servo_temp_publisher": {
+          "status": "PASS",
+          "detail": "Range: 28 ~ 48"
+        },
+        "servo_volt_publisher": {
+          "status": "PASS",
+          "detail": "Range: 7392 ~ 7514"
+        },
+        "servo_results": {
+          "servo_1_min": {
+            "moved": true,
+            "detail": "Moved from 1944.0 to 2064.0"
+          },
+          "servo_1_max": {
+            "moved": true,
+            "detail": "Moved from 2064.0 to 6528.0"
+          },
+          "servo_2_min": {
+            "moved": true,
+            "detail": "Moved from 12024.0 to 11784.0"
+          },
+          "servo_2_max": {
+            "moved": true,
+            "detail": "Moved from 12024.0 to 10680.0"
+          },
+          "servo_3_max": {
+            "moved": true,
+            "detail": "Moved from 11952.0 to 11064.0"
+          },
+          "servo_3_min": {
+            "moved": true,
+            "detail": "Moved from 11952.0 to 10008.0"
+          },
+          "servo_4_min": {
+            "moved": true,
+            "detail": "Moved from 11928.0 to 11760.0"
+          },
+          "servo_4_max": {
+            "moved": true,
+            "detail": "Moved from 11760.0 to 10584.0"
+          },
+          "servo_5_min": {
+            "moved": true,
+            "detail": "Moved from 12096.0 to 11928.0"
+          },
+          "servo_5_max": {
+            "moved": true,
+            "detail": "Moved from 11928.0 to 10632.0"
+          },
+          "servo_6_min": {
+            "moved": true,
+            "detail": "Moved from 12024.0 to 11088.0"
+          },
+          "servo_6_max": {
+            "moved": true,
+            "detail": "Moved from 12000.0 to 10008.0"
+          }
+        }
+      }
+    },
+    "RealSense": {
+      "status": "PASS",
+      "detail": "Received valid color frame (1280\u00d7720)"
+    }
+  },
+  "last_updated": "2025-08-17T15:39:31.146891"
+}
