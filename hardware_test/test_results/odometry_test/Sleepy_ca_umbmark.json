@@ -1,0 +1,70 @@
+{
+  "Sleepy_ca": {
+    "square_size": 3.0,
+    "speed": 0.2,
+    "angular_speed": 1.4,
+    "ccw": {},
+    "cw": {
+      "1": {
+        "detailed_results": {
+          "x_abs": 1.96,
+          "y_abs": 0.485,
+          "theta_abs_deg": null,
+          "x_calc": 2.6335073361178263,
+          "y_calc": 0.43480628680659933,
+          "theta_calc_deg": -76.16630294162378,
+          "dx": -0.6735073361178263,
+          "dy": 0.05019371319340066,
+          "dtheta_deg": null,
+          "closure_error": 0.6753751110669329,
+          "timestamp": "2025-08-18T18:03:31"
+        }
+      },
+      "2": {
+        "detailed_results": {
+          "x_abs": 1.355,
+          "y_abs": -1.482,
+          "theta_abs_deg": null,
+          "x_calc": 1.2605518084002763,
+          "y_calc": -1.6659932779912499,
+          "theta_calc_deg": 83.72803514374627,
+          "dx": 0.09444819159972373,
+          "dy": 0.18399327799124987,
+          "dtheta_deg": null,
+          "closure_error": 0.20681873039554102,
+          "timestamp": "2025-08-18T18:15:17"
+        }
+      },
+      "3": {
+        "detailed_results": {
+          "x_abs": 0.94,
+          "y_abs": 0.248,
+          "theta_abs_deg": null,
+          "x_calc": 1.015621116095594,
+          "y_calc": 0.2817695006582981,
+          "theta_calc_deg": -55.045447716378064,
+          "dx": -0.07562111609559397,
+          "dy": -0.03376950065829809,
+          "dtheta_deg": null,
+          "closure_error": 0.0828186716523158,
+          "timestamp": "2025-08-18T18:25:59"
+        }
+      },
+      "4": {
+        "detailed_results": {
+          "x_abs": 1.255,
+          "y_abs": 0.15,
+          "theta_abs_deg": null,
+          "x_calc": 1.485585887139583,
+          "y_calc": 0.2428442476543627,
+          "theta_calc_deg": -73.57177734377889,
+          "dx": -0.23058588713958317,
+          "dy": -0.0928442476543627,
+          "dtheta_deg": null,
+          "closure_error": 0.24857575438979002,
+          "timestamp": "2025-08-18T18:35:08"
+        }
+      }
+    }
+  }
+}
