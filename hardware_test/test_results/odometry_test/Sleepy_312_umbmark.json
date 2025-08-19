@@ -1,0 +1,145 @@
+{
+  "Sleepy_312": {
+    "square_size": 3.0,
+    "speed": 0.2,
+    "angular_speed": 1.4,
+    "wheel_base": 0.312,
+    "wheel_radius": 0.04921,
+    "winning_loops_left": 4
+  },
+  "ccw": {
+    "1": {
+      "detailed_results": {
+        "x_abs": -0.58,
+          "y_abs": 1.185,
+          "theta_abs_deg": null,
+          "x_calc": -0.3842652666981835,
+          "y_calc": 1.4213090155890509,
+          "theta_calc_deg": -67.83410832331448,
+          "dx": -0.19573473330181645,
+          "dy": -0.23630901558905082,
+          "dtheta_deg": null,
+          "closure_error": 0.3068452976165668,
+          "timestamp": "2025-08-19T10:24:30"
+        }
+      },
+      "2": {
+        "detailed_results": {
+          "x_abs": 2.085,
+          "y_abs": -0.99,
+          "theta_abs_deg": null,
+          "x_calc": 1.915261354608764,
+          "y_calc": -1.144867647296265,
+          "theta_calc_deg": 33.399053485575934,
+          "dx": 0.16973864539123595,
+          "dy": 0.1548676472962649,
+          "dtheta_deg": null,
+          "closure_error": 0.22977205208278062,
+          "timestamp": "2025-08-19T10:43:14"
+        }
+      },
+      "3": {
+        "detailed_results": {
+          "x_abs": 2.89,
+          "y_abs": -0.955,
+          "theta_abs_deg": null,
+          "x_calc": 2.658700658082354,
+          "y_calc": -1.2600885882982154,
+          "theta_calc_deg": 44.13786433293136,
+          "dx": 0.23129934191764612,
+          "dy": 0.3050885882982154,
+          "dtheta_deg": null,
+          "closure_error": 0.3828556285094084,
+          "timestamp": "2025-08-19T10:56:29"
+        }
+      }
+    },
+    "cw": {
+      "1": {
+        "detailed_results": {
+          "x_abs": 3.42,
+          "y_abs": -1.802,
+          "theta_abs_deg": null,
+          "x_calc": 3.5947423863220114,
+          "y_calc": -1.9723281236020946,
+          "theta_calc_deg": -154.79752103364788,
+          "dx": -0.17474238632201144,
+          "dy": 0.1703281236020946,
+          "dtheta_deg": null,
+          "closure_error": 0.24402166147152082,
+          "timestamp": "2025-08-19T11:05:26"
+        }
+      },
+      "2": {
+        "detailed_results": {
+          "x_abs": 3.26,
+          "y_abs": -0.735,
+          "theta_abs_deg": null,
+          "x_calc": 3.554805096979044,
+          "y_calc": -0.9096182314857847,
+          "theta_calc_deg": -131.50853365384143,
+          "dx": -0.2948050969790441,
+          "dy": 0.1746182314857847,
+          "dtheta_deg": null,
+          "closure_error": 0.3426391279057993,
+          "timestamp": "2025-08-19T11:13:39"
+        }
+      },
+      "3": {
+        "detailed_results": {
+          "x_abs": 1.625,
+          "y_abs": 0.805,
+          "theta_abs_deg": null,
+          "x_calc": 1.993121393512881,
+          "y_calc": 0.7875290123577322,
+          "theta_calc_deg": -62.639670973556825,
+          "dx": -0.3681213935128811,
+          "dy": 0.017470987642267843,
+          "dtheta_deg": null,
+          "closure_error": 0.3685357455811603,
+          "timestamp": "2025-08-19T11:26:22"
+        }
+      },
+      "4": {
+        "detailed_results": {
+          "x_abs": 2.2,
+          "y_abs": -1.305,
+          "theta_abs_deg": null,
+          "x_calc": 2.438233015394811,
+          "y_calc": -1.4184631587338925,
+          "theta_calc_deg": -129.93745117187146,
+          "dx": -0.2382330153948109,
+          "dy": 0.11346315873389257,
+          "dtheta_deg": null,
+          "closure_error": 0.263872806507182,
+          "timestamp": "2025-08-19T11:35:48"
+        }
+      }
+    },
+    "umbmark_analysis": {
+      "cg_cw": [
+        -0.2689754730521869,
+        0.11897012536600993
+      ],
+      "cg_ccw": [
+        0.06843441800235521,
+        0.07454907333514316
+      ],
+      "r_cw": 0.2941117063859442,
+      "r_ccw": 0.10119700540257914,
+      "emax": 0.2941117063859442,
+      "emax_percentage": "2.45%",
+      "total_path_length": 12.0,
+      "umbmark_pass": false,
+      "analysis_timestamp": "2025-08-19T11:36:05"
+    },
+    "umbmark_calibration": {
+      "alpha_rad": 0.00029257734786160804,
+      "beta": 0.012207868292653138,
+      "Ed_ratio_DR_over_DL": 1.0247174843791325,
+      "wheelbase_nominal": 0.1555,
+      "wheelbase_corrected": 0.15552896890733847,
+      "calibration_timestamp": "2025-08-19T11:36:05"
+    }
+  }
+

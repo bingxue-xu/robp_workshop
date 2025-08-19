@@ -106,7 +106,7 @@ def generate_launch_description():
         parameters=[
             {'frequency': 20},
             {'wheel_base': 0.312},
-            {'wheel_radius': 0.097/2},
+            {'wheel_radius': 0.04921},
             {'ticks_per_revolution': 48*64},
         ]
     )
@@ -186,7 +186,7 @@ def generate_launch_description():
         parameters=[
             {'frequency': 20},
             {'wheel_base': 0.312},
-            {'wheel_radius': 0.097/2},
+            {'wheel_radius': 0.04921},
             {'ticks_per_revolution': 3072},
         ]
     )

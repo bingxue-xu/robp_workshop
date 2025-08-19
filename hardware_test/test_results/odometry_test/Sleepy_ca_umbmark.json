@@ -3,23 +3,114 @@
     "square_size": 3.0,
     "speed": 0.2,
     "angular_speed": 1.4,
-    "ccw": {},
-    "cw": {
-      "1": {
+    "ccw": {
+      "4": {
         "detailed_results": {
-          "x_abs": 1.96,
-          "y_abs": 0.485,
+          "x_abs": 2.403,
+          "y_abs": 1.915,
           "theta_abs_deg": null,
-          "x_calc": 2.6335073361178263,
-          "y_calc": 0.43480628680659933,
-          "theta_calc_deg": -76.16630294162378,
-          "dx": -0.6735073361178263,
-          "dy": 0.05019371319340066,
+          "x_calc": 2.8925907791715146,
+          "y_calc": 1.269718466296607,
+          "theta_calc_deg": 131.99519230770392,
+          "dx": -0.4895907791715146,
+          "dy": 0.645281533703393,
           "dtheta_deg": null,
-          "closure_error": 0.6753751110669329,
-          "timestamp": "2025-08-18T18:03:31"
+          "closure_error": 0.8099922152640566,
+          "timestamp": "2025-08-19T08:48:15"
         }
       },
+      "5": {
+        "detailed_results": {
+          "x_abs": 2.79,
+          "y_abs": 1.14,
+          "theta_abs_deg": null,
+          "x_calc": 3.053519065539644,
+          "y_calc": 0.4990253871668618,
+          "theta_calc_deg": 116.45639272837315,
+          "dx": -0.263519065539644,
+          "dy": 0.6409746128331382,
+          "dtheta_deg": null,
+          "closure_error": 0.6930301235873363,
+          "timestamp": "2025-08-19T09:03:11"
+        }
+      },
+      "6": {
+        "detailed_results": {
+          "x_abs": 2.175,
+          "y_abs": 2.19,
+          "theta_abs_deg": null,
+          "x_calc": 2.7852753872557297,
+          "y_calc": 1.6475920674591351,
+          "theta_calc_deg": 140.01051682693563,
+          "dx": -0.6102753872557298,
+          "dy": 0.5424079325408648,
+          "dtheta_deg": null,
+          "closure_error": 0.8164817288668414,
+          "timestamp": "2025-08-19T09:11:21"
+        }
+      },
+      "7": {
+        "detailed_results": {
+          "x_abs": 2.29,
+          "y_abs": 2.365,
+          "theta_abs_deg": null,
+          "x_calc": 2.9208211953495375,
+          "y_calc": 1.9236223873800526,
+          "theta_calc_deg": 150.25428549758263,
+          "dx": -0.6308211953495375,
+          "dy": 0.44137761261994757,
+          "dtheta_deg": null,
+          "closure_error": 0.7699023168066867,
+          "timestamp": "2025-08-19T09:22:25"
+        }
+      },
+      "8": {
+        "detailed_results": {
+          "x_abs": 2.81,
+          "y_abs": 1.725,
+          "theta_abs_deg": null,
+          "x_calc": 3.1554034788190397,
+          "y_calc": 1.2058522084592744,
+          "theta_calc_deg": 126.5119816706786,
+          "dx": -0.34540347881903966,
+          "dy": 0.5191477915407257,
+          "dtheta_deg": null,
+          "closure_error": 0.6235527184143355,
+          "timestamp": "2025-08-19T09:36:47"
+        }
+      },
+      "11": {
+        "detailed_results": {
+          "x_abs": 3.015,
+          "y_abs": -1.055,
+          "theta_abs_deg": null,
+          "x_calc": 2.643555983663243,
+          "y_calc": -1.2995915010761296,
+          "theta_calc_deg": 36.394230769232614,
+          "dx": 0.37144401633675717,
+          "dy": 0.2445915010761297,
+          "dtheta_deg": null,
+          "closure_error": 0.44474223958497067,
+          "timestamp": "2025-08-19T10:05:45"
+        }
+      },
+      "12": {
+        "detailed_results": {
+          "x_abs": 1.86,
+          "y_abs": -1.225,
+          "theta_abs_deg": null,
+          "x_calc": 1.3616112829114213,
+          "y_calc": -1.188421855368835,
+          "theta_calc_deg": 19.288799579328952,
+          "dx": 0.4983887170885788,
+          "dy": -0.036578144631165044,
+          "dtheta_deg": null,
+          "closure_error": 0.49972920065357185,
+          "timestamp": "2025-08-19T10:14:27"
+        }
+      }
+    },
+    "cw": {
       "2": {
         "detailed_results": {
           "x_abs": 1.355,
@@ -64,7 +155,77 @@
           "closure_error": 0.24857575438979002,
           "timestamp": "2025-08-18T18:35:08"
         }
+      },
+      "5": {
+        "detailed_results": {
+          "x_abs": 1.488,
+          "y_abs": 0.99,
+          "theta_abs_deg": null,
+          "x_calc": 1.9857411657392623,
+          "y_calc": 1.0735101878959241,
+          "theta_calc_deg": -57.270507812501634,
+          "dx": -0.4977411657392623,
+          "dy": -0.08351018789592413,
+          "dtheta_deg": null,
+          "closure_error": 0.5046981469689504,
+          "timestamp": "2025-08-19T07:54:15"
+        }
+      },
+      "11": {
+        "detailed_results": {
+          "x_abs": 1.665,
+          "y_abs": 0.965,
+          "theta_abs_deg": null,
+          "x_calc": 1.7309114012508064,
+          "y_calc": 1.003908331935701,
+          "theta_calc_deg": -47.68855168269439,
+          "dx": -0.06591140125080641,
+          "dy": -0.03890833193570098,
+          "dtheta_deg": null,
+          "closure_error": 0.07653869027402738,
+          "timestamp": "2025-08-19T09:46:33"
+        }
+      },
+      "12": {
+        "detailed_results": {
+          "x_abs": 1.76,
+          "y_abs": -0.965,
+          "theta_abs_deg": null,
+          "x_calc": 1.8995755516472828,
+          "y_calc": -0.8274619671534531,
+          "theta_calc_deg": -105.56283804086509,
+          "dx": -0.13957555164728275,
+          "dy": -0.13753803284654686,
+          "dtheta_deg": null,
+          "closure_error": 0.19595419132271985,
+          "timestamp": "2025-08-19T09:56:49"
+        }
       }
+    },
+    "umbmark_analysis": {
+      "cg_cw": [
+        -0.15249782171213414,
+        -0.03376283716659715
+      ],
+      "cg_ccw": [
+        -0.2099681675300185,
+        0.4281718342404334
+      ],
+      "r_cw": 0.15619063608451053,
+      "r_ccw": 0.4768833725479754,
+      "emax": 0.4768833725479754,
+      "emax_percentage": "3.97%",
+      "total_path_length": 12.0,
+      "umbmark_pass": false,
+      "analysis_timestamp": "2025-08-19T11:26:47"
+    },
+    "umbmark_calibration": {
+      "alpha_rad": -0.0013309586596534813,
+      "beta": 0.01685268023288109,
+      "Ed_ratio_DR_over_DL": 1.0342831229746383,
+      "wheelbase_nominal": 0.1555,
+      "wheelbase_corrected": 0.15536835412533642,
+      "calibration_timestamp": "2025-08-19T11:26:47"
     }
   }
 }
