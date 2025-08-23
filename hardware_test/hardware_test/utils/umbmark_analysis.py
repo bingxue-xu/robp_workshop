@@ -87,7 +87,7 @@ def compute_alpha_beta(cg_cw, cg_ccw, L=4.0):
       alpha_y = (y_cg,CW + y_cg,CCW)/(-4L)   (4.24b, y-version)
       beta_x  = (x_cg,CW - x_cg,CCW)/(-4L)   (from 4.17-4.20)
       beta_y  = (y_cg,CW - y_cg,CCW)/(-4L)
-    We compute both x/y and average (as suggested in the paper’s practice).
+    We compute both x/y and average (as suggested in the paper's practice).
     """
     xcw, ycw = cg_cw
     xccw, yccw = cg_ccw
@@ -113,6 +113,8 @@ def wheelbase_corrected(nominal_b, alpha_rad):
 
 def plot_umbmark(json_file, save_dir=None, nominal_wheelbase=0.311/2, run_calibration=True):
     robot_name, cw_points, ccw_points, square_size = load_points(json_file)
+    robot_name = robot_name.replace('_after_calibration', '')
+
     cg_cw = center_of_gravity(cw_points)
     cg_ccw = center_of_gravity(ccw_points)
     r_cw, r_ccw, emax = compute_emax(cg_cw, cg_ccw)
@@ -157,8 +159,22 @@ def plot_umbmark(json_file, save_dir=None, nominal_wheelbase=0.311/2, run_calibr
     elif run_calibration:
         print("Need both CW and CCW data for calibration.")
 
-
     save_analysis_to_json(json_file, robot_name, analysis_data)
+    
+    is_after_calibration = 'after_calibration' in os.path.basename(json_file)
+    
+    calibration_params_text = ""
+    if is_after_calibration:
+        try:
+            with open(json_file, 'r') as f:
+                data = json.load(f)
+            robot_data = next(iter(data.values())) if data else {}
+            wheel_base = robot_data.get('wheel_base', 'N/A')
+            wheel_radius = robot_data.get('wheel_radius', 'N/A') 
+            winding_loops_left = robot_data.get('winding_loops_left', 'N/A')
+            calibration_params_text = f"Calibration: \n wb:{wheel_base}, \n wr:{wheel_radius}, \n wll:{winding_loops_left}"
+        except Exception as e:
+            print(f"Could not extract calibration parameters: {e}")
     
     plt.figure(figsize=(7, 7))
     if cw_points:
@@ -175,20 +191,29 @@ def plot_umbmark(json_file, save_dir=None, nominal_wheelbase=0.311/2, run_calibr
 
     plt.title(f"{robot_name} Odometry Error (E_max = {emax:.3f}m / {4*square_size}m)", pad=30)
     plt.figtext(0.5, 0.9, f"UMBmark: {square_size}x{square_size}m bidirectional square path", ha='center', fontsize=10)
+    
+    if is_after_calibration and calibration_params_text:
+        plt.figtext(0.8, 0.62, calibration_params_text, ha='center', fontsize=10, style='italic', color='darkblue')
+    
     plt.xlabel('ΔX [m]')
     plt.ylabel('ΔY [m]')
     plt.axhline(0, color='black', linewidth=1)
     plt.axvline(0, color='black', linewidth=1)
     plt.grid(True)
     plt.axis('equal')
-    plt.legend(loc='upper left')
+    plt.legend(loc='upper right')
 
     if save_dir is None:
         save_dir = os.path.dirname(json_file)
 
     os.makedirs(save_dir, exist_ok=True)
     timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-    png_filename = os.path.join(save_dir, f"{robot_name}_umbmark_{timestamp}.png")
+    
+    if is_after_calibration:
+        png_filename = os.path.join(save_dir, f"{robot_name}_after_calibration_umbmark_{timestamp}.png")
+    else:
+        png_filename = os.path.join(save_dir, f"{robot_name}_umbmark_{timestamp}.png")
+        
     plt.savefig(png_filename, dpi=300)
     print(f"Saved figure to {png_filename}")
 
@@ -200,8 +225,8 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description="Run UMBmark analysis & calibration")
     parser.add_argument('json_file', help='UMBmark test data JSON file')
     parser.add_argument('--save-dir', '-d', help='Directory to save plots')
-    parser.add_argument('--wheelbase', '-w', type=float, default=0.311/2,
-                       help='Nominal wheelbase in meters (default: 0.311/2)')
+    parser.add_argument('--wheelbase', '-w', type=float, default=0.311,
+                       help='Nominal wheelbase in meters (default: 0.311)')
     parser.add_argument('--no-calibration', action='store_true',
                        help='Skip calibration analysis')
     

@@ -7,96 +7,108 @@ import argparse
 from pathlib import Path
 
 def extract_odometry_results(folder):
-    """Extract odometry results from all umbmark JSON files in folder."""
-    rows = []
-    
+    """Extract odometry results from all umbmark JSON files in folder, split before/after calibration."""
+    robots = {}
     for file_path in Path(folder).glob("*_umbmark.json"):
         try:
             with open(file_path, 'r') as f:
                 data = json.load(f)
-            
-            # Extract robot name from filename or JSON
-            robot_name = file_path.stem.replace('_umbmark', '')
-            
-            # Get the first (and usually only) robot data
+            robot_name = file_path.stem.replace('_umbmark', '').replace('_after_calibration', '')
+            is_after = 'after_calibration' in file_path.stem
             robot_data = next(iter(data.values())) if data else {}
-            
-            # Extract analysis data
             analysis = robot_data.get('umbmark_analysis', {})
-            
-            # Find corresponding PNG file with timestamp pattern
-            png_pattern = f"{robot_name}_umbmark_*.png"
-            png_files = list(Path(folder).glob(png_pattern))
-            
-            # Get E_max value for sorting
-            emax = analysis.get('emax', float('inf'))  # Use infinity for missing values
+            emax = analysis.get('emax', float('inf'))
             emax_formatted = f"{emax:.3f}" if emax != float('inf') else "N/A"
-            
-            row = {
-                'Robot': robot_name,
-                'E_max_syst [m]': emax_formatted,
-                'emax': emax,  # For sorting only
-                'png_files': png_files  # Store for later use
-            }
-            
-            rows.append(row)
-            
+            png_pattern = f"{file_path.stem}*.png"
+            png_files = list(Path(folder).glob(png_pattern))
+            latest_png = sorted(png_files)[-1] if png_files else None
+
+            # Extract comment parameters from robot_data level (not analysis level)
+            # Only extract for after_calibration files
+            comment = ""
+            if is_after:
+                wheel_base = robot_data.get('wheel_base', 'N/A')
+                wheel_radius = robot_data.get('wheel_radius', 'N/A') 
+                winding_loops_left = robot_data.get('winding_loops_left', 'N/A')
+                comment = f"wb:{wheel_base}, wr:{wheel_radius}, wll:{winding_loops_left}"
+
+            if robot_name not in robots:
+                robots[robot_name] = {
+                    'before': {'emax': None, 'emax_fmt': None, 'png': None, 'comment': None},
+                    'after': {'emax': None, 'emax_fmt': None, 'png': None, 'comment': None}
+                }
+            key = 'after' if is_after else 'before'
+            robots[robot_name][key]['emax'] = emax
+            robots[robot_name][key]['emax_fmt'] = emax_formatted
+            robots[robot_name][key]['png'] = latest_png
+            robots[robot_name][key]['comment'] = comment
+
         except Exception as e:
             print(f"Error processing {file_path}: {e}")
             continue
-    
-    # Sort by E_max value (smaller is better) and remove sort column
-    df = pd.DataFrame(rows).sort_values('emax', ascending=True)
-    return df
 
-def generate_markdown_with_images(df, output_path, image_folder):
-    """Generate markdown table with embedded images in 2 rows × 4 columns grid layout."""
+    # Sort robots by before calibration emax, then after calibration emax
+    sorted_robots = sorted(
+        robots.items(),
+        key=lambda item: (
+            item[1]['before']['emax'] if item[1]['before']['emax'] is not None else float('inf'),
+            item[1]['after']['emax'] if item[1]['after']['emax'] is not None else float('inf')
+        )
+    )
+    return sorted_robots
+
+def generate_markdown_with_images(sorted_robots, output_path, image_folder):
+    """Generate markdown table with before/after calibration columns and comments."""
 
     markdown_content = f"""## Measurement of encoder only Odometry systematic errors
 
 ### UMBmark: 3×3 m bidirectional square path
 
-
-| Robot | E_max_syst [m] over 12m |
-|-------|------------------------|
+| Robot | E_max_syst [m] over 12m <br> Before calibration | E_max_syst [m] over 12m <br> After calibration | Comment |
+|-------|-----------------------------------------------|----------------------------------------------|---------|
 """
-    for _, row in df.iterrows():
-        markdown_content += f"| {row['Robot']} | {row['E_max_syst [m]']} |\n"
+    for robot_name, result in sorted_robots:
+        before = result['before']['emax_fmt'] if result['before']['emax_fmt'] else ""
+        after = result['after']['emax_fmt'] if result['after']['emax_fmt'] else ""
+        
+        # Use comment from after calibration if available, otherwise from before
+        comment = ""
+        if result['after']['comment']:
+            comment = result['after']['comment']
+        elif result['before']['comment']:
+            comment = result['before']['comment']
+            
+        markdown_content += f"| {robot_name} | {before} | {after} | {comment} |\n"
 
+    # Add default parameters note
+    markdown_content += "\n* default parameter before calibration: wheel_base:0.311, wheel_radius:0.04921, winding_loops_left:0\n"
     markdown_content += "\n### Odometry Error Plots\n\n"
 
-    # Collect robots and their plot paths
+    # Collect robots and their plot paths (before/after)
     robots_with_plots = []
-    for _, row in df.iterrows():
-        robot_name = row['Robot']
-        png_files = row['png_files']
-        if png_files:
-            latest_png = sorted(png_files)[-1]
-            rel_path = os.path.relpath(latest_png, os.path.dirname(output_path))
-            robots_with_plots.append((robot_name, rel_path))
+    for robot_name, result in sorted_robots:
+        for key in ['before', 'after']:
+            png = result[key]['png']
+            if png:
+                rel_path = os.path.relpath(png, os.path.dirname(output_path))
+                robots_with_plots.append((f"{robot_name} ({key})", rel_path))
 
-    # 2 rows × 4 columns grid
+    # 2 rows × 4 columns grid (adjust as needed)
     num_cols = 3
     num_rows = 3
     total_cells = num_cols * num_rows
-
-    # Pad robots_with_plots to fill the grid if needed
     robots_with_plots += [("", "")] * (total_cells - len(robots_with_plots))
 
     for row_idx in range(num_rows):
         start = row_idx * num_cols
         end = start + num_cols
         row_robots = robots_with_plots[start:end]
-
-        # Robot names row
         markdown_content += "| " + " | ".join([robot for robot, _ in row_robots]) + " |\n"
         markdown_content += "|" + "---|" * num_cols + "\n"
-
-        # Images row
         markdown_content += "| "
         for robot, rel_path in row_robots:
             if rel_path:
-                markdown_content += f'<img src="{rel_path}" alt="{robot}" width="500"/> | '
+                markdown_content += f'<img src="{rel_path}" alt="{robot}" width="400"/> | '
             else:
                 markdown_content += " | "
         markdown_content += "\n\n"
@@ -132,23 +144,31 @@ def main():
     print(f"Processing odometry results in: {folder_path}")
     print(f"Output will be saved to: {output_path}")
     
-    df = extract_odometry_results(folder_path)
+    sorted_robots = extract_odometry_results(folder_path)
     
-    if df.empty:
+    if not sorted_robots:
         print("No umbmark JSON files found!")
         return 1
-    
-    # Create display dataframe without helper columns
-    display_df = df[['Robot', 'E_max_syst [m]']].copy()
     
     # Print table to console
     print("\n" + "="*50)
     print("Measurement of encoder only Odometry systematic errors")
     print("UMBmark: 3×3 m bidirectional square path")
     print("="*50)
-    print(display_df.to_string(index=False))
+    print("| Robot | Before calibration | After calibration | Comment |")
+    print("|-------|---------------------|--------------------|---------| ")
+    for robot_name, result in sorted_robots:
+        before = result['before']['emax_fmt'] if result['before']['emax_fmt'] else ""
+        after = result['after']['emax_fmt'] if result['after']['emax_fmt'] else ""
+        
+        # Use comment from after calibration if available, otherwise from before
+        comment = ""
+        if result['after']['comment']:
+            comment = result['after']['comment']
 
-    generate_markdown_with_images(df, output_path, folder_path)
+        print(f"| {robot_name} | {before} | {after} | {comment} |")
+
+    generate_markdown_with_images(sorted_robots, output_path, folder_path)
     
     json_folder_copy = folder_path / 'odometry_summary.md'
     if output_path != json_folder_copy:
@@ -158,11 +178,28 @@ def main():
     # Save CSV if requested
     if args.csv:
         csv_path = Path(args.csv)
-        display_df.to_csv(csv_path, index=False)
+        # Save as CSV using the sorted_robots list
+        import csv
+        with open(csv_path, 'w', newline='') as csvfile:
+            writer = csv.writer(csvfile)
+            writer.writerow(['Robot', 'Before calibration', 'After calibration', 'Comment'])
+            for robot_name, result in sorted_robots:
+                before = result['before']['emax_fmt'] if result['before']['emax_fmt'] else ""
+                after = result['after']['emax_fmt'] if result['after']['emax_fmt'] else ""
+                
+                # Use comment from after calibration if available, otherwise from before
+                comment = ""
+                if result['after']['comment']:
+                    comment = result['after']['comment']
+                elif result['before']['comment']:
+                    comment = result['before']['comment']
+                    
+                writer.writerow([robot_name, before, after, comment])
         print(f"CSV summary saved to: {csv_path}")
     
-    print(f"\nProcessed {len(df)} robots successfully!")
+    print(f"\nProcessed {len(sorted_robots)} robots successfully!")
     return 0
+
 
 if __name__ == "__main__":
     exit(main())

@@ -1,11 +1,11 @@
 {
-  "Sleepy_after_compensation": {
+  "Sleepy_after_calibration": {
     "square_size": 3.0,
     "speed": 0.2,
     "angular_speed": 1.4,
     "wheel_base": 0.312,
     "wheel_radius": 0.04921,
-    "winning_loops_left": 5,
+    "winding_loops_left": 5,
     "ccw": {
       "1": {
         "detailed_results": {
@@ -175,15 +175,15 @@
       "emax_percentage": "1.32%",
       "total_path_length": 12.0,
       "umbmark_pass": false,
-      "analysis_timestamp": "2025-08-23T16:34:44"
+      "analysis_timestamp": "2025-08-23T17:55:17"
     },
     "umbmark_calibration": {
       "alpha_rad": -0.0021411154411195635,
       "beta": 0.0034108098085129084,
       "Ed_ratio_DR_over_DL": 1.006844966495889,
-      "wheelbase_nominal": 0.1555,
-      "wheelbase_corrected": 0.15528833013815171,
-      "calibration_timestamp": "2025-08-23T16:34:44"
+      "wheelbase_nominal": 0.311,
+      "wheelbase_corrected": 0.31057666027630343,
+      "calibration_timestamp": "2025-08-23T17:55:17"
     }
   }
 }
