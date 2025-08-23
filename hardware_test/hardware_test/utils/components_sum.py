@@ -99,3 +99,17 @@ if __name__ == "__main__":
         print(f"Copy also saved to JSON folder: {folder}")
     else:
         print(f"Files already in JSON folder: {folder}")
+
+    # Always copy to summary directory
+    summary_dir = os.path.join(os.path.dirname(__file__), "..", "..", "test_results/summary")
+    os.makedirs(summary_dir, exist_ok=True)
+    
+    # Copy all three file formats to summary directory
+    shutil.copy2(os.path.join(save_dir, "components_summary.csv"), 
+                 os.path.join(summary_dir, "components_summary.csv"))
+    shutil.copy2(os.path.join(save_dir, "components_summary.xlsx"), 
+                 os.path.join(summary_dir, "components_summary.xlsx"))
+    shutil.copy2(os.path.join(save_dir, "components_summary.md"), 
+                 os.path.join(summary_dir, "components_summary.md"))
+    
+    print(f"Summary files also copied to: {summary_dir}")

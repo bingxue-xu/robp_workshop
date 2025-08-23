@@ -7,8 +7,8 @@
       "detail": "password: robot"
     },
     "Power": {
-      "status": "PASS",
-      "detail": "works with battery, voltage: 15.8V"
+      "status": "FAIL",
+      "detail": "Did not work with battery, died after ~5 minutes"
     },
     "USBCam": {
       "status": "PASS",
