@@ -55,16 +55,27 @@ def gather_json_to_table(folder):
             for i in range(1, 7):
                 row[f"servo_{i}_pass"] = ""
 
-        # Add rplidar_detail (always show)
-        row["rplidar_detail"] = results.get("RPLidar", {}).get("detail", "")
+        # # Add rplidar_detail (always show)
+        # row["rplidar_detail"] = results.get("RPLidar", {}).get("detail", "")
 
         # Add fail_detail (truncated for overview)
-        row["fail_detail"] = ""
-        for key in ["nuc", "usb_cam", "phidgets", "rplidar", "realsense", "arm"]:
+        fail_details = []
+        key_mapping = {
+            "nuc": "Nuc",
+            "power": "Power", 
+            "usb_cam": "USBCam",
+            "phidgets": "Phidgets",
+            "rplidar": "RPLidar", 
+            "realsense": "RealSense",
+            "arm": "Arm"
+        }
+        for key in ["nuc", "power", "usb_cam", "phidgets", "rplidar", "realsense", "arm"]:
             if row.get(key, "") == "FAIL":
-                detail = results.get(key.capitalize(), {}).get("detail", "")
-                row["fail_detail"] += f"{key}: {truncate(detail)}; "
-                
+                detail = results.get(key_mapping.get(key, {}), {}).get("detail", "")
+                if detail:
+                    fail_details.append(f"{truncate(detail)}; ")
+
+        row["fail_detail"] = "; ".join(fail_details)
         # Add comment detail if exists
         comment = results.get("Comment", {})
         row["comment"] = comment.get("detail", "") if isinstance(comment, dict) else ""
@@ -103,13 +114,4 @@ if __name__ == "__main__":
     # Always copy to summary directory
     summary_dir = os.path.join(os.path.dirname(__file__), "..", "..", "test_results/summary")
     os.makedirs(summary_dir, exist_ok=True)
-    
-    # Copy all three file formats to summary directory
-    shutil.copy2(os.path.join(save_dir, "components_summary.csv"), 
-                 os.path.join(summary_dir, "components_summary.csv"))
-    shutil.copy2(os.path.join(save_dir, "components_summary.xlsx"), 
-                 os.path.join(summary_dir, "components_summary.xlsx"))
-    shutil.copy2(os.path.join(save_dir, "components_summary.md"), 
-                 os.path.join(summary_dir, "components_summary.md"))
-    
-    print(f"Summary files also copied to: {summary_dir}")
+
