@@ -24,7 +24,7 @@ https://github.com/user-attachments/assets/4e851c0b-155f-403f-a164-380398083e3c
 
         sudo apt install sshpass
 
-- ROS 2 **packages**, 
+- ROS 2 **packages** 
 
         cd ~/workshop_ws
         git clone https://github.com/bingxue-xu/robp_workshop.git src
@@ -37,25 +37,25 @@ https://github.com/user-attachments/assets/4e851c0b-155f-403f-a164-380398083e3c
 
 ## Run
 
-**Simulation** 
+- **Simulation**
 
-    ros2 launch robp_boot_camp_launch workshop_sim_launch.xml
+        ros2 launch robp_boot_camp_launch workshop_sim_launch.xml
     
-**Student code** 
+- **Student code** 
 
-    ros2 launch robp_boot_camp_launch workshop_student_launch.xml
+        ros2 launch robp_boot_camp_launch workshop_student_launch.xml
 
-**Robot**
+- **Robot**
 
-    ros2 launch robp_boot_camp_launch workshop_launch.xml
+        ros2 launch robp_boot_camp_launch workshop_launch.xml
 
-**Plotting (both simulation and robot)**
+- **Plotting (both simulation and robot)**
 
-    ros2 run perception plotting
+        ros2 run perception plotting
 
-**Debugging (both simulation and robot)**
+- **Debugging (both simulation and robot)**
 
-    ros2 topic echo /motor_controller/twist
+        ros2 topic echo /motor_controller/twist
 
 
 ## Implement to your own solution
@@ -66,7 +66,6 @@ You can customize the system to your own needs by modifying perception and contr
 
 - **Controller**: `src/controller/controller/controller.py`
 
-## Documentation 
-Here are some useful links:
+## References 
 - ROS (Robot Operating System) wiki: https://wiki.ros.org/ 
 - The HSV Color Model: [the HSV Color Model](https://medium.com/@dijdomv01/a-beginners-guide-to-understand-the-color-models-rgb-and-hsv-244226e4b3e3)
