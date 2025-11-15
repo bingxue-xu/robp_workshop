@@ -61,3 +61,21 @@ Check the results here: [Odometry Summary](test_results/summary/odometry_summary
 Need to replace arm servos but don't have a debug board? Use your ESP32
 
 **README:** [Set servo ID with ESP32](hardware_test/hardware_test/tools/servo_setter/README.md)
+
+### Reset the arm initial position
+Reset the servo positions before flashing EPS32 in
+(https://github.com/KTH-CAS-UAV/robp_arm/blob/217d123722b3326094f3bd3a047b823c8c211145/Hiwonder_xArm_ROS2/src/main.cpp#L415)
+```bash
+  servo5.move_time(16000, 1500);
+  delay(500);
+  servo4.move_time(20000, 1500);
+  delay(500);
+  servo3.move_time(3000, 1500);
+  delay(500);
+```
+
+**Demo Video:**
+
+<video src="test_results/vedios/reset_arm_position.MOV" controls width="320"></video>
+
+
