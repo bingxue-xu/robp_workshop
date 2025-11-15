@@ -63,7 +63,7 @@ Need to replace arm servos but don't have a debug board? Use your ESP32
 **README:** [Set servo ID with ESP32](hardware_test/hardware_test/tools/servo_setter/README.md)
 
 ### Reset the arm initial position
-Reset the servo positions before flashing EPS32 in
+Reset the servo positions before flashing EPS32 in Hiwonder-xArm-ROS2 lib
 (https://github.com/KTH-CAS-UAV/robp_arm/blob/217d123722b3326094f3bd3a047b823c8c211145/Hiwonder_xArm_ROS2/src/main.cpp#L415)
 ```bash
   servo5.move_time(16000, 1500);
