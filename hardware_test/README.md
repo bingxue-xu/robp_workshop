@@ -57,10 +57,10 @@ Check the results here: [Odometry Summary](test_results/summary/odometry_summary
 
 ## Tools
 
-### Servo ID Setter
-Need to replace arm servos but don't have a debug board? Use your ESP32
+### Reset servo ID 
+This tool allows you to use an ESP32 to reset servo IDs manually when an official debugging board isn't available.
 
-**README:** [Set servo ID with ESP32](hardware_test/hardware_test/tools/servo_setter/README.md)
+**README:** [Reset servo ID with ESP32](hardware_test/tools/servo_setter/README.md)
 
 ### Reset the arm initial position
 Reset the servo positions before flashing EPS32 in Hiwonder-xArm-ROS2 lib
