@@ -76,6 +76,6 @@ Reset the servo positions before flashing EPS32 in Hiwonder-xArm-ROS2 lib
 
 **Demo Video:**
 
-<video src="test_results/vedios/reset_arm_position.MOV" controls width="320"></video>
+<video src="test_results/videos/reset_arm_position.mp4" controls width="320"></video>
 
 
