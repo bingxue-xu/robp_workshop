@@ -22,7 +22,7 @@ python3 hardware_test/hardware_test/utils/components_sum.py hardware_test/test_r
 
 ```bash
 # Terminal 1: Start odometry system
-ros2 launch hardware_test odometry_test_launch.launch.py robot_name:=Sneezy json_folder:=hardware_test/test_results/odometry_test
+ros2 launch hardware_test odometry_test_launch.launch.py robot_name:=Sneezy domain_id:=0 json_folder:=hardware_test/test_results/odometry_test
 
 # Terminal 2: Run test
 ros2 run hardware_test odometry_test --ros-args -p robot_name:=Sneezy -p domain_id:=0 -p direction:=ccw -p square_size:=3.0 -p lap:=4 -p angular_speed:=1.2
