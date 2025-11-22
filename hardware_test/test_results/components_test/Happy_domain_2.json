@@ -2,6 +2,14 @@
   "robot_name": "Happy",
   "domain_id": 2,
   "results": {
+    "Nuc": {
+      "status": "PASS",
+      "detail": "ubuntu 22.04, no password"
+    },
+    "Power": {
+      "status": "PASS",
+      "detail": "works with battery"
+    },
     "RealSense": {
       "status": "PASS",
       "detail": "Received valid color frame (1280\u00d7720)"

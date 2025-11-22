@@ -12,7 +12,7 @@
     },
     "RPLidar": {
       "status": "FAIL",
-      "detail": "No rplidar hardware"
+      "detail": "No lidar"
     },
     "Arm": {
       "status": "PASS",

@@ -7,7 +7,6 @@ This tool uses an ESP32 board to set the ID of XL-15D serial bus servos. It flas
 
 ### 1. Install PlatformIO (if you haven't)
 
-    cd ~/Downloads
     sudo apt install python3-venv
     curl -fsSL -o get-platformio.py https://raw.githubusercontent.com/platformio/platformio-core-installer/master/get-platformio.py
     python3 get-platformio.py
