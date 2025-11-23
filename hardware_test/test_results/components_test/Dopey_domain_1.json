@@ -1,14 +1,14 @@
 {
   "robot_name": "Dopey",
-  "domain_id": 3,
+  "domain_id": 1,
   "results": {
     "Nuc": {
       "status": "PASS",
       "detail": "ubuntu 22.04, no password"
     },
     "Power": {
-      "status": "FAIL",
-      "detail": "Did not work with battery"
+      "status": "PASS",
+      "detail": "Did work with power bank"
     },
     "USBCam": {
       "status": "PASS",
@@ -108,7 +108,9 @@
             "detail": "Moved from 12000.0 to 10008.0"
           }
         }
-      }
+      },
+      "position": "Down"
+
     },
     "RealSense": {
       "status": "PASS",

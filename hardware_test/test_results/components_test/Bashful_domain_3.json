@@ -1,14 +1,14 @@
 {
   "robot_name": "Bashful",
-  "domain_id": 1,
+  "domain_id": 3,
   "results": {
     "Nuc": {
       "status": "PASS",
       "detail": "password: robot"
     },
     "Power": {
-      "status": "FAIL",
-      "detail": "Did not work with battery, died after ~5 minutes"
+      "status": "PASS",
+      "detail": "Did work with power bank"
     },
     "USBCam": {
       "status": "PASS",
@@ -112,7 +112,9 @@
             "detail": "Moved from 12072.0 to 10632.0"
           }
         }
-      }
+      },
+      "position": "Down"
+
     }
   },
   "last_updated": "2025-06-14T12:27:58.438986"
