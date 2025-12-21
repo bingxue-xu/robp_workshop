@@ -8,11 +8,11 @@
     },
     "Power": {
       "status": "PASS",
-      "detail": "works with battery, voltage: 15.4V"
+      "detail": "works with power bank"
     },
     "RealSense": {
       "status": "PASS",
-      "detail": "Received valid color frame (1280\u00d7720)"
+      "detail": "Received valid color frame (640\u00d7480)"
     },
     "Phidgets": {
       "status": "PASS",
@@ -21,25 +21,25 @@
         "detail": "All phidgets passed",
         "Encoders": {
           "status": "PASS",
-          "detail": "delta_encoder_left=49, delta_encoder_right=75"
+          "detail": "delta_encoder_left=0, delta_encoder_right=4"
         },
         "Motors": {
           "status": "PASS",
-          "detail": "duty_cycle_left=0.155, duty_cycle_right=0.195"
+          "detail": "duty_cycle_left=0.100, duty_cycle_right=0.100"
         },
         "Spatial": {
           "status": "PASS",
-          "detail": "acc=(0.12,-1.21,-9.42)"
+          "detail": "acc=(-0.25,0.43,-9.99)"
         },
         "Temperature": {
           "status": "PASS",
-          "detail": "Temperature=25.52\u00b0C"
+          "detail": "Temperature=22.26\u00b0C"
         }
       }
     },
     "RPLidar": {
       "status": "PASS",
-      "detail": "Total rplidar points: 360, Max measured distance: 5.10 m"
+      "detail": "Total rplidar points: 360, Max measured distance: 5.01 m"
     },
     "USBCam": {
       "status": "PASS",
@@ -61,6 +61,9 @@
         "servo_volt_publisher": {
           "status": "PASS",
           "detail": "Range: 7407 ~ 7543"
+        },
+        "reset_init_position": {
+          "status": "PASS"
         },
         "servo_results": {
           "servo_1_min": {
@@ -115,5 +118,5 @@
       }
     }
   },
-  "last_updated": "2025-06-13T11:24:15.980449"
+  "last_updated": "2025-12-21T12:49:39.876451"
 }

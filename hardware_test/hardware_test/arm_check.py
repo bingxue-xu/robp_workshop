@@ -17,7 +17,7 @@ class ArmCheck(BaseTest):
         self.servo_pos = None
         self.servo_temp = None
         self.servo_volt = None
-        self.feedback_timeout = 5.0
+        self.feedback_timeout = 15.0  # Increased timeout for phidgets initialization
         self.move_wait = 1.0  # wait a bit after moving servos
         self.feedback_received = {'pos': False, 'temp': False, 'volt': False}
 

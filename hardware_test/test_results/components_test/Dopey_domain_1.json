@@ -58,6 +58,9 @@
           "status": "PASS",
           "detail": "Range: 7392 ~ 7514"
         },
+        "reset_init_position": {
+          "status": "PASS"
+        },
         "servo_results": {
           "servo_1_min": {
             "moved": true,
@@ -117,5 +120,5 @@
       "detail": "Received valid color frame (1280\u00d7720)"
     }
   },
-  "last_updated": "2025-08-17T15:39:31.146891"
+  "last_updated": "2025-11-22T15:39:31.146891"
 }

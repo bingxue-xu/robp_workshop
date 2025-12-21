@@ -8,7 +8,7 @@
     },
     "Power": {
       "status": "PASS",
-      "detail": "works with battery"
+      "detail": "works with power bank"
     },
     "RealSense": {
       "status": "PASS",
@@ -21,7 +21,7 @@
         "detail": "All phidgets passed",
         "Encoders": {
           "status": "PASS",
-          "detail": "delta_encoder_left=9, delta_encoder_right=22"
+          "detail": "delta_encoder_left=29, delta_encoder_right=3"
         },
         "Motors": {
           "status": "PASS",
@@ -29,17 +29,17 @@
         },
         "Spatial": {
           "status": "PASS",
-          "detail": "acc=(0.18,0.23,-9.14)"
+          "detail": "acc=(-0.04,0.11,-9.63)"
         },
         "Temperature": {
           "status": "PASS",
-          "detail": "Temperature=27.74\u00b0C"
+          "detail": "Temperature=19.98\u00b0C"
         }
       }
     },
     "RPLidar": {
       "status": "PASS",
-      "detail": "Total rplidar points: 360, Max measured distance: 7.03 m"
+      "detail": "Total rplidar points: 360, Max measured distance: 7.01 m"
     },
     "USBCam": {
       "status": "PASS",
@@ -52,68 +52,71 @@
         "detail": "All servos moved",
         "servo_pos_publisher": {
           "status": "PASS",
-          "detail": "Range: 1968.0 ~ 12048.0"
+          "detail": "Range: 2016.0 ~ 20040.0"
         },
         "servo_temp_publisher": {
           "status": "PASS",
-          "detail": "Range: 27 ~ 49"
+          "detail": "Range: 23 ~ 30"
         },
         "servo_volt_publisher": {
           "status": "PASS",
-          "detail": "Range: 7494 ~ 7596"
+          "detail": "Range: 7427 ~ 7523"
+        },
+        "reset_init_position": {
+          "status": "PASS"
         },
         "servo_results": {
           "servo_1_min": {
             "moved": true,
-            "detail": "Moved from 1968.0 to 2136.0"
+            "detail": "Moved from 2016.0 to 3192.0"
           },
           "servo_1_max": {
             "moved": true,
-            "detail": "Moved from 2136.0 to 6600.0"
-          },
-          "servo_2_min": {
-            "moved": true,
-            "detail": "Moved from 12000.0 to 11760.0"
+            "detail": "Moved from 3192.0 to 8736.0"
           },
           "servo_2_max": {
             "moved": true,
-            "detail": "Moved from 11760.0 to 10416.0"
+            "detail": "Moved from 11976.0 to 11736.0"
+          },
+          "servo_2_min": {
+            "moved": true,
+            "detail": "Moved from 11976.0 to 10416.0"
           },
           "servo_3_min": {
             "moved": true,
-            "detail": "Moved from 12024.0 to 11784.0"
+            "detail": "Moved from 11952.0 to 11064.0"
           },
           "servo_3_max": {
             "moved": true,
-            "detail": "Moved from 12024.0 to 10728.0"
+            "detail": "Moved from 11952.0 to 9960.0"
           },
           "servo_4_min": {
             "moved": true,
-            "detail": "Moved from 11976.0 to 11040.0"
+            "detail": "Moved from 12024.0 to 11064.0"
           },
           "servo_4_max": {
             "moved": true,
-            "detail": "Moved from 11040.0 to 9912.0"
+            "detail": "Moved from 11064.0 to 9984.0"
           },
           "servo_5_min": {
             "moved": true,
-            "detail": "Moved from 12096.0 to 11976.0"
+            "detail": "Moved from 12072.0 to 11856.0"
           },
           "servo_5_max": {
             "moved": true,
-            "detail": "Moved from 11976.0 to 9504.0"
+            "detail": "Moved from 11976.0 to 10680.0"
           },
           "servo_6_min": {
             "moved": true,
-            "detail": "Moved from 11976.0 to 11784.0"
+            "detail": "Moved from 12000.0 to 11088.0"
           },
           "servo_6_max": {
             "moved": true,
-            "detail": "Moved from 12000.0 to 10656.0"
+            "detail": "Moved from 12000.0 to 10008.0"
           }
         }
       }
     }
   },
-  "last_updated": "2025-08-17T11:30:23.300159"
+  "last_updated": "2025-12-21T13:08:27.915265"
 }

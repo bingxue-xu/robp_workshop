@@ -8,11 +8,11 @@
     },
     "Power": {
       "status": "PASS",
-      "detail": "works with battery, voltage: 15.8V"
+      "detail": "works with power bank"
     },
     "RPLidar": {
-      "status": "FAIL",
-      "detail": "No lidar"
+      "status": "PASS",
+      "detail": "Total rplidar points: 360, Max measured distance: 5.28 m"
     },
     "Arm": {
       "status": "PASS",
@@ -21,24 +21,24 @@
         "detail": "All servos moved",
         "servo_pos_publisher": {
           "status": "PASS",
-          "detail": "Range: 2520.0 ~ 12000.0"
+          "detail": "Range: 2136.0 ~ 20040.0"
         },
         "servo_temp_publisher": {
           "status": "PASS",
-          "detail": "Range: 30 ~ 63"
+          "detail": "Range: 25 ~ 63"
         },
         "servo_volt_publisher": {
           "status": "PASS",
-          "detail": "Range: 12107 ~ 12322"
+          "detail": "Range: 11890 ~ 12220"
         },
         "servo_results": {
           "servo_1_min": {
             "moved": true,
-            "detail": "Moved from 2520.0 to 3360.0"
+            "detail": "Moved from 2136.0 to 2304.0"
           },
           "servo_1_max": {
             "moved": true,
-            "detail": "Moved from 2520.0 to 4512.0"
+            "detail": "Moved from 2304.0 to 6600.0"
           },
           "servo_2_min": {
             "moved": true,
@@ -46,31 +46,31 @@
           },
           "servo_2_max": {
             "moved": true,
-            "detail": "Moved from 12000.0 to 10560.0"
-          },
-          "servo_3_min": {
-            "moved": true,
-            "detail": "Moved from 12000.0 to 10584.0"
+            "detail": "Moved from 11640.0 to 10296.0"
           },
           "servo_3_max": {
             "moved": true,
-            "detail": "Moved from 12000.0 to 9528.0"
+            "detail": "Moved from 11952.0 to 11616.0"
           },
-          "servo_4_min": {
-            "moved": true,
-            "detail": "Moved from 11952.0 to 11592.0"
-          },
-          "servo_4_max": {
+          "servo_3_min": {
             "moved": true,
             "detail": "Moved from 11952.0 to 10536.0"
           },
+          "servo_4_min": {
+            "moved": true,
+            "detail": "Moved from 12000.0 to 11688.0"
+          },
+          "servo_4_max": {
+            "moved": true,
+            "detail": "Moved from 11688.0 to 10536.0"
+          },
           "servo_5_min": {
             "moved": true,
-            "detail": "Moved from 12000.0 to 10944.0"
+            "detail": "Moved from 11952.0 to 11664.0"
           },
           "servo_5_max": {
             "moved": true,
-            "detail": "Moved from 12000.0 to 9888.0"
+            "detail": "Moved from 11952.0 to 10536.0"
           },
           "servo_6_min": {
             "moved": true,
@@ -78,7 +78,7 @@
           },
           "servo_6_max": {
             "moved": true,
-            "detail": "Moved from 11976.0 to 9912.0"
+            "detail": "Moved from 11952.0 to 9912.0"
           }
         }
       }
@@ -98,25 +98,25 @@
         "detail": "All phidgets passed",
         "Encoders": {
           "status": "PASS",
-          "detail": "delta_encoder_left=31, delta_encoder_right=28"
+          "detail": "delta_encoder_left=2, delta_encoder_right=2"
         },
         "Motors": {
           "status": "PASS",
-          "detail": "duty_cycle_left=0.072, duty_cycle_right=0.149"
+          "detail": "duty_cycle_left=0.100, duty_cycle_right=0.100"
         },
         "Spatial": {
           "status": "PASS",
-          "detail": "acc=(0.09,-0.29,-9.63)"
+          "detail": "acc=(0.20,0.18,-9.47)"
         },
         "Temperature": {
           "status": "PASS",
-          "detail": "Temperature=30.77\u00b0C"
+          "detail": "Temperature=22.51\u00b0C"
         }
       }
     },
     "Comment": {
-      "detail": "Servo5 is loose"
+      "detail": "RGBD camera cable is missing"
     }
   },
-  "last_updated": "2025-06-17T15:51:15.373151"
+  "last_updated": "2025-12-21T15:17:15.199366"
 }

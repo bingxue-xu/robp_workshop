@@ -8,7 +8,7 @@
     },
     "Power": {
       "status": "PASS",
-      "detail": "works with battery, voltage: 15.7V"
+      "detail": "works with power bank"
     },
     "Arm": {
       "status": "PASS",
@@ -17,64 +17,67 @@
         "detail": "All servos moved",
         "servo_pos_publisher": {
           "status": "PASS",
-          "detail": "Range: 1824.0 ~ 12072.0"
+          "detail": "Range: 1848.0 ~ 20040.0"
         },
         "servo_temp_publisher": {
           "status": "PASS",
-          "detail": "Range: 26 ~ 34"
+          "detail": "Range: 23 ~ 32"
         },
         "servo_volt_publisher": {
           "status": "PASS",
-          "detail": "Range: 7348 ~ 7445"
+          "detail": "Range: 7288 ~ 7401"
+        },
+        "reset_init_position": {
+          "status": "PASS"
         },
         "servo_results": {
           "servo_1_min": {
             "moved": true,
-            "detail": "Moved from 1824.0 to 2832.0"
+            "detail": "Moved from 1848.0 to 7680.0"
           },
           "servo_1_max": {
             "moved": true,
-            "detail": "Moved from 1824.0 to 4200.0"
-          },
-          "servo_2_min": {
-            "moved": true,
-            "detail": "Moved from 12024.0 to 11808.0"
+            "detail": "Moved from 1848.0 to 7680.0"
           },
           "servo_2_max": {
             "moved": true,
-            "detail": "Moved from 12024.0 to 10752.0"
+            "detail": "Moved from 12024.0 to 11808.0"
           },
-          "servo_3_min": {
+          "servo_2_min": {
             "moved": true,
-            "detail": "Moved from 12024.0 to 11880.0"
+            "detail": "Moved from 12024.0 to 10752.0"
           },
           "servo_3_max": {
             "moved": true,
-            "detail": "Moved from 12024.0 to 10800.0"
+            "detail": "Moved from 11952.0 to 11064.0"
+          },
+          "servo_3_min": {
+            "moved": true,
+            "detail": "Moved from 11952.0 to 9960.0"
           },
           "servo_4_min": {
             "moved": true,
-            "detail": "Moved from 12072.0 to 11856.0"
+            "detail": "Moved from 12048.0 to 11064.0"
           },
           "servo_4_max": {
             "moved": true,
-            "detail": "Moved from 12072.0 to 10704.0"
+            "detail": "Moved from 11064.0 to 9960.0"
           },
           "servo_5_min": {
             "moved": true,
-            "detail": "Moved from 12000.0 to 11880.0"
+            "detail": "Moved from 12048.0 to 11928.0"
           },
           "servo_5_max": {
             "moved": true,
-            "detail": "Moved from 12000.0 to 11880.0"
+            "detail": "Moved from 11928.0 to 11040.0"
           },
           "servo_6_min": {
             "moved": true,
-            "detail": "Moved from 11976.0 to 11784.0"
+            "detail": "Moved from 12024.0 to 10968.0"
           },
           "servo_6_max": {
             "moved": true,
-            "detail": "Moved from 11976.0 to 10704.0"
+            "detail": "Moved from 11976.0 to 9888.0"
           }
         }
       }
@@ -94,7 +97,7 @@
         "detail": "All phidgets passed",
         "Encoders": {
           "status": "PASS",
-          "detail": "delta_encoder_left=40, delta_encoder_right=8"
+          "detail": "delta_encoder_left=1, delta_encoder_right=3"
         },
         "Motors": {
           "status": "PASS",
@@ -102,21 +105,21 @@
         },
         "Spatial": {
           "status": "PASS",
-          "detail": "acc=(0.14,0.22,-10.00)"
+          "detail": "acc=(-0.11,0.07,-8.95)"
         },
         "Temperature": {
           "status": "PASS",
-          "detail": "Temperature=29.57\u00b0C"
+          "detail": "Temperature=21.02\u00b0C"
         }
       }
     },
     "RPLidar": {
       "status": "PASS",
-      "detail": "Total rplidar points: 720, Max measured distance: 6.70 m"
+      "detail": "Total rplidar points: 720, Max measured distance: 5.41 m"
     },
     "Comment": {
       "status": "good to adjust deviation for servos"
     }
   },
-  "last_updated": "2025-06-27T15:55:55.548321"
+  "last_updated": "2025-12-21T13:13:27.336517"
 }

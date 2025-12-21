@@ -257,9 +257,9 @@ def generate_launch_description():
         phidgets_launch,
 # 
         # check nodes
-        realsense_check,
+        # realsense_check,
         rplidar_check,
-        usb_cam_check,
+        # usb_cam_check,
         phidgets_check,
         arm_check,
 

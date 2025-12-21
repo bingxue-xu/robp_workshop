@@ -1,22 +1,14 @@
 {
-  "robot_name": "SnowWhite",
-  "domain_id": 7,
+  "robot_name": "Huntsman",
+  "domain_id": 4,
   "results": {
     "Nuc": {
       "status": "PASS",
-      "detail": "No ubuntu installed"
+      "detail": "ubuntu 22.04, no password"
     },
     "Power": {
       "status": "PASS",
-      "detail": "works with battery, voltage: 15.8V"
-    },
-    "RealSense": {
-      "status": "PASS",
-      "detail": "Received valid color frame (640\u00d7480)"
-    },
-    "RPLidar": {
-      "status": "PASS",
-      "detail": "Total rplidar points: 360, Max measured distance: 5.39 m"
+      "detail": "works with power bank"
     },
     "Phidgets": {
       "status": "PASS",
@@ -25,25 +17,29 @@
         "detail": "All phidgets passed",
         "Encoders": {
           "status": "PASS",
-          "detail": "delta_encoder_left=29, delta_encoder_right=54"
+          "detail": "delta_encoder_left=83, delta_encoder_right=27"
         },
         "Motors": {
           "status": "PASS",
-          "detail": "duty_cycle_left=0.075, duty_cycle_right=0.126"
+          "detail": "duty_cycle_left=0.100, duty_cycle_right=0.100"
         },
         "Spatial": {
           "status": "PASS",
-          "detail": "acc=(0.02,-0.81,-9.12)"
+          "detail": "acc=(0.02,0.26,-9.68)"
         },
         "Temperature": {
           "status": "PASS",
-          "detail": "Temperature=30.05\u00b0C"
+          "detail": "Temperature=20.66\u00b0C"
         }
       }
     },
     "USBCam": {
       "status": "PASS",
       "detail": "Received valid frame (640\u00d7480), not all-black/white"
+    },
+    "RPLidar": {
+      "status": "PASS",
+      "detail": "Total rplidar points: 720, Max measured distance: 5.30 m"
     },
     "Arm": {
       "status": "PASS",
@@ -52,71 +48,75 @@
         "detail": "All servos moved",
         "servo_pos_publisher": {
           "status": "PASS",
-          "detail": "Range: 11976.0 ~ 12048.0"
+          "detail": "Range: 11712.0 ~ 12096.0"
         },
         "servo_temp_publisher": {
           "status": "PASS",
-          "detail": "Range: 28 ~ 45"
+          "detail": "Range: 26 ~ 34"
         },
         "servo_volt_publisher": {
           "status": "PASS",
-          "detail": "Range: 7518 ~ 7629"
+          "detail": "Range: 7445 ~ 7576"
+        },
+        "reset_init_position": {
+          "status": "PASS"
         },
         "servo_results": {
           "servo_1_min": {
             "moved": true,
-            "detail": "Moved from 11976.0 to 10896.0"
+            "detail": "Moved from 11712.0 to 10848.0"
           },
           "servo_1_max": {
             "moved": true,
-            "detail": "Moved from 11976.0 to 9768.0"
+            "detail": "Moved from 10848.0 to 9816.0"
           },
           "servo_2_min": {
             "moved": true,
-            "detail": "Moved from 12000.0 to 11760.0"
+            "detail": "Moved from 12048.0 to 11808.0"
           },
           "servo_2_max": {
             "moved": true,
-            "detail": "Moved from 12000.0 to 10704.0"
+            "detail": "Moved from 11808.0 to 10488.0"
           },
           "servo_3_min": {
             "moved": true,
-            "detail": "Moved from 11976.0 to 11016.0"
+            "detail": "Moved from 12024.0 to 11808.0"
           },
           "servo_3_max": {
             "moved": true,
-            "detail": "Moved from 11976.0 to 11016.0"
-          },
-          "servo_4_max": {
-            "moved": true,
-            "detail": "Moved from 11976.0 to 15360.0"
+            "detail": "Moved from 12024.0 to 10728.0"
           },
           "servo_4_min": {
             "moved": true,
-            "detail": "Moved from 11976.0 to 15360.0"
+            "detail": "Moved from 11976.0 to 11784.0"
+          },
+          "servo_4_max": {
+            "moved": true,
+            "detail": "Moved from 11784.0 to 10680.0"
           },
           "servo_5_min": {
             "moved": true,
-            "detail": "Moved from 12048.0 to 11928.0"
+            "detail": "Moved from 12096.0 to 11880.0"
           },
           "servo_5_max": {
             "moved": true,
-            "detail": "Moved from 12048.0 to 11016.0"
-          },
-          "servo_6_max": {
-            "moved": true,
-            "detail": "Moved from 12024.0 to 11136.0"
+            "detail": "Moved from 11880.0 to 10728.0"
           },
           "servo_6_min": {
             "moved": true,
-            "detail": "Moved from 12024.0 to 10056.0"
+            "detail": "Moved from 12048.0 to 11736.0"
+          },
+          "servo_6_max": {
+            "moved": true,
+            "detail": "Moved from 11736.0 to 10680.0"
           }
         }
       }
     },
-    "Comment": {
-      "detail": "Electricity meter fixed"
+    "RealSense": {
+      "status": "PASS",
+      "detail": "Received valid color frame (1280\u00d7720)"
     }
   },
-  "last_updated": "2025-08-24T14:35:29.682265"
+  "last_updated": "2025-12-21T13:21:54.970913"
 }

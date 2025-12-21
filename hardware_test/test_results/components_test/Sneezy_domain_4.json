@@ -8,7 +8,7 @@
     },
     "Power": {
       "status": "PASS",
-      "detail": "works with battery, voltage: 16.1V"
+      "detail": "works with power bank"
     },
     "Arm": {
       "status": "PASS",
@@ -17,69 +17,70 @@
         "detail": "All servos moved",
         "servo_pos_publisher": {
           "status": "PASS",
-          "detail": "Range: 7968.0 ~ 12384.0"
+          "detail": "Range: 2184.0 ~ 20040.0"
         },
         "servo_temp_publisher": {
           "status": "PASS",
-          "detail": "Range: 28 ~ 54"
+          "detail": "Range: 23 ~ 36"
         },
         "servo_volt_publisher": {
           "status": "PASS",
-          "detail": "Range: 7261 ~ 7405"
+          "detail": "Range: 7081 ~ 7425"
+        },
+        "reset_init_position": {
+          "status": "PASS"
         },
         "servo_results": {
           "servo_1_min": {
             "moved": true,
-            "detail": "Moved from 12384.0 to 11400.0"
+            "detail": "Moved from 2184.0 to 3360.0"
           },
           "servo_1_max": {
             "moved": true,
-            "detail": "Moved from 12384.0 to 10152.0"
+            "detail": "Moved from 3360.0 to 6360.0"
           },
           "servo_2_min": {
             "moved": true,
-            "detail": "Moved from 12024.0 to 11784.0"
+            "detail": "Moved from 12024.0 to 11880.0"
           },
           "servo_2_max": {
             "moved": true,
-            "detail": "Moved from 12024.0 to 10704.0"
-          },
-          "servo_3_min": {
-            "moved": true,
-            "detail": "Moved from 11952.0 to 10680.0"
+            "detail": "Moved from 12024.0 to 10752.0"
           },
           "servo_3_max": {
             "moved": true,
-            "detail": "Moved from 11952.0 to 9600.0"
+            "detail": "Moved from 11928.0 to 10968.0"
+          },
+          "servo_3_min": {
+            "moved": true,
+            "detail": "Moved from 11928.0 to 9864.0"
           },
           "servo_4_min": {
             "moved": true,
-            "detail": "Moved from 12000.0 to 11736.0"
+            "detail": "Moved from 12048.0 to 11112.0"
           },
           "servo_4_max": {
             "moved": true,
-            "detail": "Moved from 12000.0 to 10632.0"
+            "detail": "Moved from 11112.0 to 10008.0"
           },
           "servo_5_min": {
             "moved": true,
-            "detail": "Moved from 12072.0 to 11952.0"
+            "detail": "Moved from 12000.0 to 11880.0"
           },
           "servo_5_max": {
             "moved": true,
-            "detail": "Moved from 12072.0 to 11832.0"
+            "detail": "Moved from 11880.0 to 12144.0"
           },
           "servo_6_min": {
             "moved": true,
-            "detail": "Moved from 12048.0 to 11112.0"
+            "detail": "Moved from 11976.0 to 11784.0"
           },
           "servo_6_max": {
             "moved": true,
-            "detail": "Moved from 12048.0 to 9984.0"
+            "detail": "Moved from 11784.0 to 10680.0"
           }
         }
-      },
-      "position": "Down"
-
+      }
     },
     "RealSense": {
       "status": "PASS",
@@ -87,7 +88,7 @@
     },
     "RPLidar": {
       "status": "PASS",
-      "detail": "Total rplidar points: 360, Max measured distance: 4.81 m"
+      "detail": "Total rplidar points: 360, Max measured distance: 5.90 m"
     },
     "Phidgets": {
       "status": "PASS",
@@ -96,26 +97,29 @@
         "detail": "All phidgets passed",
         "Encoders": {
           "status": "PASS",
-          "detail": "delta_encoder_left=38, delta_encoder_right=45"
+          "detail": "delta_encoder_left=4, delta_encoder_right=14"
         },
         "Motors": {
           "status": "PASS",
-          "detail": "duty_cycle_left=0.166, duty_cycle_right=0.222"
+          "detail": "duty_cycle_left=0.100, duty_cycle_right=0.100"
         },
         "Spatial": {
           "status": "PASS",
-          "detail": "acc=(-0.32,-0.16,-12.15)"
+          "detail": "acc=(0.03,0.34,-9.83)"
         },
         "Temperature": {
           "status": "PASS",
-          "detail": "Temperature=30.45\u00b0C"
+          "detail": "Temperature=19.23\u00b0C"
         }
       }
     },
     "USBCam": {
       "status": "PASS",
       "detail": "Received valid frame (640\u00d7480), not all-black/white"
+    },
+    "Comment": {
+      "detail": "RGBD camera cable is missing"
     }
   },
-  "last_updated": "2025-06-12T17:22:05.298480"
+  "last_updated": "2025-12-21T12:55:43.215903"
 }

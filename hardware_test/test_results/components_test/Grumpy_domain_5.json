@@ -8,7 +8,7 @@
     },
     "Power": {
       "status": "PASS",
-      "detail": "confirmed with Waqas"
+      "detail": "works with power bank"
     },
     "Phidgets": {
       "status": "PASS",
@@ -17,7 +17,7 @@
         "detail": "All phidgets passed",
         "Encoders": {
           "status": "PASS",
-          "detail": "delta_encoder_left=8, delta_encoder_right=15"
+          "detail": "delta_encoder_left=0, delta_encoder_right=2"
         },
         "Motors": {
           "status": "PASS",
@@ -25,17 +25,17 @@
         },
         "Spatial": {
           "status": "PASS",
-          "detail": "acc=(0.27,0.21,-10.02)"
+          "detail": "acc=(0.11,0.36,-9.68)"
         },
         "Temperature": {
           "status": "PASS",
-          "detail": "Temperature=30.33\u00b0C"
+          "detail": "Temperature=22.41\u00b0C"
         }
       }
     },
     "RPLidar": {
       "status": "PASS",
-      "detail": "Total rplidar points: 360, Max measured distance: 4.00 m"
+      "detail": "Total rplidar points: 360, Max measured distance: 3.38 m"
     },
     "RealSense": {
       "status": "PASS",
@@ -48,15 +48,18 @@
         "detail": "All servos moved",
         "servo_pos_publisher": {
           "status": "PASS",
-          "detail": "Range: 168.0 ~ 20016.0"
+          "detail": "Range: 2400.0 ~ 12048.0"
         },
         "servo_temp_publisher": {
           "status": "PASS",
-          "detail": "Range: 30 ~ 63"
+          "detail": "Range: 26 ~ 29"
         },
         "servo_volt_publisher": {
           "status": "PASS",
-          "detail": "Range: 7314 ~ 7474"
+          "detail": "Range: 7241 ~ 7467"
+        },
+        "reset_init_position": {
+          "status": "PASS"
         },
         "servo_results": {
           "servo_1_min": {
@@ -77,35 +80,35 @@
           },
           "servo_3_min": {
             "moved": true,
-            "detail": "Moved from 8328.0 to 7992.0"
+            "detail": "Moved from 9336.0 to 7992.0"
           },
           "servo_3_max": {
             "moved": true,
-            "detail": "Moved from 7992.0 to 9024.0"
+            "detail": "Moved from 7992.0 to 10152.0"
           },
           "servo_4_min": {
             "moved": true,
-            "detail": "Moved from 12000.0 to 11352.0"
+            "detail": "Moved from 12000.0 to 11520.0"
           },
           "servo_4_max": {
             "moved": true,
-            "detail": "Moved from 11352.0 to 9816.0"
+            "detail": "Moved from 11976.0 to 9624.0"
           },
           "servo_5_min": {
             "moved": true,
-            "detail": "Moved from 12072.0 to 11928.0"
+            "detail": "Moved from 12072.0 to 11952.0"
           },
           "servo_5_max": {
             "moved": true,
-            "detail": "Moved from 11928.0 to 11304.0"
-          },
-          "servo_6_min": {
-            "moved": true,
-            "detail": "Moved from 12000.0 to 11712.0"
+            "detail": "Moved from 11952.0 to 10944.0"
           },
           "servo_6_max": {
             "moved": true,
-            "detail": "Moved from 11712.0 to 10560.0"
+            "detail": "Moved from 12048.0 to 11040.0"
+          },
+          "servo_6_min": {
+            "moved": true,
+            "detail": "Moved from 12048.0 to 8088.0"
           }
         }
       }
@@ -115,5 +118,5 @@
       "detail": "Received valid frame (640\u00d7480), not all-black/white"
     }
   },
-  "last_updated": "2025-06-25T11:21:16.286875"
+  "last_updated": "2025-12-21T13:04:44.813565"
 }
