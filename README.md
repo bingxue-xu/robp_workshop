@@ -1,71 +1,99 @@
-## Introduction 
+<p align="center">
+    <a href="https://github.com/bingxue-xu/robp_workshop">
+    <picture>
+    <img alt="Robot" src="assets/roboticon.png" width="60">
+    </picture><br>
+    </a>
+</p>
 
-This repository demonstrates how to run a camera-based differential robot on ROS2.
-The goal is to enable the robot to drive based on what it sees.
+<p align="center">
+  <img src="https://img.shields.io/badge/ROS2-Jazzy-blue" />
+  <img src="https://img.shields.io/badge/Python-3.10-blue" />
+  <img src="https://img.shields.io/badge/Ubuntu-24.04-orange" />
+</p>
 
+Implementation of the following projects:
 
+- **Autonomous Line Following Workshop**  
+  Real-time HSV color detection driving a proportional controller.
+  [ RealSense D435 ] [ Controller ] → [here](#workshop)
 
-https://github.com/user-attachments/assets/4e851c0b-155f-403f-a164-380398083e3c
+- **Hardware Test Suite**  
+  Test tuite for component across LiDAR, camera, 6-DOF arm, and controller in a single launch.
+  [ RPLidar ] [ RealSense ] [ xArm ] [ Phidgets ] → [here](#hardware-test-suite)
 
+- **Odometry Test Procedure**  
+  UMBmark bidirectional square-path odometry test procedure, achieved up to 67% lower systemetic error after calibration.
+  [ Encoders ] [ TF2 ] [ Odometry ] → [here](#odometry-calibration)
 
+---
 
+## Workshop
 
-## Installation 
+https://github.com/user-attachments/assets/d388093e-836f-4a35-9250-5bd22cd0b9b2
 
-- **Ubuntu**, tutorial here https://ubuntu.com/tutorials/install-ubuntu-desktop#1-overview
+The robot navigates a colored-tape course using only its onboard camera. An HSV filter isolates the line and a proportional controller converts pixel offset to wheel velocity commands published on `/cmd_vel`.
 
-- **ROS 2**, Jazzy page https://docs.ros.org/en/jazzy/Installation/Ubuntu-Install-Debians.html  
+---
 
-- **Kobuki** for simulation
+## Hardware Test Suite
 
-        sudo apt install ros-jazzy-kobuki-ros-interfaces
+One launch file runs all checks and saves timestamped JSON results per robot, then renders the table below.
 
-- **SSHPass** for SSH
+| Robot   | Encoders / IMU | RPLidar               | RealSense     | Arm (6 servos) |
+|---------|----------------|-----------------------|---------------|----------------|
+| Bashful | ✅             | ✅ 360 pts · 5.12 m   | ✅ 1280×720   | ✅ 6 / 6       |
+| Sneezy  | ✅             | ✅ 360 pts · 4.81 m   | ✅ 1280×720   | ✅ 6 / 6       |
+| Sweety  | ✅             | ✅ 360 pts · 5.39 m   | ✅ 640×480    | ✅ 6 / 6       |
+| Doc     | ✅             | ✅ 360 pts · 5.10 m   | ✅ 1280×720   | ✅ 6 / 6       |
+| Sleepy  | ✅             | —                     | ✅ 1280×720   | ❌ 1 / 6       |
 
-        sudo apt install sshpass
+---
 
-- ROS 2 **packages** 
+## Odometry Calibration
 
-        cd ~/workshop_ws
-        git clone https://github.com/bingxue-xu/robp_workshop.git src
-        cd ~/workshop_ws
-        rosdep install --from-paths src -y --ignore-src --as-root pip:false
-        colcon build --symlink-install
+UMBmark method: the robot drives a 1 m × 1 m square CW and CCW for N laps. Encoder-based dead-reckoning is compared against ground-truth TF transforms to compute correction factors for wheel radius and baseline. Results are saved to `summary.csv` with per-run error plots.
 
-        source /opt/ros/jazzy/setup.bash
-        source ~/workshop_ws/install/local_setup.bash
+---
 
-## Run
+## 0. Installation
 
-- **Simulation**
+```bash
+# ROS2 Jazzy → https://docs.ros.org/en/jazzy/Installation/Ubuntu-Install-Debians.html
+sudo apt install ros-jazzy-kobuki-ros-interfaces sshpass
 
-        ros2 launch robp_boot_camp_launch workshop_sim_launch.xml
-    
-- **Student code** 
+git clone https://github.com/bingxue-xu/robp_workshop.git ~/workshop_ws/src
+cd ~/workshop_ws
+rosdep install --from-paths src -y --ignore-src --as-root pip:false
+colcon build --symlink-install
 
-        ros2 launch robp_boot_camp_launch workshop_student_launch.xml
+source /opt/ros/jazzy/setup.bash
+source ~/workshop_ws/install/local_setup.bash
+```
 
-- **Robot**
+## 1. Quick Start
 
-        ros2 launch robp_boot_camp_launch workshop_launch.xml
+**Workshop**
+```bash
+# Simulation
+ros2 launch robp_boot_camp_launch workshop_sim_launch.xml
 
-- **Plotting (both simulation and robot)**
+# Real robot
+ros2 launch robp_boot_camp_launch workshop_launch.xml
+```
 
-        ros2 run perception plotting
+**Hardware testing**
+```bash
+ros2 launch hardware_test hardware_checks_launch.launch.py robot_name:=Bashful domain_id:=1
+```
 
-- **Debugging (both simulation and robot)**
+**Odometry calibration**
+```bash
+ros2 launch hardware_test odometry_test_launch.launch.py robot_name:=Bashful domain_id:=1
+```
 
-        ros2 topic echo /motor_controller/twist
+## 2. Gallery
 
+**Tools** — ESP32 servo ID reset utility (used when the official debugging board is unavailable): [`hardware_test/tools/servo_setter`](hardware_test/tools/servo_setter)
 
-## Implement to your own solution
-
-You can customize the system to your own needs by modifying perception and control, for example, following an object instead of a line
-
-- **Perception**:  `src/perception/perception/perception.py`
-
-- **Controller**: `src/controller/controller/controller.py`
-
-## References 
-- ROS (Robot Operating System) wiki: https://wiki.ros.org/ 
-- The HSV Color Model: [the HSV Color Model](https://medium.com/@dijdomv01/a-beginners-guide-to-understand-the-color-models-rgb-and-hsv-244226e4b3e3)
+**Packages** — `perception` · `controller` · `odometry` · `icp_odometry` · `display_markers` · `line_follower` · `hardware_test` · `robp_robot` · `robp_boot_camp`
