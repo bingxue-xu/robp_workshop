@@ -1,0 +1,2 @@
+TODO list:
+Remove the position if they return zero when computing the x,y,z coordinates, and change the pick service to be able to handle object type as input.

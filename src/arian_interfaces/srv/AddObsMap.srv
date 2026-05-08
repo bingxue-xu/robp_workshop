@@ -1,0 +1,4 @@
+arian_interfaces/PointWithRadiusArray radpoints
+bool add
+---
+nav_msgs/OccupancyGrid map

@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<launch>
+
+	<!-- run odometry-->
+	<node pkg="behaviour_tree" exec="bt2" name="bt" args = "">
+	</node>
+	<!-- run Lidar repeater-->
+	<node pkg="detection" exec="detection" name="detec" args = "">
+	</node>
+
+	<!-- run Global Mapper-->
+	<node pkg="pure_pursuit_action_server" exec="pure_pursuit_action_server_exe" name="pp_server" args = "">
+	</node>
+
+	<!-- run Path_planner-->
+	<node pkg="path_planning" exec="global_planning" name="global_planning" args = "">
+	</node>
+
+
+</launch>

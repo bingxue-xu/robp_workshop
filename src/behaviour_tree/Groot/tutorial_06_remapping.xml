@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root BTCPP_format="4">
+  <BehaviorTree ID="MoveSetResult">
+    <Fallback>
+      <Sequence>
+        <MoveBase goal="{target}"/>
+        <Script code="result=&apos;goal reached&apos;"/>
+      </Sequence>
+      <ForceFailure>
+        <Script code="result=&apos;error&apos;"/>
+      </ForceFailure>
+    </Fallback>
+  </BehaviorTree>
+
+  <BehaviorTree ID="MoveWithRemapping">
+    <Sequence>
+      <Script code="move_goal=&apos;1;2;0.5&apos;"/>
+      <SubTree ID="MoveSetResult"
+               result="{move_result}"
+               target="{move_goal}"/>
+      <SaySomething message="{move_result}"/>
+    </Sequence>
+  </BehaviorTree>
+
+  <!-- Description of Node Models (used by Groot) -->
+  <TreeNodesModel>
+    <Action ID="MoveBase"
+            editable="true">
+      <input_port name="goal"/>
+    </Action>
+    <Action ID="SaySomething"
+            editable="true">
+      <input_port name="message"/>
+    </Action>
+  </TreeNodesModel>
+
+</root>

@@ -1,0 +1,45 @@
+{
+  "configurations": [
+    {
+      "browse": {
+        "databaseFilename": "${default}",
+        "limitSymbolsToIncludedHeaders": false
+      },
+      "includePath": [
+        "/home/rosuser/dd2419_ws/install/ida_interfaces/include/**",
+        "/home/rosuser/dd2419_ws/install/gustav_custom_interfaces/include/**",
+        "/home/rosuser/dd2419_ws/install/bing_interfaces/include/**",
+        "/opt/ros/humble/include/**",
+        "/home/rosuser/dd2419_ws/install/rplidar_ros/include/**",
+        "/home/rosuser/dd2419_ws/install/robp_phidgets_temperature/include/**",
+        "/home/rosuser/dd2419_ws/install/robp_phidgets_spatial/include/**",
+        "/home/rosuser/dd2419_ws/install/robp_phidgets_motors/include/**",
+        "/home/rosuser/dd2419_ws/install/robp_phidgets_encoders/include/**",
+        "/home/rosuser/dd2419_ws/install/robp_interfaces/include/**",
+        "/home/rosuser/dd2419_ws/install/robp_boot_camp_interfaces/include/**",
+        "/home/rosuser/dd2419_ws/install/arian_interfaces/include/**",
+        "/home/rosuser/dd2419_ws/src/DynamixelSDK/dynamixel_sdk/include/**",
+        "/home/rosuser/dd2419_ws/src/DynamixelSDK/dynamixel_sdk_examples/include/**",
+        "/home/rosuser/dd2419_ws/src/gustav_custom_interfaces/include/**",
+        "/home/rosuser/dd2419_ws/src/robp_boot_camp/kobuki_soft/kobuki_softnode/include/**",
+        "/home/rosuser/dd2419_ws/src/robp_boot_camp/robp_boot_camp_distance_sensor/include/**",
+        "/home/rosuser/dd2419_ws/src/robp_boot_camp/robp_boot_camp_motors/include/**",
+        "/home/rosuser/dd2419_ws/src/robp_robot/robp_phidgets/robp_phidgets_encoders/include/**",
+        "/home/rosuser/dd2419_ws/src/robp_robot/robp_phidgets/robp_phidgets_motors/include/**",
+        "/home/rosuser/dd2419_ws/src/robp_robot/robp_phidgets/robp_phidgets_spatial/include/**",
+        "/home/rosuser/dd2419_ws/src/robp_robot/robp_phidgets/robp_phidgets_temperature/include/**",
+        "/home/rosuser/dd2419_ws/src/rplidar_ros2/include/**",
+        "/home/rosuser/dd2419_ws/src/turtlebot3/turtlebot3_node/include/**",
+        "/home/rosuser/dd2419_ws/src/turtlebot3_simulations/turtlebot3_fake_node/include/**",
+        "/home/rosuser/dd2419_ws/src/turtlebot3_simulations/turtlebot3_gazebo/include/**",
+        "/usr/include/**"
+      ],
+      "name": "ROS",
+      "intelliSenseMode": "gcc-x64",
+      "compilerPath": "/usr/bin/gcc",
+      "cStandard": "gnu11",
+      "cppStandard": "c++14"
+    }
+  ],
+  "version": 4
+}

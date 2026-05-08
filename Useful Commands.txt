@@ -1,0 +1,266 @@
+Commands
+
+Launch File:
+ros2 launch robp_boot_camp_launch boot_camp_part1_launch.xml
+
+open launch file:
+code ~/dd2419_ws/src/robp_boot_camp/robp_boot_camp_launch/launch/boot_camp_part1_launch.xml
+
+
+Show all topics:
+ros2 topic list
+
+Show msg
+ros2 topic echo /kobuki/adc
+
+show type message
+ros2 topic info /kobuki/adc
+
+ros2 interface show robp_boot_camp_interfaces/msg/ADConverter
+ch1 is fron ch2 is back
+
+ros2 interface show robp_interfaces/msg/DutyCycles
+
+Run the controller: Part1-Task3
+ros2 launch robp_boot_camp_launch boot_camp_part1_launch.xml
+
+ros2 run controller cartesian_controller
+ros2 run controller wall_following_controller
+
+Publish to tune the controller:
+ros2 topic pub /motor_controller/twist geometry_msgs/msg/Twist '{linear: {x: 1.0, y: 0.0, z: 0.0}, angular: {x: 0.0, y: 0.0, z: 0.0}}' -r 10
+
+
+Reset Wall:
+ros2 service call /reset_world std_srvs/srv/Empty {}
+
+Part2 - Task1
+Q&A Odom and base-link not connected in TF tree. Need to run the odometry node to connect them correctly
+Q&A It would still start in 0 assuming we zerod odom to map 0, but if not aligned the square it drives in would be offset by some degree to the real square
+
+Publish sstatic transform:
+ros2 run tf2_ros static_transform_publisher --frame-id map --child-frame-id odom
+
+Launch terminals:
+
+
+ros2 launch robp_boot_camp_launch boot_camp_part2_launch.xml
+
+ros2 run tf2_ros static_transform_publisher --frame-id map --child-frame-id odom
+
+ros2 run odometry odometry
+
+ros2 bag play --read-ahead-queue-size 1000 -l -r 1.0 --clock 100 --start-paused ~/dd2419_ws/bags/boot_camp
+
+Check what commands are doing
+ros2 bag play -h
+
+PArt2 -Task2
+
+Check TF frames
+ros2 run tf2_tools view_frames
+xdg-open frames_[tab].pdf
+
+Check transform between two frames
+ros2 run tf2_ros tf2_echo [source_frame] [target_frame]
+
+
+##### MArker Array
+std_msgs/Header header
+	builtin_interfaces/Time stamp
+		int32 sec
+		uint32 nanosec
+	string frame_id
+aruco_msgs/Marker[] markers
+	std_msgs/Header header
+		builtin_interfaces/Time stamp
+			int32 sec
+			uint32 nanosec
+		string frame_id
+	uint32 id
+	geometry_msgs/PoseWithCovariance pose
+		Pose pose
+			Point position
+				float64 x
+				float64 y
+				float64 z
+			Quaternion orientation
+				float64 x 0
+				float64 y 0
+				float64 z 0
+				float64 w 1
+		float64[36] covariance
+	float64 confidence
+####
+
+
+
+Terminal
+
+ros2 launch robp_boot_camp_launch boot_camp_part2_launch.xml
+
+ros2 run tf2_ros static_transform_publisher --frame-id map --child-frame-id odom
+
+ros2 run odometry odometry
+
+ros2 bag play --read-ahead-queue-size 1000 -l -r 1.0 --clock 100 --start-paused ~/dd2419_ws/bags/boot_camp
+
+ros2 run display_markers display_markers
+
+
+
+Part3: 
+
+ros2 launch robp_boot_camp_launch boot_camp_part3_launch.xml
+
+ros2 run tf2_ros static_transform_publisher --frame-id map --child-frame-id odom
+
+ros2 run detection detection
+
+ros2 bag play --read-ahead-queue-size 1000 -l -r 1.0 --clock 100 --start-paused ~/dd2419_ws/bags/boot_camp
+
+
+
+
+Build packages:
+
+colcon build --symlink-install
+
+
+Install dependencies (From root dir):
+
+rosdep install --from-paths src -y --ignore-src --as-root pip:false 
+
+#####################################################################################
+
+#######################################################################################
+
+TO RUN EVERYTHING ON THE ROBOT:
+
+
+ros2 launch start_robot_package start_robot_launch.xml
+
+
+rviz2i
+
+TO CONTROL ROBOT:
+ros2 run teleop_twist_keyboard teleop_twist_keyboard #this one makes it work
+ros2 run controller cartesian_controller 
+
+
+ros2 run tf2_ros static_transform_publisher --frame-id map --child-frame-id odom
+
+##########################################################################################
+##########################################################################################
+Running the robot:
+
+ros2 launch robp_phidgets_motors motors_launch.py
+ros2 launch robp_phidgets_encoders encoders_launch.py
+ros2 launch robp_phidgets_spatial spatial_launch.py
+ros2 launch robp_phidgets_temperature temperature_launch.py
+
+
+
+Example of publishing to topic from cmd:
+
+ros2 topic pub /motor/duty_cycles robp_interfaces/msg/DutyCycles '{duty_cycle_left: 1.0, duty_cycle_right: 1.0}' -r 10
+
+
+
+
+Running the arm servos!!!! : ros2 run micro_ros_agent micro_ros_agent serial --dev /dev/ttyUSB1 -v6
+
+
+Servo topic : /multi_servo_cmd_sub
+
+
+
+Message type: ros2 topic pub /multi_servo_cmd_sub --once std_msgs/Int16MultiArray "{layout: {dim: [{label: '', size: 0, stride: 0}], data_offset: 0}, data: [12000,12000,12000,12000,12000,12000,500,500,500,500,500,500]}" 
+
+data:[servo1_desired_pos, servo2_desired_pos, ... , servo6_desired_pos, servo1_move_time, ... , servo6_move_time
+
+
+
+servo1 = claw higher number = close
+servo2 = revolute joint below claw, rotates about  axis , higher number = rotate ccl (around z axis)
+servo3 = revolut joint after that, higher number = forward towards NUC
+servo4 = joint after that, higher number = backwards
+servo 5 = second to last joint, higher = forward
+servo 6 = rotating base higher number = rotate ccl (around z axis)
+
+
+
+
+
+get it to the left wheel sort of : ros2 topic pub /multi_servo_cmd_sub --once std_msgs/Int16MultiArray "{layout: {dim: [{label: '', size: 0, stride: 0}], data_offset: 0}, data: [5000,12000,16000,5000,18000,20000,2000,2000,2000,2000,2000,2000]}"
+
+Close the gripper: ros2 topic pub /multi_servo_cmd_sub --once std_msgs/Int16MultiArray "{layout: {dim: [{label: '', size: 0, stride: 0}], data_offset: 0}, data: [12000,12000,16000,5000,18000,20000,2000,2000,2000,2000,2000,2000]}"
+
+return to fixed pos : ros2 topic pub /multi_servo_cmd_sub --once std_msgs/Int16MultiArray "{layout: {dim: [{label: '', size: 0, stride: 0}], data_offset: 0}, data: [12000,12000,12000,12000,12000,12000,2000,2000,2000,2000,2000,2000]}"
+
+
+
+
+Servo topic pos: /servo_pos_publisher
+
+Servo topic temp : /servo_temp_publisher
+
+
+Run the cartesian controll:
+
+Start all robot nodes.
+
+
+ros2 run turtlesim turtle_teleop_key 
+ros2 run controller cartesian_controller
+
+enter arrow keys in the teleop key terminal
+
+
+Run the LIDAR and vizualize in Rviz:
+§
+ros2 launch rplidar_ros view_rplidar.launch.py
+
+
+Running the camera:
+
+ros2 run realsense2_camera realsense2_camera_node
+# or, with parameters, for example - temporal and spatial filters are enabled:
+ros2 run realsense2_camera realsense2_camera_node --ros-args -p enable_color:=false -p spatial_filter.enable:=true -p temporal_filter.enable:=true
+
+or
+
+ ros2 launch realsense2_camera rs_launch.py
+ros2 launch realsense2_camera rs_launch.py depth_module.profile:=1280x720x30 pointcloud.enable:=true
+
+
+RUN the USB CAM
+ros2 run usb_cam usb_cam_node_exe --ros-args --params-file ~/dd2419_ws/src/start_robot_package/yaml/config.yaml
+
+
+RECORD ROSBAG
+ros2 bag record -a -o milestone0
+
+
+      pixel_format: "yuyv2rgb"  # see usb_cam/supported_formats for list of supported formats
+      args = " --ros-args --params-file $(find-pkg-share start_robot_package)/yaml/config.yaml"
+      
+      ls -l /dev | grep ttyUSB
+      
+      sudo dmesg | grep tty
+      
+udevadm info -a -p $(udevadm info -q path -n <devpath>)
+
+
+sudo udevadm control --reload-rules && sudo service udev restart && sudo udevadm trigger
+
+Bus 003 Device 005: ID 32e6:9005 icSpring icspring camera
+
+get it to the left wheel sort of : 
+ros2 topic pub /pure_pursuit --once std_msgs/Float32MultiArray "{layout: {dim: [{label: '', size: 0, stride: 0}], data_offset: 0}, data: [0.5,0.5,1,1,1.5,1.5,2,2,2.5,2.5,3,3,3.5,3.5,4,4,4.5,4.5]}"
+
+
+
+ros2 topic pub /multi_servo_cmd_sub --once std_msgs/Int16MultiArray "{layout: {dim: [{label: '', size: 0, stride: 0}], data_offset: 0}, data: [120,12000,2000,16000,8400,12000,2000,2000,2000,2000,2000,2000]}"
+
+Get into observing position.

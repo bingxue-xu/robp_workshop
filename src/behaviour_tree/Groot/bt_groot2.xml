@@ -1,0 +1,288 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root BTCPP_format="4">
+  <BehaviorTree ID="BackToOrigin">
+    <Sequence>
+      <SetCurrTarget message=""/>
+      <SubTree ID="PlanAndDrive"/>
+    </Sequence>
+  </BehaviorTree>
+
+  <BehaviorTree ID="DriveTo">
+    <RetryUntilSuccessful name="Retry 15 times"
+                          num_attempts="">
+      <Sequence>
+        <RetryUntilSuccessful name="RetryOnce"
+                              num_attempts="">
+          <Sequence>
+            <GetObjList/>
+            <LocalPlanning/>
+            <PurePuresuit/>
+          </Sequence>
+        </RetryUntilSuccessful>
+        <CheckWaypoints/>
+      </Sequence>
+    </RetryUntilSuccessful>
+  </BehaviorTree>
+
+  <BehaviorTree ID="ExpDriveTo">
+    <Sequence>
+      <GetObjList/>
+      <GlobalPlanning/>
+      <RemoeGlobalObs/>
+      <RetryUntilSuccessful name="Retry15times"
+                            num_attempts="">
+        <Sequence>
+          <RetryUntilSuccessful name="RetryOnce"
+                                num_attempts="">
+            <Sequence>
+              <GetObjList/>
+              <LocalPlanning/>
+              <PurePuresuit/>
+              <VizGrid/>
+            </Sequence>
+          </RetryUntilSuccessful>
+          <CheckWaypoints/>
+        </Sequence>
+      </RetryUntilSuccessful>
+    </Sequence>
+  </BehaviorTree>
+
+  <BehaviorTree ID="Exploration">
+    <RetryUntilSuccessful name="Retry10times"
+                          num_attempts="">
+      <Sequence>
+        <SubTree ID="ExplorePoint"/>
+        <SubTree ID="DriveTo"/>
+        <CheckExplored/>
+        <PublishMapDone/>
+      </Sequence>
+    </RetryUntilSuccessful>
+  </BehaviorTree>
+
+  <BehaviorTree ID="ExplorePoint">
+    <Sequence>
+      <GetObjList/>
+      <UpdateObsMap/>
+      <VizGrid/>
+      <ExplorePathCal/>
+    </Sequence>
+  </BehaviorTree>
+
+  <BehaviorTree ID="ExporeMore">
+    <Sequence>
+      <SubTree ID="ExplorePoint"/>
+      <SubTree ID="ExpDriveTo"/>
+    </Sequence>
+  </BehaviorTree>
+
+  <BehaviorTree ID="PickTree">
+    <Sequence>
+      <Inverter>
+        <ObjInHand/>
+      </Inverter>
+      <GetRobPose/>
+      <GetTarrList/>
+      <SetCurrTarget message=""/>
+      <SubTree ID="PlanAndDrive"/>
+      <Fallback>
+        <Sequence>
+          <CheckDist/>
+          <RetryUntilSuccessful num_attempts="">
+            <Pickup/>
+          </RetryUntilSuccessful>
+          <CheckClaws/>
+          <Backup15cm/>
+        </Sequence>
+        <Fallback>
+          <Sequence>
+            <MoveArmFalse/>
+            <UsbCam/>
+            <RetryUntilSuccessful num_attempts="">
+              <Pickup/>
+            </RetryUntilSuccessful>
+            <CheckClaws/>
+            <Backup15cm/>
+          </Sequence>
+          <Sequence>
+            <MoveArmFalse name="MoveArmTrue"/>
+            <UsbCam/>
+            <RetryUntilSuccessful num_attempts="">
+              <Pickup/>
+            </RetryUntilSuccessful>
+            <CheckClaws/>
+            <Backup15cm/>
+          </Sequence>
+        </Fallback>
+        <Sequence>
+          <Backup15cm/>
+          <CheckDist/>
+          <SubTree ID="DriveTo"/>
+          <CheckDist/>
+          <RetryUntilSuccessful num_attempts="">
+            <Pickup/>
+          </RetryUntilSuccessful>
+          <Backup15cm/>
+          <CheckClaws/>
+        </Sequence>
+        <Fallback>
+          <Sequence>
+            <MoveArmFalse/>
+            <UsbCam/>
+            <RetryUntilSuccessful num_attempts="">
+              <Pickup/>
+            </RetryUntilSuccessful>
+            <CheckClaws/>
+            <Backup15cm/>
+          </Sequence>
+          <Sequence>
+            <MoveArmFalse name="MoveArmTrue"/>
+            <UsbCam/>
+            <RetryUntilSuccessful num_attempts="">
+              <Pickup/>
+            </RetryUntilSuccessful>
+            <CheckClaws/>
+            <Backup15cm/>
+          </Sequence>
+        </Fallback>
+      </Fallback>
+    </Sequence>
+  </BehaviorTree>
+
+  <BehaviorTree ID="PlaceTree">
+    <Sequence>
+      <ObjInHand name="ObjInHand_True"/>
+      <SetCurrTarget message=""/>
+      <SubTree ID="PlanAndDrive"/>
+      <Fallback>
+        <Sequence>
+          <CheckDist/>
+          <RetryUntilSuccessful name="Retry2times"
+                                num_attempts="">
+            <Place/>
+          </RetryUntilSuccessful>
+          <RemoveTargetFromList/>
+          <Backup15cm/>
+        </Sequence>
+        <RetryUntilSuccessful name="Retry2Times"
+                              num_attempts="">
+          <Sequence>
+            <Backup15cm/>
+            <SubTree ID="DriveTo"/>
+            <CheckDist/>
+            <CheckDist/>
+            <RetryUntilSuccessful num_attempts="">
+              <Place/>
+            </RetryUntilSuccessful>
+            <RemoveTargetFromList/>
+            <Backup15cm/>
+          </Sequence>
+        </RetryUntilSuccessful>
+      </Fallback>
+    </Sequence>
+  </BehaviorTree>
+
+  <BehaviorTree ID="PlanAndDrive">
+    <RetryUntilSuccessful name="Retry once"
+                          num_attempts="">
+      <Sequence>
+        <GetObjList/>
+        <GlobalPlanning/>
+        <RemoeGlobalObs/>
+        <SubTree ID="DriveTo"/>
+      </Sequence>
+    </RetryUntilSuccessful>
+  </BehaviorTree>
+
+  <BehaviorTree ID="Root_MS3">
+    <Sequence>
+      <RunOnce name="OneShot"
+               then_skip="true">
+        <Initialize name="Initialization"/>
+      </RunOnce>
+      <Fallback>
+        <Timeout msec="">
+          <SubTree ID="main_task"/>
+        </Timeout>
+        <SubTree ID="BackToOrigin"/>
+      </Fallback>
+    </Sequence>
+  </BehaviorTree>
+
+  <BehaviorTree ID="main_task">
+    <Sequence>
+      <SubTree ID="Exploration"/>
+      <Repeat num_cycles="">
+        <Sequence>
+          <Sequence>
+            <SubTree ID="PickTree"
+                     _autoremap="false"/>
+            <SubTree ID="PlaceTree"/>
+          </Sequence>
+          <Precondition name="EternalGuard"
+                        else="FAILURE"
+                        if="">
+            <Sequence>
+              <SubTree ID="ExplorePoint"/>
+              <SubTree ID="DriveTo"/>
+            </Sequence>
+          </Precondition>
+        </Sequence>
+      </Repeat>
+    </Sequence>
+  </BehaviorTree>
+
+  <!-- Description of Node Models (used by Groot) -->
+  <TreeNodesModel>
+    <Action ID="Backup15cm"
+            editable="true"/>
+    <Action ID="CheckClaws"
+            editable="true"/>
+    <Action ID="CheckDist"
+            editable="true"/>
+    <Action ID="CheckExplored"
+            editable="true"/>
+    <Action ID="CheckWaypoints"
+            editable="true"/>
+    <Action ID="ExplorePathCal"
+            editable="true"/>
+    <Action ID="GetObjList"
+            editable="true"/>
+    <Action ID="GetRobPose"
+            editable="true"/>
+    <Action ID="GetTarrList"
+            editable="true"/>
+    <Action ID="GlobalPlanning"
+            editable="true"/>
+    <Action ID="Initialize"
+            editable="true"/>
+    <Action ID="LocalPlanning"
+            editable="true"/>
+    <Action ID="MoveArmFalse"
+            editable="true"/>
+    <Action ID="ObjInHand"
+            editable="true"/>
+    <Action ID="Pickup"
+            editable="true"/>
+    <Action ID="Place"
+            editable="true"/>
+    <Action ID="PublishMapDone"
+            editable="true"/>
+    <Action ID="PurePuresuit"
+            editable="true"/>
+    <Action ID="RemoeGlobalObs"
+            editable="true"/>
+    <Action ID="RemoveTargetFromList"
+            editable="true"/>
+    <Action ID="SetCurrTarget"
+            editable="true">
+      <input_port name="message"/>
+    </Action>
+    <Action ID="UpdateObsMap"
+            editable="true"/>
+    <Action ID="UsbCam"
+            editable="true"/>
+    <Action ID="VizGrid"
+            editable="true"/>
+  </TreeNodesModel>
+
+</root>

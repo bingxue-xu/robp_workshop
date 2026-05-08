@@ -1,0 +1,36 @@
+{
+  "configurations": [
+    {
+      "browse": {
+        "databaseFilename": "${default}",
+        "limitSymbolsToIncludedHeaders": false
+      },
+      "includePath": [
+        "/opt/ros/humble/include/**",
+        "/home/rosuser/dd2419_ws/install/rplidar_ros/include/**",
+        "/home/rosuser/dd2419_ws/install/robp_phidgets_temperature/include/**",
+        "/home/rosuser/dd2419_ws/install/robp_phidgets_spatial/include/**",
+        "/home/rosuser/dd2419_ws/install/robp_phidgets_motors/include/**",
+        "/home/rosuser/dd2419_ws/install/robp_phidgets_encoders/include/**",
+        "/home/rosuser/dd2419_ws/install/robp_interfaces/include/**",
+        "/home/rosuser/dd2419_ws/install/robp_boot_camp_interfaces/include/**",
+        "/home/rosuser/dd2419_ws/install/custom_interfaces2/include/**",
+        "/home/rosuser/dd2419_ws/src/robp_boot_camp/kobuki_soft/kobuki_softnode/include/**",
+        "/home/rosuser/dd2419_ws/src/robp_boot_camp/robp_boot_camp_distance_sensor/include/**",
+        "/home/rosuser/dd2419_ws/src/robp_boot_camp/robp_boot_camp_motors/include/**",
+        "/home/rosuser/dd2419_ws/src/robp_robot/robp_phidgets/robp_phidgets_encoders/include/**",
+        "/home/rosuser/dd2419_ws/src/robp_robot/robp_phidgets/robp_phidgets_motors/include/**",
+        "/home/rosuser/dd2419_ws/src/robp_robot/robp_phidgets/robp_phidgets_spatial/include/**",
+        "/home/rosuser/dd2419_ws/src/robp_robot/robp_phidgets/robp_phidgets_temperature/include/**",
+        "/home/rosuser/dd2419_ws/src/rplidar_ros2/include/**",
+        "/usr/include/**"
+      ],
+      "name": "ROS",
+      "intelliSenseMode": "gcc-x64",
+      "compilerPath": "/usr/bin/gcc",
+      "cStandard": "gnu11",
+      "cppStandard": "c++14"
+    }
+  ],
+  "version": 4
+}

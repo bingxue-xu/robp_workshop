@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root BTCPP_format="4">
+  <BehaviorTree ID="IfDoorClosed">
+    <Fallback>
+      <OpenDoor/>
+      <RetryUntilSuccessful num_attempts="5">
+        <PickLock/>
+      </RetryUntilSuccessful>
+      <SmashDoor/>
+    </Fallback>
+  </BehaviorTree>
+
+  <BehaviorTree ID="MoveWithSubtree">
+    <Sequence>
+      <Fallback>
+        <Inverter>
+          <IsDoorClosed/>
+        </Inverter>
+        <SubTree ID="IfDoorClosed"
+                 _description="CTRL + Left Click to Jump to the corresponding subtree.&#10;Or Click &quot;Expand&quot; to visualize in place."/>
+      </Fallback>
+      <PassThroughDoor/>
+    </Sequence>
+  </BehaviorTree>
+
+  <!-- Description of Node Models (used by Groot) -->
+  <TreeNodesModel>
+    <Condition ID="IsDoorClosed"
+               editable="true"/>
+    <Action ID="OpenDoor"
+            editable="true"/>
+    <Action ID="PassThroughDoor"
+            editable="true"/>
+    <Action ID="PickLock"
+            editable="true"/>
+    <Action ID="SmashDoor"
+            editable="true"/>
+  </TreeNodesModel>
+
+</root>

@@ -1,0 +1,3 @@
+nav_msgs/OccupancyGrid obs_map
+---
+geometry_msgs/PointStamped point

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root BTCPP_format="4" project_name="Project">
+    <include path="../../../../Groot2/bin/samples_v4/tutorial_01_simple_tree.xml"/>
+    <include path="../../../../Groot2/bin/samples_v4/tutorial_02_ports.xml"/>
+    <include path="../../../../Groot2/bin/samples_v4/tutorial_03_ports_with_types.xml"/>
+    <include path="../../../../Groot2/bin/samples_v4/tutorial_04_reactive.xml"/>
+    <include path="../../../../Groot2/bin/samples_v4/tutorial_05_subtrees.xml"/>
+    <include path="../../../../Groot2/bin/samples_v4/tutorial_06_remapping.xml"/>
+    <include path="../../../../Groot2/bin/samples_v4/tutorial_07_prepost.xml"/>
+    <include path="bt_groot2.xml"/>
+    <!-- Description of Node Models (used by Groot) -->
+    <TreeNodesModel>
+        <Action ID="ApproachObject" editable="true"/>
+        <Action ID="CalculateGoal" editable="true">
+            <output_port name="goal"/>
+        </Action>
+        <Condition ID="CheckBattery" editable="true"/>
+        <Action ID="CloseGripper" editable="true"/>
+        <Action ID="GetObstacleList" editable="true"/>
+        <Condition ID="IsDoorClosed" editable="true"/>
+        <Action ID="MoveBase" editable="true">
+            <input_port name="goal"/>
+        </Action>
+        <Action ID="OpenDoor" editable="true"/>
+        <Action ID="OpenGripper" editable="true"/>
+        <Action ID="PassThroughDoor" editable="true"/>
+        <Action ID="PickLock" editable="true"/>
+        <Action ID="PrintTarget" editable="true">
+            <input_port name="target"/>
+        </Action>
+        <Action ID="Pure_puresuit" editable="true"/>
+        <Action ID="SaySomething" editable="true">
+            <input_port name="message"/>
+        </Action>
+        <Action ID="SmashDoor" editable="true"/>
+        <Action ID="ThinkWhatToSay" editable="true">
+            <output_port name="text"/>
+        </Action>
+        <Action ID="UpdateGlobalMap" editable="true"/>
+        <Action ID="explore" editable="true"/>
+        <Action ID="explore_action_server" editable="true"/>
+    </TreeNodesModel>
+</root>

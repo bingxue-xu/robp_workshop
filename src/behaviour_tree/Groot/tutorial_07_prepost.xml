@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root BTCPP_format="4">
+  <BehaviorTree ID="MoveWithConditions">
+    <Sequence>
+      <Script code="move_goal:=&apos;1;2;0.5&apos;;&#10;move_result:=&apos;waiting&apos;"
+              _description="This script contains two commands, one sets {move_goal}, the other sets {move_result}.&#10;Use a semicolon to separate them.&#10;OPTIONALLY, use CTRL+Return to add a new line.&#10;"/>
+      <MoveBase goal="{move_goal}"
+                _onSuccess="move_result=&apos;goal reached&apos;"
+                _onFailure="move_result=&apos;error&apos;"/>
+      <SaySomething message="{move_result}"/>
+    </Sequence>
+  </BehaviorTree>
+
+  <!-- Description of Node Models (used by Groot) -->
+  <TreeNodesModel>
+    <Action ID="MoveBase"
+            editable="true">
+      <input_port name="goal"/>
+    </Action>
+    <Action ID="SaySomething"
+            editable="true">
+      <input_port name="message"/>
+    </Action>
+  </TreeNodesModel>
+
+</root>

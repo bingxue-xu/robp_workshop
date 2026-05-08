@@ -1,0 +1,7 @@
+# srv/EstPose.srv
+
+# Request
+---
+
+# Response
+geometry_msgs/PointStamped est_pose

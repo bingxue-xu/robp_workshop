@@ -1,0 +1,22 @@
+
+
+#############test bt2 behaviour tree###############
+
+ros2 launch start_robot_package start_robot_launch.xml
+ros2 bag play --read-ahead-queue-size 1000 -l -r 1.0 --clock 100 --start-paused ~/dd2419_ws/bags/SLAMBAG2/SLAMBAG2_0.db3 --remap tf:=tf_null path:=path_null tf_static:=tf_static_null
+ros2 run detection detection
+ros2 run path_planning global_planning
+ros2 run pure_pursuit_action_server pure_pursuit_action_server_exe
+ros2 run behaviour_tree bt2
+
+
+
+############test ms2 state machine#############
+
+ros2 launch start_robot_package start_robot_launch.xml
+ros2 run manipulator pick_up_service
+ros2 run detection detection
+ros2 run path_planning global_planning
+ros2 run pure_pursuit_action_server pure_pursuit_action_exe
+ros2 run state_machine ms2
+

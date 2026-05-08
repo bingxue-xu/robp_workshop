@@ -1,0 +1,14 @@
+<!--
+  Standalone launcher for running a default Kobuki
+ -->
+<launch>
+  <arg name="robot_name" default="" />
+
+  <node pkg="kobuki_softnode" exec="fake_kobuki" name="fake_kobuki" output="screen"/>
+
+  <node pkg="robot_state_publisher" exec="robot_state_publisher" name="robot_state_publisher" output="screen">
+    <param name="robot_description" value="$(command 'xacro $(find-pkg-share kobuki_description)/urdf/kobuki_standalone.urdf.xacro')"/>
+    <param name="publish_frequency" value="30.0" />
+    <param name="~tf_prefix" value="$(var robot_name)"/>
+  </node>
+</launch>

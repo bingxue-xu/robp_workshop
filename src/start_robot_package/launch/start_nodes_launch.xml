@@ -1,0 +1,81 @@
+<?xml version="1.0"?>
+<launch>
+
+	<!-- run odometry-->
+	<node pkg="slam" exec="odometry" name="Odometry" args = "">
+	</node>
+	
+	<!-- run Scan Matcher-->
+	<node pkg="slam" exec="scan_matching" name="Scan_Matching" args = "">
+	</node>
+	
+	<!-- run Lidar repeater-->
+	<node pkg="slam" exec="repeater" name="Repeater" args = "">
+	</node>
+
+	<!-- run Global Mapper-->
+	<node pkg="slam" exec="global_map" name="Global_Map" args = ""> 
+	</node>
+	
+	<!-- run Local Mapper-->
+	<node pkg="slam" exec="local_map" name="Local_Map" args = "">
+	</node>
+	
+	<!-- run Aruco Marker Detector-->
+	<node pkg="slam" exec="marker_detect" name="Marker_detect" args = "">
+	</node>
+	
+	<!-- run Pickup-->
+	<node pkg="manipulator" exec="pick_up_service" name="Pickup" args = "">
+	</node>
+	
+	<!-- run Place-->
+	<node pkg="manipulator" exec="place_service" name="Place" args = "">
+	</node>
+	
+	<!-- run Detection-->
+	<node pkg="detection" exec="classification" name="Detection" args = "">
+	</node>
+	
+	<!-- run Claw Detection-->
+	<node pkg="detection" exec="claw_detect" name="claw_detect" args = "">
+	</node>
+	
+	<!-- run Move Arm Service-->
+	<node pkg="detection" exec="move_arm_service" name="Move_arm_service" args = "">
+	</node>
+	
+	<!-- run USB detection service-->
+	<node pkg="detection" exec="usb_cam_service" name="usb_cam_service" args = "">
+	</node>
+	
+	<!-- run Explore-->
+	<node pkg="exploration" exec="explorer" name="Explorer" args = "">
+	</node>
+	
+	<!-- run Speaker-->
+	<node pkg="speaker" exec="speaker" name="Speaker" args = "">
+	</node>
+	
+	<!--run Object Handler-->
+	<node pkg="slam" exec="object_handler" name="Object_Handler" args = "">
+	</node>
+	
+	<!-- run Global Path_planner-->
+	<node pkg="path_planning" exec="global_planning" name="Global_Planning" args = "">
+	</node>
+	
+	<!-- run Local Path_planner-->
+	<node pkg="path_planning" exec="local_planning" name="Local_Planning" args = "">
+	</node>
+	
+	<!-- run Cart_conroller-->
+	<node pkg="controller" exec="cartesian_controller" name="Cart_Controll" args = "">
+	</node>
+
+	<!-- run Pure Pursuit-->
+	<node pkg="pure_pursuit_action_server" exec="pure_pursuit_action_server_exe" name="Pure_Pursuit" args = "">
+	</node>
+
+
+</launch>

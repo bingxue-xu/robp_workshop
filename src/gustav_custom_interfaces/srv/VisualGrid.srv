@@ -1,0 +1,3 @@
+nav_msgs/OccupancyGrid obs_map
+---
+float64 percentage

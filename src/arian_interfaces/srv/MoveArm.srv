@@ -1,0 +1,4 @@
+bool closed
+bool reset 
+---
+bool success

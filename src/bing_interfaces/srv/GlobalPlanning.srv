@@ -1,0 +1,6 @@
+# request
+nav_msgs/OccupancyGrid map
+geometry_msgs/PointStamped goal
+---
+# Response
+nav_msgs/Path global_path

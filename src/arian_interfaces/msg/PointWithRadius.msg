@@ -1,0 +1,9 @@
+geometry_msgs/PointStamped point
+float64 radius
+bool target
+string type
+string id
+int64 marker_id
+float64 orientation
+sensor_msgs/Image image
+int64 count

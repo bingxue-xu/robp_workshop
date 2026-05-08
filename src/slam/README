@@ -1,0 +1,146 @@
+README
+Author: Arian Kourangi Esfahani
+
+Package name <slam>
+
+Executables:
+
+global_map -> Does global mapping
+
+	Uses nav_masgs/msg/ OccupancyGrid
+	This message stores xy coordinates in a row-major 1D array. To access a specific real world coord in the grid map based on index, grid map coord or vice versa use the helper functions. Makes sure you use the specified resolution and offset below
+	subscribes to /scan_filtered, 
+	publishes to /map
+	takes every 20th scan and uses it do map the environemnt
+	if a cell is detected as occupied it is set to occupied
+	if cell that is already occupied is detected as free its prob 
+	is decreased by 10
+	
+	make sure you use the following params when doing path planning
+	
+	resolution = 0.02
+	offset = -10
+	occupied space: 0<cell<80
+	free_space = 0
+	unexplored space = -10
+	outside of workspace = 100
+	obstacle detected by camera = -50
+	
+	SERVICE: 	IsInWs : "/is_in_ws". Need to copy arian_interfaces package and cb. To use service: from arian_interfaces.srv import IsInWs
+	This service allows you to send a PointStamped message from any frame in the tree and recieive a bool (T/F) weither or not the point is inside the ws
+	To see an example of how to make a client for this service see the  "publisher.py"
+	Make sure that the pointstamped message has correct frame id and stamp from when the point was detected in its respective frame
+	
+	SERVICE: AddObsMap : "add_obs_global". Need to copy arian_interfaces package and cb. To use service: from arian_interfaces.srv import AddObsMap
+	This service allows one to send in a PointstampedwithRadiusArray and a bool that signifies adding or removing from the map in any frame and add an obstacle at the detected location and 
+	of the specieied radius to the map.
+	To see an example of how to make a client for this service see the  "publisher.py"
+	Make sure that the pointstamped message has correct frame id and stamp from when the point was detected in its respective frame
+
+	The thought is that each time BT decides it wants to do global path planning it will use the add obs gobal service to add all camera objects except the current target to the global. The response of the service is the map with obstacles added, it will also be published to the global map topic but this can be delayed. After path planning and pure pursuit is done, ie reached the destination It will then use the same list and call the service again to remove all the camera obstacles, this time setting the bool to false.
+
+local_map -> Does local mapping
+	subscribes to "scan_filtered"
+	publishes to "local_map_arian"
+	
+Similar to global map but with a few differences.
+	offset : -3
+	takes in scans from scan_filtered and produces a local map centered around the lidar.(This might need to be changed to base_link)
+	Each new scan that comes in resets the map to an empty gridmap where all cells are assumed free. The scan is then used to populate pats of the map that are occupied. This happens continously.
+
+	Has service AddObsMap: "/add_obs_local". Similar to AddObsGlobal 
+	Again, BT will send in the current list of camera obstacles it has(except current target) and the service will return the local map at that time instance. This map is the meant to be sent to the local path planning service. The local map is also published to a local_map_arian topic but the added camera obstcles are erased so fast that they cannot be visialized.
+
+	Compaired to the global map, this ervice does not require the BT to clear the map of obstacles after completion. Since the map is reset for every scan. But it does still have the "add" bool
+
+odometry -> Does dead reackoning odometry estimates
+	Publishes TF odom-> base_link
+	Subscribes to '/motor/encoders' and /imu/data_raw'
+	Publishes to /path
+	
+	Takes in encoders and IMU orientation to estimate the pose of the robot in odom frame
+	
+
+
+repeater -> Simple repeater for Lidar and TF Map->Odom
+	
+	subscribes to /scan and /imu/data_raw and /map_to_odom
+	publishes to /scan_filtered
+	publishes repeat TF Map->Odom to keep the time of TF consistent with odom->base_link
+	takes in lidar scan from /scan and republishes to /scan_filtered as long as imu data indicates the robot is NOT turning 
+	
+	
+scan_matching -> does scan matching using my own built point to point ICP (see scan_match_class)
+	##IMPORTANT: Right now the robot starts aligned with the y axis instead of the x axis. It needs to stay put for 10 seconds, then do quarter turns and stay at teach turn for 2 seconds, finally 				
+	after rotating 360 it will drive towards x  = 1 y = 1.7 and then x = 0 y = 3. Then it is done
+
+	Subscricbes to /scan_filtered 
+	Publishes transform map->odom as transformstamped in topic /map_to_odom and lets repeter broadcast trasform
+	In the scan matcher there are a number of parameters than can be tuned, they are not labeled that well since I still have some tuning 
+	to do. But simply pur, this script takes in the base->odom trasnsofrm and uses it as an initial guess for the scan matching. 
+	Then it takes in the scan from the lidar and tries to match it to the map that was built in the beginning of the program. 
+	When the scan is matched to the map, we have the base->map transform. It then uses this and the base->odom transform to calculate the
+	map->odom transform. This is then published to the TF tree. 
+
+
+	Final note, since the ICP (both mine and OPEN3D) are quite bad at estimating the rotation matrix, I ignore this since the
+	IMU gives really good orientation data and does not need to be corrected.
+
+
+
+object_handler -> 
+Subscribes to "/current_target"
+Publishes to "/estimated_pose"
+
+Uses two custom messages and two different srv types. has total three services. "/add_cam_obs", "/remove_target", and "/get_list".
+How it works:
+First the two custom messages:
+	PointstampedWithRadius:
+		pointstamped_msg called point: Here input the pointstamped msg with stamp and frame_id directly from camera.
+		float 64 called radius: here input the radius of the detected object in meters (m)
+		bool called target: here input if the detected objects is cube/ball/animal as true, if box as false
+		string called type: here input the type of the detected object, need to use predefined like "red ball" "green cube" etc
+		string called id: Detection can leave this blank, object handler will assign an id based on the trasnformed pointstamped message into map frame, as well as type of the detected object.
+	PointstampedWithRadiusArray:
+		Basicly just a regular python list where each element is of the type PointStampedWithRadius. Called points
+Now the services:
+	"/add_cam_obs": Uses the custom service type called AddCamObs: 
+	This service is used by detection to input any and all objects that it detects
+
+	request : PointStampedWithRadiusArray called "radpoints" --> This name was just used to differnetiate between the point with radius and the poinstamped
+	response : bool called "done"
+
+	The object handler will itself assign the object to th correct list depening on the value of "target" in each radpoint ( PointstampedWithRadius) in radpoints.points
+	
+	This service will also publish an UNTRANSFORMED pointstamped message to "/estimated_pose", this will be the most recent pose of the
+	target object and will be given in the frame_id of what ever has detected it, probably some part of camera_link
+
+	"/remove_target": Uses the AddCamObs service type:
+	This service is used by BT to remove any targets that have been places in it box. It removed it from the dictionary of targetsin object handler
+
+	"/get_list": Uses the service type "GetList".
+	request : string called "type"
+	input "obstacle" for the list of all obstacles or "target" for the list of targets
+	response: A list of type PointStampedWithRadiusArray called list
+	Each element is a PointStampedWithRadius
+
+	Examples of how to use the services are in the publisher.py script. Ask Arian or further clarification.
+
+
+marker_detect ->
+subscribes to "/aruco/markers"
+Calls the service add_cam_obs for each aruco marker it sees
+
+cv -> Used for tuning SLAM, not important
+publish -> Examples of how to use services
+drive -> Forst draft of PurePursuit, not important
+hash -> script that hashes object position and type to generate a unique id
+process cloud -> Functions to use for filtering pointclouds
+slam -> Unused EKF-SLAM with feature extraction that does not work well
+
+workspace.tsv -> file with polygon coords for workspace
+workspace_2.tsv -> file with polygon coords for new workspace
+workspace_arian.tsv -> file with polygon coords for debugging and working on scan matcher
+
+Rest of scripts are just tests used during development
+

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root BTCPP_format="4">
+  <BehaviorTree ID="TreeWithPorts2">
+    <Sequence>
+      <CalculateGoal goal="{GoalPosition}"/>
+      <PrintTarget target="{GoalPosition}"/>
+      <Script code="OtherGoal:=&apos;-1;3&apos;"
+              _description="Using a Script, you can directly write into the blackboard"/>
+      <PrintTarget target="{OtherGoal}"/>
+    </Sequence>
+  </BehaviorTree>
+
+  <!-- Description of Node Models (used by Groot) -->
+  <TreeNodesModel>
+    <Action ID="CalculateGoal"
+            editable="true">
+      <output_port name="goal"/>
+    </Action>
+    <Action ID="PrintTarget"
+            editable="true">
+      <input_port name="target"/>
+    </Action>
+  </TreeNodesModel>
+
+</root>

@@ -1,0 +1,7 @@
+Now the global mapper does not require the list of objstacles to be sent in for removal. Just send a request with the add set to False and it
+will remove everything that is a camer obstacle or uninflated space
+
+Might want to remove capability from mapper to add uninflated space and only do in planners when inflating
+
+Object handler no longer uses has, interface is the same except that when requesting the list you dont need to specify type ie target or obstacles. ALl are stored in one list. Instead, when BT recives the list it should separate the two depending on the "Target" attribute is true or false.
+
