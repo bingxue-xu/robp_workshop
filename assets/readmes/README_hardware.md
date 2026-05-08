@@ -59,7 +59,6 @@ Check the results here: [Odometry Summary](test_results/summary/odometry_summary
 <img src="../../hardware_test/test_results/images/Odometry_plot_20250826.png" alt="Odometry Table" />
 
 
-
 ## Tools
 
 ### Reset servo ID 
