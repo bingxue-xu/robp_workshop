@@ -1,5 +1,5 @@
 <p align="center">
-    <a href="https://github.com/bingxue-xu/robp_workshop">
+    <a href="https://github.com/bingxue-xu/RoboticsProject">
     <picture>
     <img alt="Robot" src="assets/roboticsproject.png" width="600">
     </picture><br>
@@ -12,7 +12,9 @@
   <img src="https://img.shields.io/badge/Ubuntu-24.04-orange" />
 </p>
 
-Play with my little mobile robot by branch:
+📦 **Developed Packages** — `perception`, `slam`, `path_planning`, `pure_pursuit`, `controller`,`manipulator`, `odometry`, `display_markers`, `line_follower`, `hardware_test`, `behavior_tree`, `speaker` 
+
+### 🤖 Play with my little mobile robot by branch
 
 - **branch [`dd2419`](../../tree/dd2419) — Recycling Robot Project**  
   Full autonomous robot stack developed for the DD2419 project course.  
@@ -29,6 +31,13 @@ Play with my little mobile robot by branch:
 - **branch [`hardware`](../../tree/hardware) — Hardware Testing**  
   Test suite and odometry calibration across all robot components for ten robots.  
   `[Odometry Calibration]` `[Encoder]` `[RPLidar]` `[RealSense]` `[xArm]` `[Phidgets]` → [README here](assets/readmes/README_hardware.md)
+  **Hardware summary**
+  <p align="left">
+    <picture>
+    <img alt="hardware" src="assets/summary_components.png" width="900">
+    </picture><br>
+    </a>
+  </p>
 
   **Odometry Calibration — Example**
 
@@ -36,11 +45,8 @@ Play with my little mobile robot by branch:
   |:---:|:---:|
   | <img src="hardware_test/test_results/odometry_test/Sleepy_before_umbmark_2025-08-13_04-07-41.png" width="400"/> | <img src="hardware_test/test_results/odometry_test/Sleepy_after_calibration_umbmark_2025-08-23_17-59-26.png" width="400"/> |
 
+  **Toolkits** — reset servo ID using ESP32, reset Hiwonder-xArm initial position [`hardware_test/tools`]
 
 ---
 
-## Gallery
 
-**Toolkits** — reset servo ID using ESP32, reset Hiwonder-xArm initial position [`hardware_test/tools`]
-
-**Packages** — `perception`, `slam`, `path_planning`, `pure_pursuit`, `controller`,`manipulator`, `odometry`, `display_markers`, `line_follower`, `hardware_test`, `robp_robot`, `robp_boot_camp`, `behavior_tree`, `speaker` 
