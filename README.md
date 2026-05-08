@@ -30,7 +30,7 @@ Play with my little mobile robot by branch:
   Test suite and odometry calibration across all robot components for ten robots.  
   `[Odometry Calibration]` `[Encoder]` `[RPLidar]` `[RealSense]` `[xArm]` `[Phidgets]` → [README here](assets/readmes/README_hardware.md)
 
-### Calibration Example — Sleepy
+### Odometry Calibration — Example
 
 | Before | After |
 |:---:|:---:|
